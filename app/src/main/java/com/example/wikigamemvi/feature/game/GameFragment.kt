@@ -1,4 +1,4 @@
-package com.example.wikigamemvi.ui.game
+package com.example.wikigamemvi.feature.game
 
 import androidx.fragment.app.Fragment
 
