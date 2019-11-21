@@ -12,25 +12,25 @@ interface BaseViewState
 interface BaseViewEffect
 interface BaseResult
 
-abstract class BaseViewModel<A: BaseAction, S: BaseViewState, E: BaseViewEffect, R: BaseResult>
+abstract class BaseViewModel<A: BaseAction, R: BaseResult, S: BaseViewState, E: BaseViewEffect>
     : ViewModel(){
 
     protected val compositeDisposable = CompositeDisposable()
 
     private val actions = PublishRelay.create<A>()
 
-    private val store by lazy {
+    private val store: Observable<Lce<out R>> by lazy {
         actions.actionToResult()
             .share()
     }
 
-    protected val viewState: Observable<S> by lazy {
+    val viewState: Observable<S> by lazy {
         store.resultToViewState()
             .replay()
             .autoConnect(1) { compositeDisposable += it }
     }
 
-    protected val viewEffects: Observable<E> by lazy {
+    val viewEffects: Observable<E> by lazy {
         store.resultToViewEffect()
     }
 
