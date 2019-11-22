@@ -3,10 +3,7 @@ package com.example.wikigamemvi.feature.game.model
 import com.example.wikigamemvi.data.model.WikiArticle
 import com.example.wikigamemvi.data.model.WikiResponse
 import com.example.wikigamemvi.data.model.WikiUrl
-import com.example.wikigamemvi.feature.base.BaseAction
-import com.example.wikigamemvi.feature.base.BaseResult
-import com.example.wikigamemvi.feature.base.BaseViewEffect
-import com.example.wikigamemvi.feature.base.BaseViewState
+import com.example.wikigamemvi.feature.base.*
 
 data class GameViewState(
     val targetArticle: WikiArticle? = null,
@@ -22,11 +19,25 @@ sealed class GameViewEffect: BaseViewEffect{
 
 sealed class GameAction: BaseAction {
     data class ShowToastAction(val text: String): GameAction()
-    object ShowToastActionAAAA: GameAction()
-    object LoadTargetArticleAction: GameAction()
+    object InitializeArticlesAction: GameAction()
+//    object LoadTargetArticleAction: GameAction()
 }
 
 sealed class GameResult: BaseResult {
     data class LoadTargetArticleResult(val articleResponse: WikiResponse): GameResult()
+    data class LoadCurrentArticleResult(val articleResponse: WikiResponse): GameResult()
+
+    data class InitializeArticlesResult(
+        val targetArticleResponse: WikiResponse,
+        val currentArticleResponse: WikiResponse
+    ): GameResult()  {
+        companion object: LoadingResult<InitializeArticlesResult>{
+            override fun getLoadingResult(): InitializeArticlesResult {
+                val response = WikiResponse("", "", "", "", listOf())
+                return InitializeArticlesResult(response, response)
+            }
+        }
+    }
+
     data class ShowToastResult(val text: String): GameResult()
 }

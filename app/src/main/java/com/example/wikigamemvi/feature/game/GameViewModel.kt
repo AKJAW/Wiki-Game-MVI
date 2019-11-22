@@ -5,15 +5,14 @@ import com.example.wikigamemvi.data.model.WikiResponse
 import com.example.wikigamemvi.feature.base.BaseViewModel
 import com.example.wikigamemvi.feature.base.Lce
 import com.example.wikigamemvi.feature.game.model.GameAction
-import com.example.wikigamemvi.feature.game.model.GameAction.LoadTargetArticleAction
-import com.example.wikigamemvi.feature.game.model.GameAction.ShowToastAction
+import com.example.wikigamemvi.feature.game.model.GameAction.*
 import com.example.wikigamemvi.feature.game.model.GameResult
-import com.example.wikigamemvi.feature.game.model.GameResult.LoadTargetArticleResult
-import com.example.wikigamemvi.feature.game.model.GameResult.ShowToastResult
+import com.example.wikigamemvi.feature.game.model.GameResult.*
 import com.example.wikigamemvi.feature.game.model.GameViewEffect
 import com.example.wikigamemvi.feature.game.model.GameViewEffect.SomeToastEffect
 import com.example.wikigamemvi.feature.game.model.GameViewState
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -26,14 +25,14 @@ class GameViewModel(): BaseViewModel<GameAction, GameResult, GameViewState, Game
         .delay(1L, TimeUnit.SECONDS)
 
     init {
-        process(LoadTargetArticleAction)
+        process(InitializeArticlesAction)
     }
 
     override fun Observable<GameAction>.actionToResult(): Observable<Lce<out GameResult>> {
         return publish <Lce<out GameResult>> {
             Observable.merge(
                 it.ofType<ShowToastAction>().onShowToast(),
-                it.ofType<LoadTargetArticleAction>().onLoadArticle()
+                it.ofType<InitializeArticlesAction>().onInitializeArticles()
             )
         }
     }
@@ -42,7 +41,7 @@ class GameViewModel(): BaseViewModel<GameAction, GameResult, GameViewState, Game
         return scan(GameViewState()) { state, result ->
             when(result){
                 is Lce.Content -> handleResultContent(state, result.payload)
-                is Lce.Loading -> handleResultLoading(state)
+                is Lce.Loading -> handleResultLoading(state, result.payload)
                 is Lce.Error -> TODO()
             }
         }.distinctUntilChanged()
@@ -50,6 +49,16 @@ class GameViewModel(): BaseViewModel<GameAction, GameResult, GameViewState, Game
 
     private fun handleResultContent(state: GameViewState, payload: GameResult): GameViewState {
         return when(payload){
+            is InitializeArticlesResult -> {
+                val targetArticle = WikiArticle.fromResponse(payload.targetArticleResponse)
+                val currentArticle = WikiArticle.fromResponse(payload.currentArticleResponse)
+
+                state.copy(
+                    targetArticle = targetArticle,
+                    isTargetArticleLoading = false,
+                    currentArticle = currentArticle,
+                    isCurrentArticleLoading = false)
+            }
             is LoadTargetArticleResult -> {
                 val name = payload.articleResponse.name
                 val wikiArticle = WikiArticle(name, "", "")
@@ -59,8 +68,17 @@ class GameViewModel(): BaseViewModel<GameAction, GameResult, GameViewState, Game
         }
     }
 
-    private fun handleResultLoading(state: GameViewState): GameViewState {
-        return state.copy(targetArticle = null, isTargetArticleLoading = true)
+    private fun handleResultLoading(
+        state: GameViewState, payload: GameResult
+    ): GameViewState {
+       return when(payload){
+            is InitializeArticlesResult -> state.copy(
+                targetArticle = null,
+                isTargetArticleLoading = true,
+                currentArticle = null,
+                isCurrentArticleLoading = true)
+           else -> state.copy()
+       }
     }
 
     override fun Observable<Lce<out GameResult>>.resultToViewEffect(): Observable<GameViewEffect> {
@@ -73,17 +91,24 @@ class GameViewModel(): BaseViewModel<GameAction, GameResult, GameViewState, Game
     }
 
 
-    private fun Observable<LoadTargetArticleAction>.onLoadArticle(): Observable<Lce<LoadTargetArticleResult>> {
-        return switchMap<Lce<LoadTargetArticleResult>> {
-            loadArticle()
-                .subscribeOn(Schedulers.io())
-                .map<Lce<LoadTargetArticleResult>> {
-                    Lce.Content(LoadTargetArticleResult(it))
+    private fun Observable<InitializeArticlesAction>.onInitializeArticles(): Observable<Lce<InitializeArticlesResult>> {
+        return switchMap<Lce<InitializeArticlesResult>> {
+            Observable.zip<WikiResponse, WikiResponse, List<WikiResponse>>(
+                loadArticle().observeOn(Schedulers.io()),
+                loadArticle().observeOn(Schedulers.io()),
+                BiFunction { t1, t2 -> listOf(t1, t2) }
+            )
+                .map<Lce<InitializeArticlesResult>> {
+                    Lce.Content(InitializeArticlesResult(it[0], it[1]))
                 }
                 .onErrorReturn {
-                    Lce.Error(LoadTargetArticleResult(testArticle.copy(name = "Error")))
+                    val errorResult = InitializeArticlesResult(
+                        testArticle.copy(name = "Error1"),
+                        testArticle.copy(name = "Error2"))
+
+                    Lce.Error(errorResult)
                 }
-                .startWith(Lce.Loading())
+                .startWith(Lce.Loading(InitializeArticlesResult.getLoadingResult()))
         }
     }
 

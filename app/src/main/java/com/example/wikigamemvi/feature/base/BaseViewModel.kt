@@ -2,6 +2,7 @@ package com.example.wikigamemvi.feature.base
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.example.wikigamemvi.feature.game.model.GameResult
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
@@ -13,6 +14,9 @@ interface BaseAction
 interface BaseViewState
 interface BaseViewEffect
 interface BaseResult
+interface LoadingResult<T> {
+    fun getLoadingResult(): T
+}
 
 abstract class BaseViewModel<A: BaseAction, R: BaseResult, S: BaseViewState, E: BaseViewEffect>
     : ViewModel(){
