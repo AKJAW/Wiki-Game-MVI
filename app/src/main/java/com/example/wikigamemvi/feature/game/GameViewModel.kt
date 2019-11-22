@@ -6,9 +6,12 @@ import com.example.wikigamemvi.feature.base.BaseViewModel
 import com.example.wikigamemvi.feature.base.Lce
 import com.example.wikigamemvi.feature.game.model.GameAction
 import com.example.wikigamemvi.feature.game.model.GameAction.LoadTargetArticleAction
+import com.example.wikigamemvi.feature.game.model.GameAction.ShowToastAction
 import com.example.wikigamemvi.feature.game.model.GameResult
 import com.example.wikigamemvi.feature.game.model.GameResult.LoadTargetArticleResult
+import com.example.wikigamemvi.feature.game.model.GameResult.ShowToastResult
 import com.example.wikigamemvi.feature.game.model.GameViewEffect
+import com.example.wikigamemvi.feature.game.model.GameViewEffect.SomeToastEffect
 import com.example.wikigamemvi.feature.game.model.GameViewState
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
@@ -22,9 +25,16 @@ class GameViewModel(): BaseViewModel<GameAction, GameResult, GameViewState, Game
         .just(testArticle)
         .delay(1L, TimeUnit.SECONDS)
 
+    init {
+        process(LoadTargetArticleAction)
+    }
+
     override fun Observable<GameAction>.actionToResult(): Observable<Lce<out GameResult>> {
-        return publish {
-             it.ofType<LoadTargetArticleAction>().onLoadArticle().map<Lce<out GameResult>> { it as Lce<GameResult> }
+        return publish <Lce<out GameResult>> {
+            Observable.merge(
+                it.ofType<ShowToastAction>().onShowToast(),
+                it.ofType<LoadTargetArticleAction>().onLoadArticle()
+            )
         }
     }
 
@@ -45,6 +55,7 @@ class GameViewModel(): BaseViewModel<GameAction, GameResult, GameViewState, Game
                 val wikiArticle = WikiArticle(name, "", "")
                 state.copy(targetArticle = wikiArticle, isTargetArticleLoading = false)
             }
+            else -> state.copy()
         }
     }
 
@@ -53,7 +64,12 @@ class GameViewModel(): BaseViewModel<GameAction, GameResult, GameViewState, Game
     }
 
     override fun Observable<Lce<out GameResult>>.resultToViewEffect(): Observable<GameViewEffect> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val s = "s"
+        return filter { it is Lce.Content && it.payload is ShowToastResult }
+            .map<GameViewEffect> {
+                val showToast = it as Lce.Content<ShowToastResult>
+                SomeToastEffect(showToast.payload.text)
+            }
     }
 
 
@@ -69,5 +85,9 @@ class GameViewModel(): BaseViewModel<GameAction, GameResult, GameViewState, Game
                 }
                 .startWith(Lce.Loading())
         }
+    }
+
+    private fun Observable<ShowToastAction>.onShowToast(): Observable<Lce<ShowToastResult>> {
+        return map<Lce<ShowToastResult>> { Lce.Content(ShowToastResult("aa")) }
     }
 }

@@ -1,6 +1,8 @@
 package com.example.wikigamemvi.feature.base
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,9 +17,9 @@ interface BaseResult
 abstract class BaseViewModel<A: BaseAction, R: BaseResult, S: BaseViewState, E: BaseViewEffect>
     : ViewModel(){
 
-    protected val compositeDisposable = CompositeDisposable()
+    protected val disposables = CompositeDisposable()
 
-    private val actions = PublishRelay.create<A>()
+    private val actions = BehaviorRelay.create<A>()
 
     private val store: Observable<Lce<out R>> by lazy {
         actions.actionToResult()
@@ -26,22 +28,27 @@ abstract class BaseViewModel<A: BaseAction, R: BaseResult, S: BaseViewState, E: 
 
     val viewState: Observable<S> by lazy {
         store.resultToViewState()
+            .doOnNext { Log.d("-----", "vs $it") }
+            .observeOn(AndroidSchedulers.mainThread())
             .replay()
-            .autoConnect(1) { compositeDisposable += it }
+            .autoConnect(1) { disposables += it }
     }
 
     val viewEffects: Observable<E> by lazy {
-        store.resultToViewEffect()
+        store.doOnNext { Log.d("-----", "ve before $it") }.resultToViewEffect()
+            .doOnNext { Log.d("-----", "ve $it") }
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun process(action: A) {
+        Log.d("-----", "process $action")
         actions.accept(action)
     }
 
     override fun onCleared() {
         super.onCleared()
 
-        compositeDisposable.clear()
+        disposables.clear()
     }
 
     abstract fun Observable<A>.actionToResult(): Observable<Lce<out R>>

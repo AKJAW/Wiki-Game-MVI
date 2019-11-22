@@ -17,13 +17,16 @@ data class GameViewState(
 ): BaseViewState
 
 sealed class GameViewEffect: BaseViewEffect{
-    object SomeToastEffect: GameViewEffect()
+    data class SomeToastEffect(val text: String): GameViewEffect()
 }
 
 sealed class GameAction: BaseAction {
+    data class ShowToastAction(val text: String): GameAction()
+    object ShowToastActionAAAA: GameAction()
     object LoadTargetArticleAction: GameAction()
 }
 
 sealed class GameResult: BaseResult {
     data class LoadTargetArticleResult(val articleResponse: WikiResponse): GameResult()
+    data class ShowToastResult(val text: String): GameResult()
 }
