@@ -14,9 +14,6 @@ interface BaseAction
 interface BaseViewState
 interface BaseViewEffect
 interface BaseResult
-interface LoadingResult<T> {
-    fun getLoadingResult(): T
-}
 
 abstract class BaseViewModel<A: BaseAction, R: BaseResult, S: BaseViewState, E: BaseViewEffect>
     : ViewModel(){

@@ -17,12 +17,12 @@ import io.reactivex.rxkotlin.ofType
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class GameViewModel(): BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
+class GameViewModel: BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
 
     val testArticle = WikiResponse("name", "Description", "img.jpg", "wiki.pl", listOf())
     fun loadArticle() = Observable
         .just(testArticle)
-        .delay(1L, TimeUnit.SECONDS)
+        .delay(3L, TimeUnit.SECONDS)
 
     init {
         process(InitializeArticlesAction)
@@ -59,11 +59,6 @@ class GameViewModel(): BaseViewModel<GameAction, GameResult, GameViewState, Game
                     currentArticle = currentArticle,
                     isCurrentArticleLoading = false)
             }
-            is LoadTargetArticleResult -> {
-                val name = payload.articleResponse.name
-                val wikiArticle = WikiArticle(name, "", "")
-                state.copy(targetArticle = wikiArticle, isTargetArticleLoading = false)
-            }
             else -> state.copy()
         }
     }
@@ -82,7 +77,6 @@ class GameViewModel(): BaseViewModel<GameAction, GameResult, GameViewState, Game
     }
 
     override fun Observable<Lce<out GameResult>>.resultToViewEffect(): Observable<GameViewEffect> {
-        val s = "s"
         return filter { it is Lce.Content && it.payload is ShowToastResult }
             .map<GameViewEffect> {
                 val showToast = it as Lce.Content<ShowToastResult>
@@ -108,7 +102,7 @@ class GameViewModel(): BaseViewModel<GameAction, GameResult, GameViewState, Game
 
                     Lce.Error(errorResult)
                 }
-                .startWith(Lce.Loading(InitializeArticlesResult.getLoadingResult()))
+                .startWith(Lce.Loading(InitializeArticlesResult()))
         }
     }
 

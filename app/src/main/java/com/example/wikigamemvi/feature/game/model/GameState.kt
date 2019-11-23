@@ -20,24 +20,16 @@ sealed class GameViewEffect: BaseViewEffect{
 sealed class GameAction: BaseAction {
     data class ShowToastAction(val text: String): GameAction()
     object InitializeArticlesAction: GameAction()
-//    object LoadTargetArticleAction: GameAction()
+    object LoadCurrentArticleAction: GameAction()
 }
 
 sealed class GameResult: BaseResult {
-    data class LoadTargetArticleResult(val articleResponse: WikiResponse): GameResult()
     data class LoadCurrentArticleResult(val articleResponse: WikiResponse): GameResult()
 
     data class InitializeArticlesResult(
-        val targetArticleResponse: WikiResponse,
-        val currentArticleResponse: WikiResponse
-    ): GameResult()  {
-        companion object: LoadingResult<InitializeArticlesResult>{
-            override fun getLoadingResult(): InitializeArticlesResult {
-                val response = WikiResponse("", "", "", "", listOf())
-                return InitializeArticlesResult(response, response)
-            }
-        }
-    }
+        val targetArticleResponse: WikiResponse = WikiResponse(),
+        val currentArticleResponse: WikiResponse = WikiResponse()
+    ): GameResult()
 
     data class ShowToastResult(val text: String): GameResult()
 }
