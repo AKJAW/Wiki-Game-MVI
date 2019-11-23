@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.wikigamemvi.R
+import com.example.wikigamemvi.data.model.WikiUrl
 import com.example.wikigamemvi.feature.game.model.GameAction
 import com.example.wikigamemvi.feature.game.model.GameViewState
 import io.reactivex.disposables.CompositeDisposable
@@ -32,8 +34,11 @@ class ArticlesFragment: Fragment(){
             ViewModelProviders.of(this).get(GameViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
-        wikiLinksAdapter = ArticleLinksAdapter()
+        wikiLinksAdapter = ArticleLinksAdapter(::onArticleNavigationClick)
+    }
 
+    private fun onArticleNavigationClick(wikiUrl: WikiUrl){
+        Toast.makeText(activity, wikiUrl, Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateView(

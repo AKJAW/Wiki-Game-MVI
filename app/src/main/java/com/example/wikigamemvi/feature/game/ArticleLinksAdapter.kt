@@ -10,7 +10,10 @@ import com.example.wikigamemvi.R
 import com.example.wikigamemvi.data.model.WikiUrl
 import kotlinx.android.synthetic.main.wiki_navigation_item.view.*
 
-class ArticleLinksAdapter(): ListAdapter<WikiUrl, ArticleLinksAdapter.ViewHolder>(WikiUrlDiffCallback()){
+class ArticleLinksAdapter(
+    private val onItemClick: (WikiUrl) -> Unit
+): ListAdapter<WikiUrl, ArticleLinksAdapter.ViewHolder>(WikiUrlDiffCallback()){
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.wiki_navigation_item, parent, false)
@@ -21,10 +24,14 @@ class ArticleLinksAdapter(): ListAdapter<WikiUrl, ArticleLinksAdapter.ViewHolder
         holder.bind(getItem(position))
     }
 
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
         fun bind(wikiUrl: WikiUrl){
             itemView.nagivation_name.text = wikiUrl
+
+            itemView.nagivation_container.setOnClickListener {
+                onItemClick(wikiUrl)
+            }
         }
     }
 }

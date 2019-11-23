@@ -62,6 +62,7 @@ class GameViewModel: BaseViewModel<GameAction, GameResult, GameViewState, GameVi
                     isCurrentArticleLoading = false,
                     wikiNavigationLinks = payload.currentArticleResponse.outgoingUrls)
             }
+
             is LoadCurrentArticleResult -> {
                 val currentArticle = WikiArticle.fromResponse(payload.articleResponse)
 
@@ -70,6 +71,7 @@ class GameViewModel: BaseViewModel<GameAction, GameResult, GameViewState, GameVi
                     isCurrentArticleLoading = false,
                     wikiNavigationLinks = payload.articleResponse.outgoingUrls)
             }
+
             else -> state.copy()
         }
     }
@@ -84,11 +86,13 @@ class GameViewModel: BaseViewModel<GameAction, GameResult, GameViewState, GameVi
                 currentArticle = null,
                 isCurrentArticleLoading = true,
                 wikiNavigationLinks = listOf())
+
             is LoadCurrentArticleResult -> state.copy(
                 currentArticle = null,
                 isCurrentArticleLoading = true,
                 wikiNavigationLinks = listOf()
             )
+
             else -> state.copy()
         }
     }
