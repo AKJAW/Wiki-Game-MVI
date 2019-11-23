@@ -37,7 +37,8 @@ class ArticlesFragment: Fragment(){
     }
 
     private fun onArticleNavigationClick(wikiTitle: WikiTitle){
-        Toast.makeText(activity, wikiTitle, Toast.LENGTH_SHORT).show()
+        viewModel.process(GameAction.LoadCurrentArticleAction(wikiTitle))
+//        Toast.makeText(activity, wikiTitle, Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateView(
