@@ -13,6 +13,7 @@ import com.example.wikigamemvi.R
 import com.example.wikigamemvi.data.model.WikiTitle
 import com.example.wikigamemvi.feature.game.model.GameAction
 import com.example.wikigamemvi.feature.game.model.GameViewState
+import com.example.wikigamemvi.injection.injector
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_articles.*
@@ -30,7 +31,9 @@ class ArticlesFragment: Fragment(){
         super.onCreate(savedInstanceState)
 
         viewModel = activity?.run {
-            ViewModelProviders.of(this).get(GameViewModel::class.java)
+            ViewModelProviders
+                .of(this, injector.gameViewModelFactory())
+                .get(GameViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
         wikiLinksAdapter = ArticleLinksAdapter(::onArticleNavigationClick)

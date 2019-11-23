@@ -5,14 +5,18 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.wikigamemvi.data.repository.MockWikipediaApi
 import com.example.wikigamemvi.data.repository.WikipediaRepositoryImpl
+import com.example.wikigamemvi.data.repository.base.WikipediaRepository
+import com.example.wikigamemvi.feature.base.ViewModelFactory
+import com.example.wikigamemvi.feature.game.GameViewModel
 import com.example.wikigamemvi.injection.module.WikipediaApiModule
+import com.example.wikigamemvi.injection.module.WikipediaRepositoryModule
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [WikipediaApiModule::class])
+@Component(modules = [WikipediaApiModule::class, WikipediaRepositoryModule::class])
 interface ApplicationComponent{
 
     @Component.Builder
@@ -23,7 +27,5 @@ interface ApplicationComponent{
         fun build(): ApplicationComponent
     }
 
-    fun wikipediaApi(): MockWikipediaApi
-
-    fun wikipediaRepository(): WikipediaRepositoryImpl
+    fun gameViewModelFactory(): ViewModelFactory<GameViewModel>
 }

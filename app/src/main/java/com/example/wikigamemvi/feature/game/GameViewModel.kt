@@ -2,6 +2,7 @@ package com.example.wikigamemvi.feature.game
 
 import com.example.wikigamemvi.data.model.WikiArticle
 import com.example.wikigamemvi.data.model.WikiResponse
+import com.example.wikigamemvi.data.repository.base.WikipediaRepository
 import com.example.wikigamemvi.feature.base.BaseViewModel
 import com.example.wikigamemvi.feature.base.Lce
 import com.example.wikigamemvi.feature.game.model.GameAction
@@ -16,8 +17,11 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class GameViewModel: BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
+class GameViewModel @Inject constructor(
+    private val wikipediaRepository: WikipediaRepository
+): BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
 
     val testArticle = WikiResponse("name", "Description", "img.jpg", "wiki.pl", listOf("aa", "bb", "cc"))
     var i = 0
