@@ -20,8 +20,9 @@ import java.util.concurrent.TimeUnit
 class GameViewModel: BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
 
     val testArticle = WikiResponse("name", "Description", "img.jpg", "wiki.pl", listOf())
+    var i = 0
     fun loadArticle() = Observable
-        .just(testArticle)
+        .just(testArticle.copy(name = testArticle.name + i++))
         .delay(3L, TimeUnit.SECONDS)
 
     init {
@@ -32,7 +33,8 @@ class GameViewModel: BaseViewModel<GameAction, GameResult, GameViewState, GameVi
         return publish <Lce<out GameResult>> {
             Observable.merge(
                 it.ofType<ShowToastAction>().onShowToast(),
-                it.ofType<InitializeArticlesAction>().onInitializeArticles()
+                it.ofType<InitializeArticlesAction>().onInitializeArticles(),
+                it.ofType<LoadCurrentArticleAction>().onLoadCurrentArticle()
             )
         }
     }
@@ -57,7 +59,16 @@ class GameViewModel: BaseViewModel<GameAction, GameResult, GameViewState, GameVi
                     targetArticle = targetArticle,
                     isTargetArticleLoading = false,
                     currentArticle = currentArticle,
-                    isCurrentArticleLoading = false)
+                    isCurrentArticleLoading = false,
+                    navigationUrls = payload.currentArticleResponse.outgoingUrls)
+            }
+            is LoadCurrentArticleResult -> {
+                val currentArticle = WikiArticle.fromResponse(payload.articleResponse)
+
+                state.copy(
+                    currentArticle = currentArticle,
+                    isCurrentArticleLoading = false,
+                    navigationUrls = payload.articleResponse.outgoingUrls)
             }
             else -> state.copy()
         }
@@ -66,14 +77,20 @@ class GameViewModel: BaseViewModel<GameAction, GameResult, GameViewState, GameVi
     private fun handleResultLoading(
         state: GameViewState, payload: GameResult
     ): GameViewState {
-       return when(payload){
+        return when(payload){
             is InitializeArticlesResult -> state.copy(
                 targetArticle = null,
                 isTargetArticleLoading = true,
                 currentArticle = null,
-                isCurrentArticleLoading = true)
-           else -> state.copy()
-       }
+                isCurrentArticleLoading = true,
+                navigationUrls = listOf())
+            is LoadCurrentArticleResult -> state.copy(
+                currentArticle = null,
+                isCurrentArticleLoading = true,
+                navigationUrls = listOf()
+            )
+            else -> state.copy()
+        }
     }
 
     override fun Observable<Lce<out GameResult>>.resultToViewEffect(): Observable<GameViewEffect> {
@@ -85,20 +102,22 @@ class GameViewModel: BaseViewModel<GameAction, GameResult, GameViewState, GameVi
     }
 
 
+    private fun Observable<ShowToastAction>.onShowToast(): Observable<Lce<ShowToastResult>> {
+        return map<Lce<ShowToastResult>> { Lce.Content(ShowToastResult("aa")) }
+    }
+
     private fun Observable<InitializeArticlesAction>.onInitializeArticles(): Observable<Lce<InitializeArticlesResult>> {
-        return switchMap<Lce<InitializeArticlesResult>> {
+        return switchMap {
             Observable.zip<WikiResponse, WikiResponse, List<WikiResponse>>(
                 loadArticle().observeOn(Schedulers.io()),
                 loadArticle().observeOn(Schedulers.io()),
                 BiFunction { t1, t2 -> listOf(t1, t2) }
             )
-                .map<Lce<InitializeArticlesResult>> {
-                    Lce.Content(InitializeArticlesResult(it[0], it[1]))
+                .map<Lce<InitializeArticlesResult>> { responses ->
+                    Lce.Content(InitializeArticlesResult(responses[0], responses[1]))
                 }
                 .onErrorReturn {
-                    val errorResult = InitializeArticlesResult(
-                        testArticle.copy(name = "Error1"),
-                        testArticle.copy(name = "Error2"))
+                    val errorResult = InitializeArticlesResult()
 
                     Lce.Error(errorResult)
                 }
@@ -106,7 +125,17 @@ class GameViewModel: BaseViewModel<GameAction, GameResult, GameViewState, GameVi
         }
     }
 
-    private fun Observable<ShowToastAction>.onShowToast(): Observable<Lce<ShowToastResult>> {
-        return map<Lce<ShowToastResult>> { Lce.Content(ShowToastResult("aa")) }
+    private fun Observable<LoadCurrentArticleAction>.onLoadCurrentArticle(): Observable<Lce<LoadCurrentArticleResult>> {
+        return switchMap {
+            loadArticle()
+                .map<Lce<LoadCurrentArticleResult>> { response ->
+                    Lce.Content(LoadCurrentArticleResult(response))
+                }
+                .onErrorReturn {
+                    Lce.Error(LoadCurrentArticleResult())
+                }
+                .startWith(Lce.Loading(LoadCurrentArticleResult()))
+        }
     }
+
 }

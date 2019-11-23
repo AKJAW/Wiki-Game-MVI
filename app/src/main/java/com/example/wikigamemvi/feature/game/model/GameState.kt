@@ -24,12 +24,14 @@ sealed class GameAction: BaseAction {
 }
 
 sealed class GameResult: BaseResult {
-    data class LoadCurrentArticleResult(val articleResponse: WikiResponse): GameResult()
+    data class ShowToastResult(val text: String): GameResult()
 
     data class InitializeArticlesResult(
         val targetArticleResponse: WikiResponse = WikiResponse(),
         val currentArticleResponse: WikiResponse = WikiResponse()
     ): GameResult()
 
-    data class ShowToastResult(val text: String): GameResult()
+    data class LoadCurrentArticleResult(
+        val articleResponse: WikiResponse = WikiResponse()
+    ): GameResult()
 }

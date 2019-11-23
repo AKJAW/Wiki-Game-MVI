@@ -8,10 +8,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.wikigamemvi.R
+import com.example.wikigamemvi.feature.game.model.GameAction
 import com.example.wikigamemvi.feature.game.model.GameViewState
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_articles.*
+import kotlinx.android.synthetic.main.fragment_articles.view.*
 import java.lang.Exception
 
 class ArticlesFragment: Fragment(){
@@ -34,7 +36,9 @@ class ArticlesFragment: Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_articles, container, false).also {
-
+            it.current_article_header_text_view.setOnClickListener {
+                viewModel.process(GameAction.LoadCurrentArticleAction)
+            }
         }
     }
 
