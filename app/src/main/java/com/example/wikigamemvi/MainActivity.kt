@@ -36,8 +36,8 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
-        val viewModel = ViewModelProviders.of(this)
-            .get(GameViewModel::class.java)
+//        val viewModel = ViewModelProviders.of(this)
+//            .get(GameViewModel::class.java)
 
     }
 

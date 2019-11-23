@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.wikigamemvi.R
 import com.example.wikigamemvi.feature.game.model.GameAction
 import com.example.wikigamemvi.feature.game.model.GameViewState
@@ -19,7 +21,9 @@ import java.lang.Exception
 class ArticlesFragment: Fragment(){
     private var disposables = CompositeDisposable()
 
+    //TODO inject
     private lateinit var viewModel: GameViewModel
+    private lateinit var wikiLinksAdapter: ArticleLinksAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +31,8 @@ class ArticlesFragment: Fragment(){
         viewModel = activity?.run {
             ViewModelProviders.of(this).get(GameViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
+
+        wikiLinksAdapter = ArticleLinksAdapter()
 
     }
 
@@ -36,8 +42,10 @@ class ArticlesFragment: Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_articles, container, false).also {
-            it.current_article_header_text_view.setOnClickListener {
-                viewModel.process(GameAction.LoadCurrentArticleAction)
+            it.wiki_navigation_recycler_view.apply {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(activity)
+                adapter = wikiLinksAdapter
             }
         }
     }
@@ -59,6 +67,10 @@ class ArticlesFragment: Fragment(){
 
         if(state.currentArticle != null){
             current_article_title_text_view.text = state.currentArticle.name
+        }
+
+        if(state.wikiNavigationLinks.isNotEmpty()){
+            wikiLinksAdapter.submitList(state.wikiNavigationLinks)
         }
     }
 

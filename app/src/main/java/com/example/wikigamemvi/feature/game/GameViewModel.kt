@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
 
 class GameViewModel: BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
 
-    val testArticle = WikiResponse("name", "Description", "img.jpg", "wiki.pl", listOf())
+    val testArticle = WikiResponse("name", "Description", "img.jpg", "wiki.pl", listOf("aa", "bb", "cc"))
     var i = 0
     fun loadArticle() = Observable
         .just(testArticle.copy(name = testArticle.name + i++))
