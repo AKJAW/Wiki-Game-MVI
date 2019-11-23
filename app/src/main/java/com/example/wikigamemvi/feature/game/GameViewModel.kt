@@ -60,7 +60,7 @@ class GameViewModel: BaseViewModel<GameAction, GameResult, GameViewState, GameVi
                     isTargetArticleLoading = false,
                     currentArticle = currentArticle,
                     isCurrentArticleLoading = false,
-                    wikiNavigationLinks = payload.currentArticleResponse.outgoingUrls)
+                    wikiNavigationLinks = payload.currentArticleResponse.outgoingTitles)
             }
 
             is LoadCurrentArticleResult -> {
@@ -69,7 +69,7 @@ class GameViewModel: BaseViewModel<GameAction, GameResult, GameViewState, GameVi
                 state.copy(
                     currentArticle = currentArticle,
                     isCurrentArticleLoading = false,
-                    wikiNavigationLinks = payload.articleResponse.outgoingUrls)
+                    wikiNavigationLinks = payload.articleResponse.outgoingTitles)
             }
 
             else -> state.copy()

@@ -7,12 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wikigamemvi.R
-import com.example.wikigamemvi.data.model.WikiUrl
+import com.example.wikigamemvi.data.model.WikiTitle
 import kotlinx.android.synthetic.main.wiki_navigation_item.view.*
 
 class ArticleLinksAdapter(
-    private val onItemClick: (WikiUrl) -> Unit
-): ListAdapter<WikiUrl, ArticleLinksAdapter.ViewHolder>(WikiUrlDiffCallback()){
+    private val onItemClick: (WikiTitle) -> Unit
+): ListAdapter<WikiTitle, ArticleLinksAdapter.ViewHolder>(WikiTitleDiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -26,22 +26,22 @@ class ArticleLinksAdapter(
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
-        fun bind(wikiUrl: WikiUrl){
-            itemView.nagivation_name.text = wikiUrl
+        fun bind(wikiTitle: WikiTitle){
+            itemView.nagivation_name.text = wikiTitle
 
             itemView.nagivation_container.setOnClickListener {
-                onItemClick(wikiUrl)
+                onItemClick(wikiTitle)
             }
         }
     }
 }
 
-class WikiUrlDiffCallback: DiffUtil.ItemCallback<WikiUrl>(){
-    override fun areItemsTheSame(oldItem: WikiUrl, newItem: WikiUrl): Boolean {
+class WikiTitleDiffCallback: DiffUtil.ItemCallback<WikiTitle>(){
+    override fun areItemsTheSame(oldItem: WikiTitle, newItem: WikiTitle): Boolean {
         return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: WikiUrl, newItem: WikiUrl): Boolean {
+    override fun areContentsTheSame(oldItem: WikiTitle, newItem: WikiTitle): Boolean {
         return oldItem == newItem
     }
 }

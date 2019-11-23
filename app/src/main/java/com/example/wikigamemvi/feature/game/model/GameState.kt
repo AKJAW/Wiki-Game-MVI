@@ -2,7 +2,7 @@ package com.example.wikigamemvi.feature.game.model
 
 import com.example.wikigamemvi.data.model.WikiArticle
 import com.example.wikigamemvi.data.model.WikiResponse
-import com.example.wikigamemvi.data.model.WikiUrl
+import com.example.wikigamemvi.data.model.WikiTitle
 import com.example.wikigamemvi.feature.base.*
 
 data class GameViewState(
@@ -10,7 +10,7 @@ data class GameViewState(
     val isTargetArticleLoading: Boolean = false,
     val currentArticle: WikiArticle? = null,
     val isCurrentArticleLoading: Boolean = false,
-    val wikiNavigationLinks: List<WikiUrl> = listOf()
+    val wikiNavigationLinks: List<WikiTitle> = listOf()
 ): BaseViewState
 
 sealed class GameViewEffect: BaseViewEffect{
