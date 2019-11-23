@@ -9,6 +9,7 @@ import com.example.wikigamemvi.feature.game.GameViewModel
 import com.example.wikigamemvi.feature.game.model.GameAction
 import com.example.wikigamemvi.feature.game.model.GameViewEffect
 import com.example.wikigamemvi.feature.game.model.GameViewState
+import com.example.wikigamemvi.injection.injector
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
