@@ -1,0 +1,36 @@
+ext {
+    kotlinVersion = "1.3.50"
+    minSdkVersion = 21
+    targetSdkVersion = 29
+    compileSdkVersion = 29
+
+    //Libraries
+    appCompatVersion = '1.1.0'
+    materialVersion = '1.0.0'
+    coreKtxVersion = '1.1.0'
+    constraintLayoutVersion = '1.1.3'
+
+    rxKotlinVersion = '2.4.0'
+    rxAndroidVersion = '2.1.1'
+    rxRelayVersion = '2.1.1'
+    rxBindingVersion = '3.0.0'
+
+    daggerVersion = '2.24'
+    daggerCompilerVersion = '2.22.1'
+    daggerProcessorVersion = '2.16'
+
+    //Testing
+    jUnitVersion = '4.12'
+    androidJUnitVersion = '1.1.1'
+    espressoVersion = '3.2.0'
+
+    domainDependencies = [
+            rxKotlin: "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion",
+            rxRelay: "com.jakewharton.rxrelay2:rxrelay:$rxRelayVersion"
+    ]
+
+
+    domainTestDependencies = [
+            jUnit: "junit:junit:$jUnitVersion"
+    ]
+}
