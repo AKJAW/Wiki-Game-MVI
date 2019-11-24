@@ -38,7 +38,7 @@ class ArticlesFragment: Fragment(){
         wikiLinksAdapter = ArticleLinksAdapter(::onArticleNavigationClick)
     }
 
-    private fun onArticleNavigationClick(wikiTitle: com.akjaw.domain.model.WikiTitle){
+    private fun onArticleNavigationClick(wikiTitle: WikiTitle){
         viewModel.process(GameAction.LoadCurrentArticleAction(wikiTitle))
 //        Toast.makeText(activity, wikiTitle, Toast.LENGTH_SHORT).show()
     }

@@ -143,7 +143,7 @@ class GameViewModel @Inject constructor(
 
     private fun Observable<LoadCurrentArticleAction>.onLoadCurrentArticle(): Observable<Lce<LoadCurrentArticleResult>> {
         return switchMap {
-            getRandomArticleUseCase()
+            getArticleFromTitleUseCase(it.wikiTitle)
                 .map<Lce<LoadCurrentArticleResult>> { response ->
                     Lce.Content(LoadCurrentArticleResult(response))
                 }
