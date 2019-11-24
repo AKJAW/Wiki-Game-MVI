@@ -13,6 +13,7 @@ import com.akjaw.wikigamemvi.feature.game.model.GameViewEffect
 import com.akjaw.wikigamemvi.feature.game.model.GameViewEffect.SomeToastEffect
 import com.akjaw.wikigamemvi.feature.game.model.GameViewState
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.schedulers.Schedulers
@@ -24,17 +25,17 @@ class GameViewModel @Inject constructor(
     private val getArticleFromTitleUseCase: GetArticleFromTitleUseCase
 ): BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
 
-    val testArticle = com.akjaw.domain.model.WikiResponse(
-        "name",
-        "Description",
-        "img.jpg",
-        "wiki.pl",
-        listOf("aa", "bb", "cc")
-    )
-    var i = 0
-    fun loadArticle() = Observable
-        .just(testArticle.copy(name = testArticle.name + i++))
-        .delay(3L, TimeUnit.SECONDS)
+//    val testArticle = com.akjaw.domain.model.WikiResponse(
+//        "name",
+//        "Description",
+//        "img.jpg",
+//        "wiki.pl",
+//        listOf("aa", "bb", "cc")
+//    )
+//    var i = 0
+//    fun loadArticle() = Observable
+//        .just(testArticle.copy(name = testArticle.name + i++))
+//        .delay(3L, TimeUnit.SECONDS)
 
     init {
         process(InitializeArticlesAction)
@@ -124,8 +125,8 @@ class GameViewModel @Inject constructor(
     private fun Observable<InitializeArticlesAction>.onInitializeArticles(): Observable<Lce<InitializeArticlesResult>> {
         return switchMap {
             Observable.zip<com.akjaw.domain.model.WikiResponse, com.akjaw.domain.model.WikiResponse, List<com.akjaw.domain.model.WikiResponse>>(
-                loadArticle().observeOn(Schedulers.io()),
-                loadArticle().observeOn(Schedulers.io()),
+                getRandomArticleUseCase().observeOn(Schedulers.io()),
+                getRandomArticleUseCase().observeOn(Schedulers.io()),
                 BiFunction { t1, t2 -> listOf(t1, t2) }
             )
                 .map<Lce<InitializeArticlesResult>> { responses ->
@@ -142,7 +143,7 @@ class GameViewModel @Inject constructor(
 
     private fun Observable<LoadCurrentArticleAction>.onLoadCurrentArticle(): Observable<Lce<LoadCurrentArticleResult>> {
         return switchMap {
-            loadArticle()
+            getRandomArticleUseCase()
                 .map<Lce<LoadCurrentArticleResult>> { response ->
                     Lce.Content(LoadCurrentArticleResult(response))
                 }
