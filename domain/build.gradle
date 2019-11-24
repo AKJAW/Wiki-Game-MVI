@@ -1,11 +1,4 @@
 apply plugin: 'kotlin'
-//
-//dependencies {
-//    implementation fileTree(dir: 'libs', include: ['*.jar'])
-//}
-
-//sourceCompatibility = "7"
-//targetCompatibility = "7"
 
 dependencies {
     def domainDependencies = rootProject.ext.domainDependencies
@@ -15,4 +8,31 @@ dependencies {
     implementation domainDependencies.rxRelay
 
     testImplementation domainTestDependencies.jUnit
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+}
+
+buildscript {
+    ext.kotlin_version = '1.3.50'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }

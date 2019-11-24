@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.akjaw.wikigamemvi.R
-import com.akjaw.wikigamemvi.data.model.WikiTitle
+import com.akjaw.domain.model.WikiTitle
 import com.akjaw.wikigamemvi.feature.game.model.GameAction
 import com.akjaw.wikigamemvi.feature.game.model.GameViewState
 import com.akjaw.wikigamemvi.injection.injector
@@ -38,7 +38,7 @@ class ArticlesFragment: Fragment(){
         wikiLinksAdapter = ArticleLinksAdapter(::onArticleNavigationClick)
     }
 
-    private fun onArticleNavigationClick(wikiTitle: WikiTitle){
+    private fun onArticleNavigationClick(wikiTitle: com.akjaw.domain.model.WikiTitle){
         viewModel.process(GameAction.LoadCurrentArticleAction(wikiTitle))
 //        Toast.makeText(activity, wikiTitle, Toast.LENGTH_SHORT).show()
     }

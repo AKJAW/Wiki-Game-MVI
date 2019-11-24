@@ -1,4 +1,4 @@
-package com.akjaw.wikigamemvi.data.model
+package com.akjaw.domain.model
 
 data class WikiArticle(
     val name: String,

@@ -1,5 +1,7 @@
 package com.akjaw.wikigamemvi.data.model
 
+import com.akjaw.domain.model.WikiTitle
+
 data class WikiResponseEntity(
     val name: String = "",
     val description: String = "",

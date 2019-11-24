@@ -1,16 +1,16 @@
 package com.akjaw.wikigamemvi.feature.game.model
 
-import com.akjaw.wikigamemvi.data.model.WikiArticle
-import com.akjaw.wikigamemvi.data.model.WikiResponse
-import com.akjaw.wikigamemvi.data.model.WikiTitle
+import com.akjaw.domain.model.WikiArticle
+import com.akjaw.domain.model.WikiResponse
+import com.akjaw.domain.model.WikiTitle
 import com.akjaw.wikigamemvi.feature.base.*
 
 data class GameViewState(
-    val targetArticle: WikiArticle? = null,
+    val targetArticle: com.akjaw.domain.model.WikiArticle? = null,
     val isTargetArticleLoading: Boolean = false,
-    val currentArticle: WikiArticle? = null,
+    val currentArticle: com.akjaw.domain.model.WikiArticle? = null,
     val isCurrentArticleLoading: Boolean = false,
-    val wikiNavigationLinks: List<WikiTitle> = listOf()
+    val wikiNavigationLinks: List<com.akjaw.domain.model.WikiTitle> = listOf()
 ): BaseViewState
 
 sealed class GameViewEffect: BaseViewEffect{
@@ -20,18 +20,18 @@ sealed class GameViewEffect: BaseViewEffect{
 sealed class GameAction: BaseAction {
     data class ShowToastAction(val text: String): GameAction()
     object InitializeArticlesAction: GameAction()
-    data class LoadCurrentArticleAction(val wikiTitle: WikiTitle): GameAction()
+    data class LoadCurrentArticleAction(val wikiTitle: com.akjaw.domain.model.WikiTitle): GameAction()
 }
 
 sealed class GameResult: BaseResult {
     data class ShowToastResult(val text: String): GameResult()
 
     data class InitializeArticlesResult(
-        val targetArticleResponse: WikiResponse = WikiResponse(),
-        val currentArticleResponse: WikiResponse = WikiResponse()
+        val targetArticleResponse: com.akjaw.domain.model.WikiResponse = com.akjaw.domain.model.WikiResponse(),
+        val currentArticleResponse: com.akjaw.domain.model.WikiResponse = com.akjaw.domain.model.WikiResponse()
     ): GameResult()
 
     data class LoadCurrentArticleResult(
-        val articleResponse: WikiResponse = WikiResponse()
+        val articleResponse: com.akjaw.domain.model.WikiResponse = com.akjaw.domain.model.WikiResponse()
     ): GameResult()
 }

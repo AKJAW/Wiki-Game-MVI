@@ -1,8 +1,6 @@
 package com.akjaw.wikigamemvi.feature.game
 
-import com.akjaw.wikigamemvi.data.model.WikiArticle
-import com.akjaw.wikigamemvi.data.model.WikiResponse
-import com.akjaw.wikigamemvi.data.repository.base.WikipediaRepository
+import com.akjaw.domain.repository.WikiRepository
 import com.akjaw.wikigamemvi.feature.base.BaseViewModel
 import com.akjaw.wikigamemvi.feature.base.Lce
 import com.akjaw.wikigamemvi.feature.game.model.GameAction
@@ -20,10 +18,16 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class GameViewModel @Inject constructor(
-    private val wikipediaRepository: WikipediaRepository
+    private val wikiRepository: WikiRepository
 ): BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
 
-    val testArticle = WikiResponse("name", "Description", "img.jpg", "wiki.pl", listOf("aa", "bb", "cc"))
+    val testArticle = com.akjaw.domain.model.WikiResponse(
+        "name",
+        "Description",
+        "img.jpg",
+        "wiki.pl",
+        listOf("aa", "bb", "cc")
+    )
     var i = 0
     fun loadArticle() = Observable
         .just(testArticle.copy(name = testArticle.name + i++))
@@ -56,8 +60,8 @@ class GameViewModel @Inject constructor(
     private fun handleResultContent(state: GameViewState, payload: GameResult): GameViewState {
         return when(payload){
             is InitializeArticlesResult -> {
-                val targetArticle = WikiArticle.fromResponse(payload.targetArticleResponse)
-                val currentArticle = WikiArticle.fromResponse(payload.currentArticleResponse)
+                val targetArticle = com.akjaw.domain.model.WikiArticle.fromResponse(payload.targetArticleResponse)
+                val currentArticle = com.akjaw.domain.model.WikiArticle.fromResponse(payload.currentArticleResponse)
 
                 state.copy(
                     targetArticle = targetArticle,
@@ -68,7 +72,7 @@ class GameViewModel @Inject constructor(
             }
 
             is LoadCurrentArticleResult -> {
-                val currentArticle = WikiArticle.fromResponse(payload.articleResponse)
+                val currentArticle = com.akjaw.domain.model.WikiArticle.fromResponse(payload.articleResponse)
 
                 state.copy(
                     currentArticle = currentArticle,
@@ -116,7 +120,7 @@ class GameViewModel @Inject constructor(
 
     private fun Observable<InitializeArticlesAction>.onInitializeArticles(): Observable<Lce<InitializeArticlesResult>> {
         return switchMap {
-            Observable.zip<WikiResponse, WikiResponse, List<WikiResponse>>(
+            Observable.zip<com.akjaw.domain.model.WikiResponse, com.akjaw.domain.model.WikiResponse, List<com.akjaw.domain.model.WikiResponse>>(
                 loadArticle().observeOn(Schedulers.io()),
                 loadArticle().observeOn(Schedulers.io()),
                 BiFunction { t1, t2 -> listOf(t1, t2) }

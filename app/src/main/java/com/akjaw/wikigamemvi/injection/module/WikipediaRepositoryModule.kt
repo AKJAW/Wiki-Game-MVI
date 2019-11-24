@@ -1,12 +1,12 @@
 package com.akjaw.wikigamemvi.injection.module
 
-import com.akjaw.wikigamemvi.data.repository.WikipediaRepositoryImpl
-import com.akjaw.wikigamemvi.data.repository.base.WikipediaRepository
+import com.akjaw.wikigamemvi.data.repository.WikiRepositoryImpl
+import com.akjaw.domain.repository.WikiRepository
 import dagger.Binds
 import dagger.Module
 
 @Module
 abstract class WikipediaRepositoryModule {
     @Binds
-    abstract fun bindTaskRepository(wikipediaRepositoryImpl: WikipediaRepositoryImpl): WikipediaRepository
+    abstract fun bindTaskRepository(wikipediaRepositoryImpl: WikiRepositoryImpl): WikiRepository
 }
