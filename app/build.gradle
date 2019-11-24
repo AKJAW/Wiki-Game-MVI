@@ -9,7 +9,7 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "com.example.wikigamemvi"
+        applicationId "com.akjaw.wikigamemvi"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
