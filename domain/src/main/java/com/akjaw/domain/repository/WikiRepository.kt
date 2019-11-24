@@ -6,8 +6,8 @@ import io.reactivex.Single
 
 interface WikiRepository {
 
-    fun getRandomArticle(): Single<com.akjaw.domain.model.WikiResponse>
+    fun getRandomArticle(): Single<WikiResponse>
 
-    fun getArticleFromTitle(title: com.akjaw.domain.model.WikiTitle): Single<com.akjaw.domain.model.WikiResponse>
+    fun getArticleFromTitle(title: WikiTitle): Single<WikiResponse>
 
 }

@@ -1,6 +1,8 @@
 package com.akjaw.wikigamemvi.feature.game
 
 import com.akjaw.domain.repository.WikiRepository
+import com.akjaw.domain.usecase.GetArticleFromTitleUseCase
+import com.akjaw.domain.usecase.GetRandomArticleUseCase
 import com.akjaw.wikigamemvi.feature.base.BaseViewModel
 import com.akjaw.wikigamemvi.feature.base.Lce
 import com.akjaw.wikigamemvi.feature.game.model.GameAction
@@ -18,7 +20,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class GameViewModel @Inject constructor(
-    private val wikiRepository: WikiRepository
+    private val getRandomArticleUseCase: GetRandomArticleUseCase,
+    private val getArticleFromTitleUseCase: GetArticleFromTitleUseCase
 ): BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
 
     val testArticle = com.akjaw.domain.model.WikiResponse(
