@@ -1,17 +1,18 @@
 apply plugin: 'kotlin'
 
 dependencies {
+    implementation project(':domain')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    def domainDependencies = rootProject.ext.domainDependencies
-    def domainTestDependencies = rootProject.ext.domainTestDependencies
+    def dataDependencies = rootProject.ext.dataDependencies
+    def dataTestDependencies = rootProject.ext.dataTestDependencies
 
-    implementation domainDependencies.rxKotlin
-    implementation domainDependencies.rxRelay
-    implementation domainDependencies.javaxAnnotation
-    implementation domainDependencies.javaxInject
+    implementation dataDependencies.rxKotlin
+    implementation dataDependencies.rxRelay
+    implementation dataDependencies.javaxAnnotation
+    implementation dataDependencies.javaxInject
 
-    testImplementation domainTestDependencies.jUnit
+    testImplementation dataTestDependencies.jUnit
 }
 
 buildscript {
@@ -39,3 +40,4 @@ compileTestKotlin {
         jvmTarget = "1.8"
     }
 }
+

@@ -25,18 +25,6 @@ class GameViewModel @Inject constructor(
     private val getArticleFromTitleUseCase: GetArticleFromTitleUseCase
 ): BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
 
-//    val testArticle = com.akjaw.domain.model.WikiResponse(
-//        "name",
-//        "Description",
-//        "img.jpg",
-//        "wiki.pl",
-//        listOf("aa", "bb", "cc")
-//    )
-//    var i = 0
-//    fun loadArticle() = Observable
-//        .just(testArticle.copy(name = testArticle.name + i++))
-//        .delay(3L, TimeUnit.SECONDS)
-
     init {
         process(InitializeArticlesAction)
     }
@@ -151,6 +139,9 @@ class GameViewModel @Inject constructor(
                     Lce.Error(LoadCurrentArticleResult())
                 }
                 .startWith(Lce.Loading(LoadCurrentArticleResult()))
+                .doOnComplete {
+                    val s = "s"
+                }
         }
     }
 

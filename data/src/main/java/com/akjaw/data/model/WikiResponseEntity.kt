@@ -1,4 +1,4 @@
-package com.akjaw.wikigamemvi.data.model
+package com.akjaw.data.model
 
 import com.akjaw.domain.model.WikiTitle
 

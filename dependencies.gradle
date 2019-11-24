@@ -5,6 +5,9 @@ ext {
     compileSdkVersion = 29
 
     //Libraries
+    javaxAnnotationVersion = '1.0'
+    javaxInjectVersion = '1'
+    appCompatVersion = '1.1.0'
     appCompatVersion = '1.1.0'
     materialVersion = '1.0.0'
     coreKtxVersion = '1.1.0'
@@ -25,14 +28,26 @@ ext {
     espressoVersion = '3.2.0'
 
     domainDependencies = [
-            javaxAnnotation: "javax.annotation:jsr250-api:1.0",
-            javaxInject: "javax.inject:javax.inject:1",
+            javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
+            javaxInject: "javax.inject:javax.inject:$javaxInjectVersion",
             rxKotlin: "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion",
             rxRelay: "com.jakewharton.rxrelay2:rxrelay:$rxRelayVersion"
     ]
 
 
     domainTestDependencies = [
+            jUnit: "junit:junit:$jUnitVersion"
+    ]
+
+    dataDependencies = [
+            javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
+            javaxInject: "javax.inject:javax.inject:$javaxInjectVersion",
+            rxKotlin: "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion",
+            rxRelay: "com.jakewharton.rxrelay2:rxrelay:$rxRelayVersion"
+    ]
+
+
+    dataTestDependencies = [
             jUnit: "junit:junit:$jUnitVersion"
     ]
 }

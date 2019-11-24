@@ -1,4 +1,4 @@
-package com.akjaw.wikigamemvi.data.repository
+package com.akjaw.data.repository
 
 import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.repository.WikiRepository

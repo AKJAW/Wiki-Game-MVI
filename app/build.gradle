@@ -25,6 +25,9 @@ android {
 }
 
 dependencies {
+    implementation project(':domain')
+    implementation project(':data')
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
@@ -56,6 +59,4 @@ dependencies {
     testImplementation "junit:junit:$jUnitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidJUnitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
-
-    implementation project(':domain')
 }
