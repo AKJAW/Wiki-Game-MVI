@@ -4,7 +4,6 @@ import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.model.WikiTitle
 import com.akjaw.domain.repository.WikiRepository
 import io.reactivex.Observable
-import io.reactivex.Single
 import javax.inject.Inject
 
 

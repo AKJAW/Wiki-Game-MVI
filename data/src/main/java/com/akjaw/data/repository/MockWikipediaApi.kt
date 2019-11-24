@@ -8,8 +8,14 @@ import kotlin.random.Random
 class MockWikipediaApi {
     private val articles = listOf(
         WikiResponse(name = "First", outgoingTitles = listOf("Third")),
-        WikiResponse(name = "Second", outgoingTitles = listOf("Fourth", "First")),
-        WikiResponse(name = "Third", outgoingTitles = listOf("Fourth", "Second")),
+        WikiResponse(
+            name = "Second",
+            outgoingTitles = listOf("Fourth", "First")
+        ),
+        WikiResponse(
+            name = "Third",
+            outgoingTitles = listOf("Fourth", "Second")
+        ),
         WikiResponse(name = "Fourth", outgoingTitles = listOf("First"))
     )
 

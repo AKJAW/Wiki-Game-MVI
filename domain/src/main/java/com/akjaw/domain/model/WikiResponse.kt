@@ -1,7 +1,5 @@
 package com.akjaw.domain.model
 
-typealias WikiTitle = String
-
 data class WikiResponse(
     val name: String = "",
     val description: String = "",

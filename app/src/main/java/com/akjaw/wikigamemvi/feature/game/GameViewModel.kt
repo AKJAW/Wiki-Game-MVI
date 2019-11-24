@@ -1,5 +1,7 @@
 package com.akjaw.wikigamemvi.feature.game
 
+import com.akjaw.domain.model.WikiArticle
+import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.repository.WikiRepository
 import com.akjaw.domain.usecase.GetArticleFromTitleUseCase
 import com.akjaw.domain.usecase.GetRandomArticleUseCase
@@ -12,6 +14,7 @@ import com.akjaw.wikigamemvi.feature.game.model.GameResult.*
 import com.akjaw.wikigamemvi.feature.game.model.GameViewEffect
 import com.akjaw.wikigamemvi.feature.game.model.GameViewEffect.SomeToastEffect
 import com.akjaw.wikigamemvi.feature.game.model.GameViewState
+import com.akjaw.wikigamemvi.util.toArticle
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
@@ -52,8 +55,8 @@ class GameViewModel @Inject constructor(
     private fun handleResultContent(state: GameViewState, payload: GameResult): GameViewState {
         return when(payload){
             is InitializeArticlesResult -> {
-                val targetArticle = com.akjaw.domain.model.WikiArticle.fromResponse(payload.targetArticleResponse)
-                val currentArticle = com.akjaw.domain.model.WikiArticle.fromResponse(payload.currentArticleResponse)
+                val targetArticle = payload.targetArticleResponse.toArticle()
+                val currentArticle = payload.currentArticleResponse.toArticle()
 
                 state.copy(
                     targetArticle = targetArticle,
@@ -64,7 +67,7 @@ class GameViewModel @Inject constructor(
             }
 
             is LoadCurrentArticleResult -> {
-                val currentArticle = com.akjaw.domain.model.WikiArticle.fromResponse(payload.articleResponse)
+                val currentArticle = payload.articleResponse.toArticle()
 
                 state.copy(
                     currentArticle = currentArticle,
@@ -112,7 +115,7 @@ class GameViewModel @Inject constructor(
 
     private fun Observable<InitializeArticlesAction>.onInitializeArticles(): Observable<Lce<InitializeArticlesResult>> {
         return switchMap {
-            Observable.zip<com.akjaw.domain.model.WikiResponse, com.akjaw.domain.model.WikiResponse, List<com.akjaw.domain.model.WikiResponse>>(
+            Observable.zip<WikiResponse, WikiResponse, List<WikiResponse>>(
                 getRandomArticleUseCase().observeOn(Schedulers.io()),
                 getRandomArticleUseCase().observeOn(Schedulers.io()),
                 BiFunction { t1, t2 -> listOf(t1, t2) }
