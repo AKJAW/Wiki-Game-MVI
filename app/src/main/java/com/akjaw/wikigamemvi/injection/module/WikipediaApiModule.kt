@@ -1,17 +1,16 @@
 package com.akjaw.wikigamemvi.injection.module
 
-import com.akjaw.data.repository.MockWikipediaApi
+import com.akjaw.data.repository.MockWikipediaApiImpl
+import com.akjaw.data.repository.WikipediaApi
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
 
 @Module
-object WikipediaApiModule {
+abstract class WikipediaApiModule {
 
-    @JvmStatic @Singleton @Provides
-    fun providesApi(): com.akjaw.data.repository.MockWikipediaApi {
-        return com.akjaw.data.repository.MockWikipediaApi()
-    }
+    @Binds
+    abstract fun bindWikiApi(impl: MockWikipediaApiImpl)
+            : WikipediaApi
 
 
 }

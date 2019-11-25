@@ -17,7 +17,7 @@ class GetTargetArticleUseCaseImpl @Inject constructor(
     //or
     //TODO get target article (the article is save internally inside repository)
     override fun invoke(): Observable<WikiResponse> {
-        return wikiRepository.getTargetArticle()
+        return wikiRepository.getTargetArticle().toObservable()
 //            .switchIfEmpty(
 //                loadRandomArticleUseCase()
 //                    .doOnNext {

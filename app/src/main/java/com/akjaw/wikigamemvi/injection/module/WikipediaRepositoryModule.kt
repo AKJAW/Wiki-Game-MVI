@@ -13,7 +13,7 @@ import dagger.Module
 @Module
 abstract class WikipediaRepositoryModule {
     @Binds
-    abstract fun bindTaskRepository(wikipediaRepositoryImpl: com.akjaw.data.repository.WikiRepositoryImpl): WikiRepository
+    abstract fun bindTaskRepository(wikipediaRepositoryImpl: WikiRepositoryImpl): WikiRepository
 
     @Binds
     abstract fun bindGetRandomArticleUseCase(impl: GetRandomArticleUseCaseImpl)
