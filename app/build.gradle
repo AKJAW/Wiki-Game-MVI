@@ -57,6 +57,7 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerCompilerVersion"
 
     testImplementation "junit:junit:$jUnitVersion"
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidJUnitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
 }

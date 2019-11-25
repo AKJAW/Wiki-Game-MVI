@@ -26,6 +26,7 @@ ext {
     jUnitVersion = '4.12'
     androidJUnitVersion = '1.1.1'
     espressoVersion = '3.2.0'
+    mockitoVersion = '3.1.0'
 
     domainDependencies = [
             javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
@@ -36,7 +37,8 @@ ext {
 
 
     domainTestDependencies = [
-            jUnit: "junit:junit:$jUnitVersion"
+            jUnit: "junit:junit:$jUnitVersion",
+            mockitoCore: "org.mockito:mockito-core:$mockitoVersion"
     ]
 
     dataDependencies = [
@@ -48,6 +50,7 @@ ext {
 
 
     dataTestDependencies = [
-            jUnit: "junit:junit:$jUnitVersion"
+            jUnit: "junit:junit:$jUnitVersion",
+            mockitoCore: "org.mockito:mockito-core:$mockitoVersion"
     ]
 }

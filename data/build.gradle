@@ -13,6 +13,7 @@ dependencies {
     implementation dataDependencies.javaxInject
 
     testImplementation dataTestDependencies.jUnit
+    testImplementation dataTestDependencies.mockitoCore
 }
 
 buildscript {

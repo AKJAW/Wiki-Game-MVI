@@ -5,7 +5,12 @@ import com.akjaw.domain.model.WikiTitle
 import io.reactivex.Single
 import kotlin.random.Random
 
-class MockWikipediaApi {
+interface MockWikipediaApi {
+    fun randomArticle(): Single<WikiResponse>
+    fun articleFromTitle(title: WikiTitle): Single<WikiResponse>
+}
+
+class MockWikipediaApiImpl: MockWikipediaApi {
     private val articles = listOf(
         WikiResponse(name = "First", outgoingTitles = listOf("Third")),
         WikiResponse(
@@ -19,13 +24,13 @@ class MockWikipediaApi {
         WikiResponse(name = "Fourth", outgoingTitles = listOf("First"))
     )
 
-    fun randomArticle(): Single<WikiResponse> {
+    override fun randomArticle(): Single<WikiResponse> {
         val index = Random.nextInt(articles.size)
 
         return Single.just(articles[index])
     }
 
-    fun articleFromTitle(title: WikiTitle): Single<WikiResponse> {
+    override fun articleFromTitle(title: WikiTitle): Single<WikiResponse> {
         val article = articles.firstOrNull{
             it.name == title
         }
