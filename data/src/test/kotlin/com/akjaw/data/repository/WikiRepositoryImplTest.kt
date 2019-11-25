@@ -23,16 +23,33 @@ class WikiRepositoryImplTest {
     }
 
     @Test
-    fun `subsequent calls to getTargetArticles return the same value`() {
+    fun `subsequent calls to getTargetArticles without refresh return the same value`() {
         val testObserver = TestObserver<WikiResponse>()
-        wikiRepository.getTargetArticle().subscribe(testObserver)
+        wikiRepository.getTargetArticle(false).subscribe(testObserver)
         testObserver.assertValue(WikiResponse(name = "1"))
 
         val testObserver2 = TestObserver<WikiResponse>()
-        wikiRepository.getTargetArticle().subscribe(testObserver2)
+        wikiRepository.getTargetArticle(false).subscribe(testObserver2)
         testObserver2.assertValue(WikiResponse(name = "1"))
 
-        val s = "s"
+        val testObserver3 = TestObserver<WikiResponse>()
+        wikiRepository.getTargetArticle(false).subscribe(testObserver3)
+        testObserver3.assertValue(WikiResponse(name = "1"))
+    }
+
+    @Test
+    fun `calling getTargetArticles with refresh causes the value to change`() {
+        val testObserver = TestObserver<WikiResponse>()
+        wikiRepository.getTargetArticle(false).subscribe(testObserver)
+        testObserver.assertValue(WikiResponse(name = "1"))
+
+        val testObserver2 = TestObserver<WikiResponse>()
+        wikiRepository.getTargetArticle(true).subscribe(testObserver2)
+        testObserver2.assertValue(WikiResponse(name = "2"))
+
+        val testObserver3 = TestObserver<WikiResponse>()
+        wikiRepository.getTargetArticle(false).subscribe(testObserver3)
+        testObserver3.assertValue(WikiResponse(name = "2"))
     }
 
     @Test

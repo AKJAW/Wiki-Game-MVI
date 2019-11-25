@@ -6,18 +6,17 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 interface GetTargetArticleUseCase {
-    operator fun invoke(): Observable<WikiResponse>
+    operator fun invoke(isNewTargetArticle: Boolean = false): Observable<WikiResponse>
 }
 
 class GetTargetArticleUseCaseImpl @Inject constructor(
-    private val wikiRepository: WikiRepository,
-    private val loadRandomArticleUseCase: GetRandomArticleUseCase
+    private val wikiRepository: WikiRepository
 ): GetTargetArticleUseCase {
     //TODO get random article -> save it to the repository (saveTargetRepo?)
     //or
     //TODO get target article (the article is save internally inside repository)
-    override fun invoke(): Observable<WikiResponse> {
-        return wikiRepository.getTargetArticle().toObservable()
+    override fun invoke(isNewTargetArticle: Boolean): Observable<WikiResponse> {
+        return wikiRepository.getTargetArticle(isNewTargetArticle).toObservable()
 //            .switchIfEmpty(
 //                loadRandomArticleUseCase()
 //                    .doOnNext {

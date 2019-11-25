@@ -13,14 +13,14 @@ class WikiRepositoryImpl @Inject constructor(
 
     private val targetBehaviorSubject = BehaviorSubject.create<WikiResponse>()
 
-    override fun getTargetArticle(): Single<WikiResponse> {
+    override fun getTargetArticle(refresh: Boolean): Single<WikiResponse> {
         val targetArticle = targetBehaviorSubject.value
 
-        return if(targetArticle != null){
-            Single.just(targetArticle)
-        } else {
+        return if(targetArticle == null || refresh){
             getRandomArticle()
                 .doAfterSuccess { targetBehaviorSubject.onNext(it) }
+        } else {
+            Single.just(targetArticle)
         }
     }
 
