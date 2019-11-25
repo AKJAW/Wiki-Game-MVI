@@ -13,7 +13,7 @@ class WikiRepositoryImplTest {
     private lateinit var wikiRepository: WikiRepository
 
     @Before
-    fun init(){
+    fun setUp(){
         val apiMock = Mockito.mock(WikipediaApi::class.java)
         Mockito.`when`(apiMock.randomArticle())
             .thenReturn(Single.just(WikiResponse(name = "1")))
