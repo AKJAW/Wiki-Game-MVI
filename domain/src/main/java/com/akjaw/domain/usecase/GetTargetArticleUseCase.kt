@@ -20,24 +20,12 @@ class GetTargetArticleUseCaseImpl @Inject constructor(
     private val targetBehaviorSubject = BehaviorSubject.create<WikiResponse>()
 
     override fun invoke(isNewTargetArticle: Boolean): Observable<WikiResponse> {
-        return getTargetArticleFromCache(isNewTargetArticle)
-            .toObservable()
-            .compose {
-                if (it.isEmpty.blockingGet()){
-                    getTargetArticleFromRepository()
-                } else {
-                    it
-                }
-            }
-    }
-
-    private fun getTargetArticleFromCache(isNewTargetArticle: Boolean): Maybe<WikiResponse>{
         val targetArticle = targetBehaviorSubject.value
 
         return if(targetArticle == null || isNewTargetArticle){
-            Maybe.empty()
+            getTargetArticleFromRepository()
         } else {
-            Maybe.just(targetArticle)
+            Observable.just(targetArticle)
         }
     }
 
