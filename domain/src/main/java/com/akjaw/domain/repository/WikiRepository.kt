@@ -9,8 +9,6 @@ import io.reactivex.subjects.BehaviorSubject
 
 interface WikiRepository {
 
-    fun getTargetArticle(refresh: Boolean): Single<WikiResponse>
-
     fun getRandomArticle(): Single<WikiResponse>
 
     fun getArticleFromTitle(title: WikiTitle): Single<WikiResponse>

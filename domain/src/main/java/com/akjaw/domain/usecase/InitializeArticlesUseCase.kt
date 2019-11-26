@@ -22,13 +22,13 @@ class InitializeArticlesUseCaseImpl @Inject constructor(
             .flatMap { target ->
                 wikiRepository.getRandomArticle()
                     .map { random -> target to random }
+                    .toObservable()
             }
             .repeat()
             .takeUntil { (target, random) ->
                 target != random
             }
             .takeLast(1)
-            .toObservable()
     }
 
 }

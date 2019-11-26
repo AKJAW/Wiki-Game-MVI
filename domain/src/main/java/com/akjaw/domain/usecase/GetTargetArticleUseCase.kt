@@ -2,34 +2,48 @@ package com.akjaw.domain.usecase
 
 import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.repository.WikiRepository
+import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 interface GetTargetArticleUseCase {
-    operator fun invoke(isNewTargetArticle: Boolean = false): Single<WikiResponse>
+    operator fun invoke(isNewTargetArticle: Boolean = false): Observable<WikiResponse>
 }
 
 class GetTargetArticleUseCaseImpl @Inject constructor(
     private val wikiRepository: WikiRepository
 ): GetTargetArticleUseCase {
-    //TODO get random article -> save it to the repository (saveTargetRepo?)
-    //or
-    //TODO get target article (the article is save internally inside repository)
-    override fun invoke(isNewTargetArticle: Boolean): Single<WikiResponse> {
-        return wikiRepository.getTargetArticle(isNewTargetArticle)
-//            .switchIfEmpty(
-//                loadRandomArticleUseCase()
-//                    .doOnNext {
-//                        wikiRepository.setTargetArticle()
-//                        print("only first $it")
-//                        val s = "s"
-//                    }
-//            )
-//            .doOnNext {
-//                print("everyTime $it")
-//                val s = "s"
-//            }
+
+    private val targetBehaviorSubject = BehaviorSubject.create<WikiResponse>()
+
+    override fun invoke(isNewTargetArticle: Boolean): Observable<WikiResponse> {
+        return getTargetArticleFromCache(isNewTargetArticle)
+            .toObservable()
+            .compose {
+                if (it.isEmpty.blockingGet()){
+                    getTargetArticleFromRepository()
+                } else {
+                    it
+                }
+            }
     }
 
+    private fun getTargetArticleFromCache(isNewTargetArticle: Boolean): Maybe<WikiResponse>{
+        val targetArticle = targetBehaviorSubject.value
+
+        return if(targetArticle == null || isNewTargetArticle){
+            Maybe.empty()
+        } else {
+            Maybe.just(targetArticle)
+        }
+    }
+
+    private fun getTargetArticleFromRepository(): Observable<WikiResponse>{
+        return wikiRepository.getRandomArticle()
+            .doAfterSuccess { targetBehaviorSubject.onNext(it) }
+            .toObservable()
+    }
 }
