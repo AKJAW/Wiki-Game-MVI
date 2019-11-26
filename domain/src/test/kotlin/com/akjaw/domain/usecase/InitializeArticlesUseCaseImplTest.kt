@@ -3,8 +3,11 @@ package com.akjaw.domain.usecase
 import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.repository.WikiRepository
 import io.reactivex.Observable
+import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.observers.TestObserver
+import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.schedulers.Schedulers
 import org.junit.Before
 
 import org.junit.Assert.*
@@ -23,6 +26,10 @@ class InitializeArticlesUseCaseImplTest {
         wikiRepository = Mockito.mock(WikiRepository::class.java)
         targetUseCase = Mockito.mock(GetTargetArticleUseCase::class.java)
         useCase = InitializeArticlesUseCaseImpl(wikiRepository, targetUseCase)
+
+        RxJavaPlugins.setIoSchedulerHandler {
+            Schedulers.trampoline()
+        }
     }
 
     @Test

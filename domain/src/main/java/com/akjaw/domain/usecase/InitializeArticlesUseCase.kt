@@ -6,6 +6,7 @@ import com.akjaw.domain.repository.WikiRepository
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
 import java.lang.IllegalStateException
 import javax.inject.Inject
 
@@ -19,6 +20,7 @@ class InitializeArticlesUseCaseImpl @Inject constructor(
 ): InitializeArticlesUseCase {
     override fun invoke(): Observable<Pair<WikiResponse, WikiResponse>> {
         return getTargetArticleUseCase(true)
+            .observeOn(Schedulers.io())
             .flatMap { target ->
                 wikiRepository.getRandomArticle()
                     .map { random -> target to random }
