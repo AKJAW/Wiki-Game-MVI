@@ -5,6 +5,7 @@ import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.repository.WikiRepository
 import com.akjaw.domain.usecase.GetArticleFromTitleUseCase
 import com.akjaw.domain.usecase.GetRandomArticleUseCase
+import com.akjaw.domain.usecase.InitializeArticlesUseCase
 import com.akjaw.wikigamemvi.feature.base.BaseViewModel
 import com.akjaw.wikigamemvi.feature.base.Lce
 import com.akjaw.wikigamemvi.feature.game.model.GameAction
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class GameViewModel @Inject constructor(
-    private val getRandomArticleUseCase: GetRandomArticleUseCase,
+    private val initializeArticlesUseCase: InitializeArticlesUseCase,
     private val getArticleFromTitleUseCase: GetArticleFromTitleUseCase
 ): BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
 
@@ -115,13 +116,9 @@ class GameViewModel @Inject constructor(
 
     private fun Observable<InitializeArticlesAction>.onInitializeArticles(): Observable<Lce<InitializeArticlesResult>> {
         return switchMap {
-            Observable.zip<WikiResponse, WikiResponse, List<WikiResponse>>(
-                getRandomArticleUseCase().observeOn(Schedulers.io()),
-                getRandomArticleUseCase().observeOn(Schedulers.io()),
-                BiFunction { t1, t2 -> listOf(t1, t2) }
-            )
+            initializeArticlesUseCase()
                 .map<Lce<InitializeArticlesResult>> { responses ->
-                    Lce.Content(InitializeArticlesResult(responses[0], responses[1]))
+                    Lce.Content(InitializeArticlesResult(responses.first, responses.second))
                 }
                 .onErrorReturn {
                     val errorResult = InitializeArticlesResult()
