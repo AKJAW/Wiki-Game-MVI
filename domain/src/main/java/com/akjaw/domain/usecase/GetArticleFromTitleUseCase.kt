@@ -14,6 +14,8 @@ interface GetArticleFromTitleUseCase {
 class GetArticleFromTitleUseCaseImpl @Inject constructor(
     private val wikiRepository: WikiRepository
 ): GetArticleFromTitleUseCase {
-    override fun invoke(title: WikiTitle): Observable<WikiResponse>
-            = wikiRepository.getArticleFromTitle(title).toObservable()
+    override fun invoke(title: WikiTitle): Observable<WikiResponse>{
+        return wikiRepository.getArticleFromTitle(title)
+            .toObservable()
+    }
 }

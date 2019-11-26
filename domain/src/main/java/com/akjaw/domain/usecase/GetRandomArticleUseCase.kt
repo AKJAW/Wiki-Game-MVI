@@ -4,6 +4,7 @@ import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.repository.WikiRepository
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -16,6 +17,7 @@ class GetRandomArticleUseCaseImpl @Inject constructor(
 ): GetRandomArticleUseCase {
     override fun invoke(): Observable<WikiResponse>
             = wikiRepository.getRandomArticle()
+        .observeOn(Schedulers.io())
         .delay(3L, TimeUnit.SECONDS)
         .toObservable()
 }

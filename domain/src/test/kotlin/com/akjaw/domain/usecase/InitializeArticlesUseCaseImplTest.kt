@@ -8,6 +8,7 @@ import io.reactivex.Single
 import io.reactivex.observers.TestObserver
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
+import org.junit.After
 import org.junit.Before
 
 import org.junit.Assert.*
@@ -30,6 +31,11 @@ class InitializeArticlesUseCaseImplTest {
         RxJavaPlugins.setIoSchedulerHandler {
             Schedulers.trampoline()
         }
+    }
+
+    @After
+    fun tearDown(){
+        RxJavaPlugins.reset()
     }
 
     @Test
