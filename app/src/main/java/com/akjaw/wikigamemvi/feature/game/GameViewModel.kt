@@ -1,10 +1,8 @@
 package com.akjaw.wikigamemvi.feature.game
 
-import com.akjaw.domain.model.WikiArticle
-import com.akjaw.domain.model.WikiResponse
-import com.akjaw.domain.repository.WikiRepository
+import com.akjaw.domain.model.WikiTitle
+import com.akjaw.domain.usecase.ArticleWinConditionUseCase
 import com.akjaw.domain.usecase.GetArticleFromTitleUseCase
-import com.akjaw.domain.usecase.GetRandomArticleUseCase
 import com.akjaw.domain.usecase.InitializeArticlesUseCase
 import com.akjaw.wikigamemvi.feature.base.BaseViewModel
 import com.akjaw.wikigamemvi.feature.base.Lce
@@ -17,16 +15,13 @@ import com.akjaw.wikigamemvi.feature.game.model.GameViewEffect.SomeToastEffect
 import com.akjaw.wikigamemvi.feature.game.model.GameViewState
 import com.akjaw.wikigamemvi.util.toArticle
 import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.ofType
-import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class GameViewModel @Inject constructor(
     private val initializeArticlesUseCase: InitializeArticlesUseCase,
-    private val getArticleFromTitleUseCase: GetArticleFromTitleUseCase
+    private val getArticleFromTitleUseCase: GetArticleFromTitleUseCase,
+    private val winConditionUseCase: ArticleWinConditionUseCase
 ): BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
 
     init {
@@ -38,7 +33,7 @@ class GameViewModel @Inject constructor(
             Observable.merge(
                 it.ofType<ShowToastAction>().onShowToast(),
                 it.ofType<InitializeArticlesAction>().onInitializeArticles(),
-                it.ofType<LoadCurrentArticleAction>().onLoadCurrentArticle()
+                it.ofType<LoadNextArticleAction>().onLoadNextArticle()
             )
         }
     }
@@ -67,7 +62,7 @@ class GameViewModel @Inject constructor(
                     wikiNavigationLinks = payload.currentArticleResponse.outgoingTitles)
             }
 
-            is LoadCurrentArticleResult -> {
+            is LoadNextArticleResult -> {
                 val currentArticle = payload.articleResponse.toArticle()
 
                 state.copy(
@@ -91,7 +86,7 @@ class GameViewModel @Inject constructor(
                 isCurrentArticleLoading = true,
                 wikiNavigationLinks = listOf())
 
-            is LoadCurrentArticleResult -> state.copy(
+            is LoadNextArticleResult -> state.copy(
                 currentArticle = null,
                 isCurrentArticleLoading = true,
                 wikiNavigationLinks = listOf()
@@ -111,7 +106,7 @@ class GameViewModel @Inject constructor(
 
 
     private fun Observable<ShowToastAction>.onShowToast(): Observable<Lce<ShowToastResult>> {
-        return map<Lce<ShowToastResult>> { Lce.Content(ShowToastResult("aa")) }
+        return map<Lce<ShowToastResult>> { Lce.Content(ShowToastResult(it.text)) }
     }
 
     private fun Observable<InitializeArticlesAction>.onInitializeArticles(): Observable<Lce<InitializeArticlesResult>> {
@@ -129,20 +124,26 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    private fun Observable<LoadCurrentArticleAction>.onLoadCurrentArticle(): Observable<Lce<LoadCurrentArticleResult>> {
+    private fun Observable<LoadNextArticleAction>.onLoadNextArticle(): Observable<Lce<GameResult>> {
         return switchMap {
-            getArticleFromTitleUseCase(it.wikiTitle)
-                .map<Lce<LoadCurrentArticleResult>> { response ->
-                    Lce.Content(LoadCurrentArticleResult(response))
+            winConditionUseCase(it.wikiTitle)
+                .map <Lce<GameResult>> {
+                    Lce.Content(WinConditionResult)
                 }
-                .onErrorReturn {
-                    Lce.Error(LoadCurrentArticleResult())
-                }
-                .startWith(Lce.Loading(LoadCurrentArticleResult()))
-                .doOnComplete {
-                    val s = "s"
-                }
+                .switchIfEmpty(getNextArticle(it.wikiTitle) as Observable<Lce<GameResult>>)
         }
     }
+
+    private fun getNextArticle(wikiTitle: WikiTitle): Observable<Lce<LoadNextArticleResult>> {
+        return getArticleFromTitleUseCase(wikiTitle)
+            .map<Lce<LoadNextArticleResult>> { response ->
+                Lce.Content(LoadNextArticleResult(response))
+            }
+            .onErrorReturn {
+                Lce.Error(LoadNextArticleResult())
+            }
+            .startWith(Lce.Loading(LoadNextArticleResult()))
+    }
+
 
 }

@@ -20,7 +20,7 @@ sealed class GameViewEffect: BaseViewEffect{
 sealed class GameAction: BaseAction {
     data class ShowToastAction(val text: String): GameAction()
     object InitializeArticlesAction: GameAction()
-    data class LoadCurrentArticleAction(val wikiTitle: WikiTitle): GameAction()
+    data class LoadNextArticleAction(val wikiTitle: WikiTitle): GameAction()
 }
 
 sealed class GameResult: BaseResult {
@@ -31,7 +31,9 @@ sealed class GameResult: BaseResult {
         val currentArticleResponse: WikiResponse = WikiResponse()
     ): GameResult()
 
-    data class LoadCurrentArticleResult(
+    data class LoadNextArticleResult(
         val articleResponse: WikiResponse = WikiResponse()
     ): GameResult()
+
+    object WinConditionResult: GameResult()
 }

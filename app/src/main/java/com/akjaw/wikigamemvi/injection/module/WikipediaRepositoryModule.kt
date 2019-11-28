@@ -7,6 +7,7 @@ import com.akjaw.domain.usecase.GetTargetArticleUseCase
 import com.akjaw.domain.usecase.GetTargetArticleUseCaseImpl
 import dagger.Binds
 import dagger.Module
+import javax.inject.Singleton
 
 
 @Module
@@ -14,23 +15,23 @@ abstract class WikipediaRepositoryModule {
     @Binds
     abstract fun bindTaskRepository(wikipediaRepositoryImpl: WikiRepositoryImpl): WikiRepository
 
-    @Binds
+    @Binds @Singleton
     abstract fun bindGetRandomArticleUseCase(impl: GetRandomArticleUseCaseImpl)
             : GetRandomArticleUseCase
 
-    @Binds
+    @Binds @Singleton
     abstract fun bindGetArticleFromTitleUseCase(impl: GetArticleFromTitleUseCaseImpl)
             : GetArticleFromTitleUseCase
 
-    @Binds
+    @Binds @Singleton
     abstract fun bindGetTargetArticleUseCase(impl: GetTargetArticleUseCaseImpl)
             : GetTargetArticleUseCase
 
-    @Binds
+    @Binds @Singleton
     abstract fun bindInitializeArticlesUseCase(impl: InitializeArticlesUseCaseImpl)
             : InitializeArticlesUseCase
 
-    @Binds
+    @Binds @Singleton
     abstract fun bindArticleWinConditionUseCase(impl: ArticleWinConditionUseCaseImpl)
             : ArticleWinConditionUseCase
 }

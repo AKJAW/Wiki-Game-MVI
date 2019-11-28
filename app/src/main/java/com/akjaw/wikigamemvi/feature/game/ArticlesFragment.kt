@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.akjaw.wikigamemvi.R
 import com.akjaw.domain.model.WikiTitle
 import com.akjaw.wikigamemvi.feature.game.model.GameAction
+import com.akjaw.wikigamemvi.feature.game.model.GameViewEffect
 import com.akjaw.wikigamemvi.feature.game.model.GameViewState
 import com.akjaw.wikigamemvi.injection.injector
 import io.reactivex.disposables.CompositeDisposable
@@ -36,10 +38,13 @@ class ArticlesFragment: Fragment(){
         } ?: throw Exception("Invalid Activity")
 
         wikiLinksAdapter = ArticleLinksAdapter(::onArticleNavigationClick)
+
+        disposables += viewModel.viewState.subscribe(::render)
+        disposables += viewModel.viewEffects.subscribe(::trigger)
     }
 
     private fun onArticleNavigationClick(wikiTitle: WikiTitle){
-        viewModel.process(GameAction.LoadCurrentArticleAction(wikiTitle))
+        viewModel.process(GameAction.LoadNextArticleAction(wikiTitle))
 //        Toast.makeText(activity, wikiTitle, Toast.LENGTH_SHORT).show()
     }
 
@@ -57,11 +62,14 @@ class ArticlesFragment: Fragment(){
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        disposables += viewModel.viewState.subscribe(::render)
-    }
+//    override fun onResume() {
+//        super.onResume()
+//
+//        disposables += viewModel.viewState.subscribe(::render)
+//        disposables += viewModel.viewEffects.subscribe(::trigger)
+//
+//
+//    }
 
     private fun render(state: GameViewState){
 
@@ -81,9 +89,24 @@ class ArticlesFragment: Fragment(){
         }
     }
 
-    override fun onPause() {
-        super.onPause()
+
+    private fun trigger(effect: GameViewEffect) {
+        when(effect){
+            is GameViewEffect.SomeToastEffect -> {
+                Toast.makeText(activity, effect.text, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
 
         disposables.clear()
     }
+
+    //    override fun onPause() {
+//        super.onPause()
+//
+//        disposables.clear()
+//    }
 }
