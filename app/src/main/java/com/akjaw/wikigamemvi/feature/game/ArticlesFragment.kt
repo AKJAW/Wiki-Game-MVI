@@ -41,6 +41,9 @@ class ArticlesFragment: Fragment(){
 
         disposables += viewModel.viewState.subscribe(::render)
         disposables += viewModel.viewEffects.subscribe(::trigger)
+
+
+        viewModel.process(GameAction.ShowToastAction("aa"))
     }
 
     private fun onArticleNavigationClick(wikiTitle: WikiTitle){

@@ -97,10 +97,17 @@ class GameViewModel @Inject constructor(
     }
 
     override fun Observable<Lce<out GameResult>>.resultToViewEffect(): Observable<GameViewEffect> {
-        return filter { it is Lce.Content && it.payload is ShowToastResult }
-            .map<GameViewEffect> {
-                val showToast = it as Lce.Content<ShowToastResult>
-                SomeToastEffect(showToast.payload.text)
+        return filter { it is Lce.Content }
+            .cast(Lce.Content::class.java)
+            .flatMap <GameViewEffect> { content ->
+                when(content.payload){
+                    is ShowToastResult -> {
+                        Observable.just(
+                            SomeToastEffect(content.payload.text)
+                        )
+                    }
+                    else -> Observable.empty<GameViewEffect>()
+                }
             }
     }
 
