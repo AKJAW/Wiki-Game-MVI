@@ -2,9 +2,7 @@ package com.akjaw.domain.usecase
 
 import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.repository.WikiRepository
-import io.reactivex.Maybe
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject

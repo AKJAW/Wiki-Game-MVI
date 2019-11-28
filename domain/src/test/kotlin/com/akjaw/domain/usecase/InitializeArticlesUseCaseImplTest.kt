@@ -3,15 +3,12 @@ package com.akjaw.domain.usecase
 import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.repository.WikiRepository
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.Single
-import io.reactivex.observers.TestObserver
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import org.junit.After
 import org.junit.Before
 
-import org.junit.Assert.*
 import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.verify

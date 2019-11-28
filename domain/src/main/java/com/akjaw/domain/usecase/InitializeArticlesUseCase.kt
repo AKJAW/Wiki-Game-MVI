@@ -1,13 +1,9 @@
 package com.akjaw.domain.usecase
 
-import com.akjaw.domain.model.WikiArticle
 import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.repository.WikiRepository
 import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
-import java.lang.IllegalStateException
 import javax.inject.Inject
 
 interface InitializeArticlesUseCase {
