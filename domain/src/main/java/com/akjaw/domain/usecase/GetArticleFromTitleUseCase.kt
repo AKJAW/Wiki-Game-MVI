@@ -4,6 +4,7 @@ import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.model.WikiTitle
 import com.akjaw.domain.repository.WikiRepository
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 
@@ -16,6 +17,7 @@ class GetArticleFromTitleUseCaseImpl @Inject constructor(
 ): GetArticleFromTitleUseCase {
     override fun invoke(title: WikiTitle): Observable<WikiResponse>{
         return wikiRepository.getArticleFromTitle(title)
+            .observeOn(Schedulers.io())
             .toObservable()
     }
 }

@@ -10,7 +10,8 @@ data class GameViewState(
     val isTargetArticleLoading: Boolean = false,
     val currentArticle: WikiArticle? = null,
     val isCurrentArticleLoading: Boolean = false,
-    val wikiNavigationLinks: List<WikiTitle> = listOf()
+    val wikiNavigationLinks: List<WikiTitle> = listOf(),
+    val hasWon: Boolean = false
 ): BaseViewState
 
 sealed class GameViewEffect: BaseViewEffect{

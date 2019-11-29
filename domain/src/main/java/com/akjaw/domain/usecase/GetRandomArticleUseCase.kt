@@ -18,6 +18,5 @@ class GetRandomArticleUseCaseImpl @Inject constructor(
     override fun invoke(): Observable<WikiResponse>
             = wikiRepository.getRandomArticle()
         .observeOn(Schedulers.io())
-        .delay(3L, TimeUnit.SECONDS)
         .toObservable()
 }

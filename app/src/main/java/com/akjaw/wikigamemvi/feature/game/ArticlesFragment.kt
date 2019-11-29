@@ -41,9 +41,6 @@ class ArticlesFragment: Fragment(){
 
         disposables += viewModel.viewState.subscribe(::render)
         disposables += viewModel.viewEffects.subscribe(::trigger)
-
-
-        viewModel.process(GameAction.ShowToastAction("aa"))
     }
 
     private fun onArticleNavigationClick(wikiTitle: WikiTitle){
@@ -90,6 +87,10 @@ class ArticlesFragment: Fragment(){
         if(state.wikiNavigationLinks.isNotEmpty()){
             wikiLinksAdapter.submitList(state.wikiNavigationLinks)
         }
+
+        wiki_navigation_recycler_view.isVisible = !state.hasWon
+        current_article_title_text_view.isVisible = !state.hasWon
+        current_article_header_text_view.isVisible = !state.hasWon
     }
 
 

@@ -59,7 +59,8 @@ class GameViewModel @Inject constructor(
                     isTargetArticleLoading = false,
                     currentArticle = currentArticle,
                     isCurrentArticleLoading = false,
-                    wikiNavigationLinks = payload.currentArticleResponse.outgoingTitles)
+                    wikiNavigationLinks = payload.currentArticleResponse.outgoingTitles,
+                    hasWon = false)
             }
 
             is LoadNextArticleResult -> {
@@ -69,6 +70,12 @@ class GameViewModel @Inject constructor(
                     currentArticle = currentArticle,
                     isCurrentArticleLoading = false,
                     wikiNavigationLinks = payload.articleResponse.outgoingTitles)
+            }
+
+            is WinConditionResult -> {
+                state.copy(
+                    hasWon = true
+                )
             }
 
             else -> state.copy()
@@ -137,6 +144,7 @@ class GameViewModel @Inject constructor(
                 .map <Lce<GameResult>> {
                     Lce.Content(WinConditionResult)
                 }
+                .retry(1)
                 .switchIfEmpty(getNextArticle(it.wikiTitle) as Observable<Lce<GameResult>>)
         }
     }
