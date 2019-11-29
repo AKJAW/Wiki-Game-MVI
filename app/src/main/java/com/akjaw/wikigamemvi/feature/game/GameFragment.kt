@@ -11,9 +11,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.akjaw.wikigamemvi.R
 import com.akjaw.domain.model.WikiTitle
+import com.akjaw.wikigamemvi.MainActivity
 import com.akjaw.wikigamemvi.feature.game.model.GameAction
 import com.akjaw.wikigamemvi.feature.game.model.GameViewEffect
 import com.akjaw.wikigamemvi.feature.game.model.GameViewState
+import com.akjaw.wikigamemvi.feature.victory.VictoryFragment
 import com.akjaw.wikigamemvi.injection.injector
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
