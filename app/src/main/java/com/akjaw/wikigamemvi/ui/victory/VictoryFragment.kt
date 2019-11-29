@@ -1,4 +1,4 @@
-package com.akjaw.wikigamemvi.feature.victory
+package com.akjaw.wikigamemvi.ui.victory
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.akjaw.wikigamemvi.R
-import com.akjaw.wikigamemvi.feature.game.GameViewModel
-import com.akjaw.wikigamemvi.feature.game.model.GameViewState
+import com.akjaw.wikigamemvi.ui.game.GameViewModel
+import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.injection.injector
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign

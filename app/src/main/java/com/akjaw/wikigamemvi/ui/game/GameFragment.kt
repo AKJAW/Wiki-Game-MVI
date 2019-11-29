@@ -1,4 +1,4 @@
-package com.akjaw.wikigamemvi.feature.game
+package com.akjaw.wikigamemvi.ui.game
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,15 +11,13 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.akjaw.wikigamemvi.R
 import com.akjaw.domain.model.WikiTitle
-import com.akjaw.wikigamemvi.MainActivity
-import com.akjaw.wikigamemvi.feature.game.model.GameAction
-import com.akjaw.wikigamemvi.feature.game.model.GameViewEffect
-import com.akjaw.wikigamemvi.feature.game.model.GameViewState
-import com.akjaw.wikigamemvi.feature.victory.VictoryFragment
+import com.akjaw.wikigamemvi.ui.game.model.GameAction
+import com.akjaw.wikigamemvi.ui.game.model.GameViewEffect
+import com.akjaw.wikigamemvi.ui.game.model.GameViewState
+import com.akjaw.wikigamemvi.ui.victory.VictoryFragment
 import com.akjaw.wikigamemvi.injection.injector
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_game.*
 import kotlinx.android.synthetic.main.fragment_game.view.*
 import java.lang.Exception

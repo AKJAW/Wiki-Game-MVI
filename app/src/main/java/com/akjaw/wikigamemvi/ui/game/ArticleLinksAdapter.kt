@@ -1,4 +1,4 @@
-package com.akjaw.wikigamemvi.feature.game
+package com.akjaw.wikigamemvi.ui.game
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.akjaw.wikigamemvi.R
-import com.akjaw.domain.model.WikiTitle
 import kotlinx.android.synthetic.main.wiki_navigation_item.view.*
 
 class ArticleLinksAdapter(

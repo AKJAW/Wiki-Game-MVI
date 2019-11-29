@@ -1,4 +1,4 @@
-package com.akjaw.wikigamemvi.feature
+package com.akjaw.wikigamemvi.ui
 
 import android.app.Application
 import com.akjaw.wikigamemvi.injection.DaggerApplicationComponentProvider

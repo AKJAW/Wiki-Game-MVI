@@ -1,9 +1,8 @@
-package com.akjaw.wikigamemvi.feature.base
+package com.akjaw.wikigamemvi.ui.base
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.jakewharton.rxrelay2.BehaviorRelay
-import com.jakewharton.rxrelay2.ReplayRelay
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

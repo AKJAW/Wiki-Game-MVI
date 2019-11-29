@@ -1,9 +1,9 @@
-package com.akjaw.wikigamemvi.feature.game.model
+package com.akjaw.wikigamemvi.ui.game.model
 
 import com.akjaw.domain.model.WikiArticle
 import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.model.WikiTitle
-import com.akjaw.wikigamemvi.feature.base.*
+import com.akjaw.wikigamemvi.ui.base.*
 
 data class GameViewState(
     val targetArticle: WikiArticle? = null,

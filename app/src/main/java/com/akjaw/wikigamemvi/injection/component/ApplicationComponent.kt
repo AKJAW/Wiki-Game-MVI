@@ -1,8 +1,8 @@
 package com.akjaw.wikigamemvi.injection.component
 
 import android.content.Context
-import com.akjaw.wikigamemvi.feature.base.ViewModelFactory
-import com.akjaw.wikigamemvi.feature.game.GameViewModel
+import com.akjaw.wikigamemvi.ui.base.ViewModelFactory
+import com.akjaw.wikigamemvi.ui.game.GameViewModel
 import com.akjaw.wikigamemvi.injection.module.WikipediaApiModule
 import com.akjaw.wikigamemvi.injection.module.WikipediaRepositoryModule
 import dagger.BindsInstance

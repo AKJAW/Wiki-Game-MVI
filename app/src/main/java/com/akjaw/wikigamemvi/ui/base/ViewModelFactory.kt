@@ -1,4 +1,4 @@
-package com.akjaw.wikigamemvi.feature.base
+package com.akjaw.wikigamemvi.ui.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

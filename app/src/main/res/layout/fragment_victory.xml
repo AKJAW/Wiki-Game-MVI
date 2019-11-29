@@ -33,7 +33,7 @@
 
 
     <fragment
-        android:name="com.akjaw.wikigamemvi.feature.game.ArticleFragment"
+        android:name="com.akjaw.wikigamemvi.ui.game.ArticleFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
