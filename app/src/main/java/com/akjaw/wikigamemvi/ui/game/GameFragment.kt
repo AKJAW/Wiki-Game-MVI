@@ -63,15 +63,6 @@ class GameFragment: Fragment(){
         }
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//
-//        disposables += viewModel.viewState.subscribe(::render)
-//        disposables += viewModel.viewEffects.subscribe(::trigger)
-//
-//
-//    }
-
     private fun render(state: GameViewState){
 
         target_article_progress_bar.isVisible = state.isTargetArticleLoading
@@ -111,10 +102,4 @@ class GameFragment: Fragment(){
 
         disposables.clear()
     }
-
-    //    override fun onPause() {
-//        super.onPause()
-//
-//        disposables.clear()
-//    }
 }

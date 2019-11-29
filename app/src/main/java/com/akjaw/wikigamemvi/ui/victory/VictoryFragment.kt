@@ -12,6 +12,7 @@ import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.injection.injector
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
+import kotlinx.android.synthetic.main.fragment_article.*
 
 class VictoryFragment: Fragment(){
     private var disposables = CompositeDisposable()
@@ -44,6 +45,13 @@ class VictoryFragment: Fragment(){
 
     private fun render(state: GameViewState){
 //        victory_steps_text_view.text = state.targetArticle?.name ?: " aaa"
+        val targetArticle = state.targetArticle
+
+        if(targetArticle != null){
+            article_title.text = targetArticle.name
+            article_description.text = targetArticle.description
+        }
+
     }
 
     override fun onPause() {

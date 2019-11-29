@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:textAlignment="center"
         android:textSize="20sp"
@@ -33,10 +33,14 @@
 
 
     <fragment
-        android:name="com.akjaw.wikigamemvi.ui.game.ArticleFragment"
+        android:id="@+id/article_fragment"
+        android:name="com.akjaw.wikigamemvi.ui.common.ArticleFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/victory_steps_text_view" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
