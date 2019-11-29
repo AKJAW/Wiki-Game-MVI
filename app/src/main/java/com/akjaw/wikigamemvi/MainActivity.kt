@@ -33,11 +33,6 @@ class MainActivity : AppCompatActivity() {
             .commit()
 
         setSupportActionBar(toolbar)
-
-        val viewModel = ViewModelProviders
-            .of(this, injector.gameViewModelFactory())
-            .get(GameViewModel::class.java)
-
     }
 
 //    override fun onResume() {

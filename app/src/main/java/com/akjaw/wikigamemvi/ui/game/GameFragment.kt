@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -64,7 +65,6 @@ class GameFragment: Fragment(){
     }
 
     private fun render(state: GameViewState){
-
         target_article_progress_bar.isVisible = state.isTargetArticleLoading
         current_article_progress_bar.isVisible = state.isCurrentArticleLoading
 
@@ -78,6 +78,11 @@ class GameFragment: Fragment(){
 
         if(state.wikiNavigationLinks.isNotEmpty()){
             wikiLinksAdapter.submitList(state.wikiNavigationLinks)
+        }
+
+        activity?.findViewById<TextView>(R.id.toolbar_steps)?.apply {
+            val stepsText = resources.getString(R.string.toolbar_step, state.numberOfSteps)
+            text = stepsText
         }
     }
 

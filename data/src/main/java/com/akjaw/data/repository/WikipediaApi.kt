@@ -13,7 +13,7 @@ interface WikipediaApi {
 
 class MockWikipediaApiImpl @Inject constructor(): WikipediaApi {
     private val articles = listOf(
-        WikiResponse(name = "First", outgoingTitles = listOf("Third")),
+        WikiResponse(name = "First", outgoingTitles = listOf("Third", "Fourth")),
         WikiResponse(
             name = "Second",
             outgoingTitles = listOf("Fourth", "First")
@@ -22,7 +22,7 @@ class MockWikipediaApiImpl @Inject constructor(): WikipediaApi {
             name = "Third",
             outgoingTitles = listOf("Fourth", "Second")
         ),
-        WikiResponse(name = "Fourth", outgoingTitles = listOf("First"))
+        WikiResponse(name = "Fourth", outgoingTitles = listOf("First", "Third"))
     )
 
     override fun randomArticle(): Single<WikiResponse> {

@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.akjaw.wikigamemvi.R
@@ -54,6 +56,10 @@ class VictoryFragment: Fragment(){
 
         val stepsText = resources.getString(R.string.victory_steps, state.numberOfSteps)
         victory_steps_text_view.text = stepsText
+
+        activity?.findViewById<TextView>(R.id.toolbar_steps)?.apply {
+            isVisible = false
+        }
     }
 
     override fun onPause() {
