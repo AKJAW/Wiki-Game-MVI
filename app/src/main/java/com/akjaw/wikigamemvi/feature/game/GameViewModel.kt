@@ -117,7 +117,6 @@ class GameViewModel @Inject constructor(
                     Observable.just(viewEffect)
                 }
 
-
             }
     }
 

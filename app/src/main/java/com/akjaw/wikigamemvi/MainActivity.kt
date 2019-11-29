@@ -2,7 +2,10 @@ package com.akjaw.wikigamemvi
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProviders
 import com.akjaw.wikigamemvi.feature.game.GameFragment
+import com.akjaw.wikigamemvi.feature.game.GameViewModel
+import com.akjaw.wikigamemvi.injection.injector
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -31,8 +34,9 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
-//        val viewModel = ViewModelProviders.of(this)
-//            .get(GameViewModel::class.java)
+        val viewModel = ViewModelProviders
+            .of(this, injector.gameViewModelFactory())
+            .get(GameViewModel::class.java)
 
     }
 
