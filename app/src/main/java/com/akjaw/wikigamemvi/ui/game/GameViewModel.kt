@@ -69,6 +69,7 @@ class GameViewModel @Inject constructor(
                 state.copy(
                     currentArticle = currentArticle,
                     isCurrentArticleLoading = false,
+                    numberOfSteps = state.numberOfSteps + 1,
                     wikiNavigationLinks = payload.articleResponse.outgoingTitles)
             }
 
