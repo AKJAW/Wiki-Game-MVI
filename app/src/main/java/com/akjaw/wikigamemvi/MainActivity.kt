@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.main_fragment_placeholder, GameFragment())
             .commit()
 
-        setSupportActionBar(toolbar)
     }
 
 //    override fun onResume() {

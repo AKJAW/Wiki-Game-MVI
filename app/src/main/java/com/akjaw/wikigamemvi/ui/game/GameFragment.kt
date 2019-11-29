@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -19,7 +20,9 @@ import com.akjaw.wikigamemvi.ui.victory.VictoryFragment
 import com.akjaw.wikigamemvi.injection.injector
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_game.*
+import kotlinx.android.synthetic.main.fragment_game.toolbar
 import kotlinx.android.synthetic.main.fragment_game.view.*
 import java.lang.Exception
 
@@ -61,6 +64,8 @@ class GameFragment: Fragment(){
                 layoutManager = LinearLayoutManager(activity)
                 adapter = wikiLinksAdapter
             }
+
+            (activity as? AppCompatActivity?)?.setSupportActionBar(toolbar)
         }
     }
 
@@ -80,10 +85,10 @@ class GameFragment: Fragment(){
             wikiLinksAdapter.submitList(state.wikiNavigationLinks)
         }
 
-        activity?.findViewById<TextView>(R.id.toolbar_steps)?.apply {
+//        activity?.findViewById<TextView>(R.id.toolbar_steps)?.apply {
             val stepsText = resources.getString(R.string.toolbar_step, state.numberOfSteps)
-            text = stepsText
-        }
+            toolbar_steps.text = stepsText
+//        }
     }
 
 
