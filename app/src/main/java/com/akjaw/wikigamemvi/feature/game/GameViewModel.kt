@@ -43,7 +43,7 @@ class GameViewModel @Inject constructor(
             when(result){
                 is Lce.Content -> handleResultContent(state, result.payload)
                 is Lce.Loading -> handleResultLoading(state, result.payload)
-                is Lce.Error -> TODO()
+                is Lce.Error -> handleResultError(state, result.payload)
             }
         }.distinctUntilChanged()
     }
@@ -103,6 +103,25 @@ class GameViewModel @Inject constructor(
         }
     }
 
+    private fun handleResultError(state: GameViewState, payload: GameResult): GameViewState {
+        return when(payload){
+            is InitializeArticlesResult -> state.copy(
+                targetArticle = null,
+                isTargetArticleLoading = true,
+                currentArticle = null,
+                isCurrentArticleLoading = true,
+                wikiNavigationLinks = listOf())
+
+            is LoadNextArticleResult -> state.copy(
+                currentArticle = null,
+                isCurrentArticleLoading = true,
+                wikiNavigationLinks = listOf()
+            )
+
+            else -> state.copy()
+        }
+    }
+
     override fun Observable<Lce<out GameResult>>.resultToViewEffect(): Observable<GameViewEffect> {
         return filter { it is Lce.Content }
             .cast(Lce.Content::class.java)
@@ -144,7 +163,9 @@ class GameViewModel @Inject constructor(
                 .map <Lce<GameResult>> {
                     Lce.Content(WinConditionResult)
                 }
-                .retry(1)
+                .onErrorReturn {
+                    Lce.Error(WinConditionResult)
+                }
                 .switchIfEmpty(getNextArticle(it.wikiTitle) as Observable<Lce<GameResult>>)
         }
     }

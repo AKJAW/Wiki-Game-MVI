@@ -2,4 +2,6 @@
     <string name="app_name">Wiki game MVI</string>
     <string name="game_find_title">Find:</string>
     <string name="current_article">Current article</string>
+    <string name="victory_header">You have Won!</string>
+    <string name="victory_steps">It took you %1$s steps to reach your target</string>
 </resources>

@@ -17,11 +17,11 @@ import com.akjaw.wikigamemvi.feature.game.model.GameViewState
 import com.akjaw.wikigamemvi.injection.injector
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import kotlinx.android.synthetic.main.fragment_articles.*
-import kotlinx.android.synthetic.main.fragment_articles.view.*
+import kotlinx.android.synthetic.main.fragment_game.*
+import kotlinx.android.synthetic.main.fragment_game.view.*
 import java.lang.Exception
 
-class ArticlesFragment: Fragment(){
+class GameFragment: Fragment(){
     private var disposables = CompositeDisposable()
 
     //TODO inject
@@ -53,7 +53,7 @@ class ArticlesFragment: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_articles, container, false).also {
+        return inflater.inflate(R.layout.fragment_game, container, false).also {
             it.wiki_navigation_recycler_view.apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(activity)
