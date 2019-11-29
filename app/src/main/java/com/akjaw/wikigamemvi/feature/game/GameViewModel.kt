@@ -11,6 +11,7 @@ import com.akjaw.wikigamemvi.feature.game.model.GameAction.*
 import com.akjaw.wikigamemvi.feature.game.model.GameResult
 import com.akjaw.wikigamemvi.feature.game.model.GameResult.*
 import com.akjaw.wikigamemvi.feature.game.model.GameViewEffect
+import com.akjaw.wikigamemvi.feature.game.model.GameViewEffect.ShowVictoryScreenEffect
 import com.akjaw.wikigamemvi.feature.game.model.GameViewEffect.SomeToastEffect
 import com.akjaw.wikigamemvi.feature.game.model.GameViewState
 import com.akjaw.wikigamemvi.util.toArticle
@@ -59,8 +60,7 @@ class GameViewModel @Inject constructor(
                     isTargetArticleLoading = false,
                     currentArticle = currentArticle,
                     isCurrentArticleLoading = false,
-                    wikiNavigationLinks = payload.currentArticleResponse.outgoingTitles,
-                    hasWon = false)
+                    wikiNavigationLinks = payload.currentArticleResponse.outgoingTitles)
             }
 
             is LoadNextArticleResult -> {
@@ -70,12 +70,6 @@ class GameViewModel @Inject constructor(
                     currentArticle = currentArticle,
                     isCurrentArticleLoading = false,
                     wikiNavigationLinks = payload.articleResponse.outgoingTitles)
-            }
-
-            is WinConditionResult -> {
-                state.copy(
-                    hasWon = true
-                )
             }
 
             else -> state.copy()
@@ -104,36 +98,26 @@ class GameViewModel @Inject constructor(
     }
 
     private fun handleResultError(state: GameViewState, payload: GameResult): GameViewState {
-        return when(payload){
-            is InitializeArticlesResult -> state.copy(
-                targetArticle = null,
-                isTargetArticleLoading = true,
-                currentArticle = null,
-                isCurrentArticleLoading = true,
-                wikiNavigationLinks = listOf())
-
-            is LoadNextArticleResult -> state.copy(
-                currentArticle = null,
-                isCurrentArticleLoading = true,
-                wikiNavigationLinks = listOf()
-            )
-
-            else -> state.copy()
-        }
+        TODO()
     }
 
     override fun Observable<Lce<out GameResult>>.resultToViewEffect(): Observable<GameViewEffect> {
         return filter { it is Lce.Content }
             .cast(Lce.Content::class.java)
             .flatMap <GameViewEffect> { content ->
-                when(content.payload){
-                    is ShowToastResult -> {
-                        Observable.just(
-                            SomeToastEffect(content.payload.text)
-                        )
-                    }
-                    else -> Observable.empty<GameViewEffect>()
+                val viewEffect: GameViewEffect? = when(content.payload){
+                    is ShowToastResult -> SomeToastEffect(content.payload.text)
+                    is ShowVictoryScreenResult -> ShowVictoryScreenEffect
+                    else -> null
                 }
+
+                if(viewEffect == null){
+                    Observable.empty()
+                } else {
+                    Observable.just(viewEffect)
+                }
+
+
             }
     }
 
@@ -161,10 +145,7 @@ class GameViewModel @Inject constructor(
         return switchMap {
             winConditionUseCase(it.wikiTitle)
                 .map <Lce<GameResult>> {
-                    Lce.Content(WinConditionResult)
-                }
-                .onErrorReturn {
-                    Lce.Error(WinConditionResult)
+                    Lce.Content(ShowVictoryScreenResult)
                 }
                 .switchIfEmpty(getNextArticle(it.wikiTitle) as Observable<Lce<GameResult>>)
         }

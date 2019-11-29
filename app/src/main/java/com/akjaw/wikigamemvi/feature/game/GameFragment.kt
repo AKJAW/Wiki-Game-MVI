@@ -19,6 +19,7 @@ import com.akjaw.wikigamemvi.feature.victory.VictoryFragment
 import com.akjaw.wikigamemvi.injection.injector
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_game.*
 import kotlinx.android.synthetic.main.fragment_game.view.*
 import java.lang.Exception
@@ -89,10 +90,6 @@ class GameFragment: Fragment(){
         if(state.wikiNavigationLinks.isNotEmpty()){
             wikiLinksAdapter.submitList(state.wikiNavigationLinks)
         }
-
-        wiki_navigation_recycler_view.isVisible = !state.hasWon
-        current_article_title_text_view.isVisible = !state.hasWon
-        current_article_header_text_view.isVisible = !state.hasWon
     }
 
 
@@ -100,6 +97,13 @@ class GameFragment: Fragment(){
         when(effect){
             is GameViewEffect.SomeToastEffect -> {
                 Toast.makeText(activity, effect.text, Toast.LENGTH_SHORT).show()
+            }
+
+            is GameViewEffect.ShowVictoryScreenEffect -> {
+                fragmentManager?.beginTransaction()?.apply {
+                    replace(R.id.main_fragment_placeholder, VictoryFragment())
+                    commit()
+                }
             }
         }
     }
