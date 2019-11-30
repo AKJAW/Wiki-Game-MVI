@@ -14,25 +14,6 @@ import java.lang.IllegalStateException
 
 
 class ArticleFragment: Fragment(){
-    companion object {
-        const val EXTRA_ARTICLE = "EXTRA_ARTICLE"
-
-        fun newInstance(article: WikiArticle): ArticleFragment{
-            val parcelableArticle = ParcelableWikiArticle(
-                article.name,
-                article.description,
-                article.imageUrl
-            )
-            val fragment = ArticleFragment()
-
-            val args = Bundle()
-            args.putParcelable(EXTRA_ARTICLE, parcelableArticle)
-            fragment.arguments = args
-
-            return fragment
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,4 +31,23 @@ class ArticleFragment: Fragment(){
         }
     }
 
+    companion object {
+        const val SHARED_TRANSITION_TITLE = "title"
+        const val EXTRA_ARTICLE = "EXTRA_ARTICLE"
+
+        fun newInstance(article: WikiArticle): ArticleFragment{
+            val parcelableArticle = ParcelableWikiArticle(
+                article.name,
+                article.description,
+                article.imageUrl
+            )
+            val fragment = ArticleFragment()
+
+            val args = Bundle()
+            args.putParcelable(EXTRA_ARTICLE, parcelableArticle)
+            fragment.arguments = args
+
+            return fragment
+        }
+    }
 }

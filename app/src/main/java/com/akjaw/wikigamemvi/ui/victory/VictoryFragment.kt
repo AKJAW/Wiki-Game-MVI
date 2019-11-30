@@ -1,6 +1,7 @@
 package com.akjaw.wikigamemvi.ui.victory
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +13,11 @@ import com.akjaw.wikigamemvi.R
 import com.akjaw.wikigamemvi.ui.game.GameViewModel
 import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.injection.injector
+import com.akjaw.wikigamemvi.ui.common.ArticleFragment.Companion.SHARED_TRANSITION_TITLE
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_article.*
+import kotlinx.android.synthetic.main.fragment_article.view.*
 import kotlinx.android.synthetic.main.fragment_victory.*
 
 class VictoryFragment: Fragment(){
@@ -30,6 +33,9 @@ class VictoryFragment: Fragment(){
                 .get(GameViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
+        sharedElementEnterTransition =
+            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+
     }
 
     override fun onCreateView(
@@ -37,7 +43,9 @@ class VictoryFragment: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_victory, container, false)
+        return inflater.inflate(R.layout.fragment_victory, container, false).also {
+            it.article_title.transitionName = SHARED_TRANSITION_TITLE
+        }
     }
 
     override fun onResume() {

@@ -1,6 +1,7 @@
 package com.akjaw.wikigamemvi.ui.game
 
 import android.os.Bundle
+import android.transition.ChangeBounds
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.akjaw.wikigamemvi.ui.game.model.GameViewEffect
 import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.ui.victory.VictoryFragment
 import com.akjaw.wikigamemvi.injection.injector
+import com.akjaw.wikigamemvi.ui.common.ArticleFragment.Companion.SHARED_TRANSITION_TITLE
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.activity_main.*
@@ -29,7 +31,6 @@ import java.lang.Exception
 class GameFragment: Fragment(){
     private var disposables = CompositeDisposable()
 
-    //TODO inject
     private lateinit var viewModel: GameViewModel
     private lateinit var wikiLinksAdapter: ArticleLinksAdapter
 
@@ -50,7 +51,6 @@ class GameFragment: Fragment(){
 
     private fun onArticleNavigationClick(wikiTitle: WikiTitle){
         viewModel.process(GameAction.LoadNextArticleAction(wikiTitle))
-//        Toast.makeText(activity, wikiTitle, Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateView(
@@ -85,10 +85,8 @@ class GameFragment: Fragment(){
             wikiLinksAdapter.submitList(state.wikiNavigationLinks)
         }
 
-//        activity?.findViewById<TextView>(R.id.toolbar_steps)?.apply {
-            val stepsText = resources.getString(R.string.toolbar_step, state.numberOfSteps)
-            toolbar_steps.text = stepsText
-//        }
+        val stepsText = resources.getString(R.string.toolbar_step, state.numberOfSteps)
+        toolbar_steps.text = stepsText
     }
 
 
@@ -98,12 +96,22 @@ class GameFragment: Fragment(){
                 Toast.makeText(activity, effect.text, Toast.LENGTH_SHORT).show()
             }
 
-            is GameViewEffect.ShowVictoryScreenEffect -> {
-                fragmentManager?.beginTransaction()?.apply {
-                    replace(R.id.main_fragment_placeholder, VictoryFragment())
-                    commit()
-                }
-            }
+            is GameViewEffect.ShowVictoryScreenEffect -> showVictoryFragment()
+        }
+    }
+
+    private fun showVictoryFragment() {
+        val transition = fragmentManager?.beginTransaction() ?: return
+
+        transition.replace(R.id.main_fragment_placeholder, VictoryFragment())
+        transition.addSharedElement(target_article_text_view, SHARED_TRANSITION_TITLE)
+        transition.commit()
+
+
+        fragmentManager?.beginTransaction()?.apply {
+
+
+
         }
     }
 
