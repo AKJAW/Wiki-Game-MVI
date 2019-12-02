@@ -73,14 +73,14 @@ class GameFragment: Fragment(){
 
     private fun render(state: GameViewState){
         target_article_view.setIsLoading(state.isTargetArticleLoading)
-        current_article_progress_bar.isVisible = state.isCurrentArticleLoading
+        current_article_view.setIsLoading(state.isCurrentArticleLoading)
 
         if(state.targetArticle != null){
             target_article_view.setArticle(state.targetArticle)
         }
 
         if(state.currentArticle != null){
-            current_article_title_text_view.text = state.currentArticle.name
+            current_article_view.setArticle(state.currentArticle, true)
         }
 
         if(state.wikiNavigationLinks.isNotEmpty()){
