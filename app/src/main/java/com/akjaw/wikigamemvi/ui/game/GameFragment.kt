@@ -1,11 +1,9 @@
 package com.akjaw.wikigamemvi.ui.game
 
 import android.os.Bundle
-import android.transition.ChangeBounds
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -22,7 +20,7 @@ import com.akjaw.wikigamemvi.injection.injector
 import com.akjaw.wikigamemvi.ui.common.ArticleFragment.Companion.SHARED_TRANSITION_TITLE
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.article.view.*
 import kotlinx.android.synthetic.main.fragment_game.*
 import kotlinx.android.synthetic.main.fragment_game.toolbar
 import kotlinx.android.synthetic.main.fragment_game.view.*
@@ -70,11 +68,11 @@ class GameFragment: Fragment(){
     }
 
     private fun render(state: GameViewState){
-        target_article_progress_bar.isVisible = state.isTargetArticleLoading
+        target_article_view.setIsLoading(state.isTargetArticleLoading)
         current_article_progress_bar.isVisible = state.isCurrentArticleLoading
 
         if(state.targetArticle != null){
-            target_article_text_view.text = state.targetArticle.name
+            target_article_view.setArticle(state.targetArticle)
         }
 
         if(state.currentArticle != null){
@@ -104,7 +102,7 @@ class GameFragment: Fragment(){
         val transition = fragmentManager?.beginTransaction() ?: return
 
         transition.replace(R.id.main_fragment_placeholder, VictoryFragment())
-        transition.addSharedElement(target_article_text_view, SHARED_TRANSITION_TITLE)
+        transition.addSharedElement(target_article_view.article_title_text_view, SHARED_TRANSITION_TITLE)
         transition.commit()
 
 
