@@ -28,7 +28,7 @@
     <com.akjaw.wikigamemvi.ui.common.ArticleView
         android:id="@+id/target_article_view"
         app:header="@string/game_find_title"
-        app:headerBackgroundColor="@color/findArticle"
+        app:headerBackgroundColor="@color/articleRed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

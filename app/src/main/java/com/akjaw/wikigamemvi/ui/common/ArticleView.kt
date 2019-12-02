@@ -2,6 +2,7 @@ package com.akjaw.wikigamemvi.ui.common
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.View
 import androidx.cardview.widget.CardView
@@ -23,9 +24,15 @@ class ArticleView @JvmOverloads constructor(
         article_header_text_view.text = attributes.getString(R.styleable.ArticleView_header)
 
         val backgroundColor = attributes.getColor(R.styleable.ArticleView_headerBackgroundColor, Color.WHITE)
-        header_background.setBackgroundColor(backgroundColor)
 
+        setHeaderColor(backgroundColor)
         attributes.recycle()
+    }
+
+    private fun setHeaderColor(color: Int){
+        val headerBackground = header_background.background as GradientDrawable
+        headerBackground.setColor(color)
+
     }
 
     fun setArticle(article: WikiArticle){

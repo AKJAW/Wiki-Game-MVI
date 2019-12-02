@@ -3,5 +3,8 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="findArticle">#cef2e0</color>
+    <color name="articleGreen">#cef2e0</color>
+    <color name="articleBlue">#cedff2</color>
+    <color name="articleRed">#f2cedd</color>
+    <color name="articlePurple">#afa3bf</color>
 </resources>
