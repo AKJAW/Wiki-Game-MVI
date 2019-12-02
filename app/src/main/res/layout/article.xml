@@ -25,10 +25,11 @@
                 android:background="@drawable/bordered_rectangle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" >
+            </FrameLayout>
 
             <TextView
-                android:id="@+id/article_header_text_view"
+                android:id="@+id/article_header_title_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -37,6 +38,20 @@
                 android:textColor="@android:color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/header_background"
                 app:layout_constraintStart_toStartOf="@+id/header_background"
+                app:layout_constraintTop_toTopOf="@+id/header_background" />
+
+            <TextView
+                android:id="@+id/article_header_button_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="@string/article_header_button"
+                android:textColor="@color/articleLink"
+                android:textSize="15sp"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:gravity="center_vertical|center"
+                app:layout_constraintBottom_toBottomOf="@+id/header_background"
+                app:layout_constraintEnd_toEndOf="@+id/header_background"
                 app:layout_constraintTop_toTopOf="@+id/header_background" />
 
             <ImageView

@@ -21,7 +21,7 @@ class ArticleView @JvmOverloads constructor(
 
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.ArticleView)
 
-        article_header_text_view.text = attributes.getString(R.styleable.ArticleView_header)
+        article_header_title_text_view.text = attributes.getString(R.styleable.ArticleView_header)
 
         val backgroundColor = attributes.getColor(R.styleable.ArticleView_headerBackgroundColor, Color.WHITE)
 
@@ -35,6 +35,11 @@ class ArticleView @JvmOverloads constructor(
 
     }
 
+    fun setOnMoreClickListener(onClick: (View) -> Unit){
+        article_header_button_text_view.setOnClickListener(onClick)
+    }
+
+    //TODO change header color?
     fun setArticle(article: WikiArticle){
         wikiArticle = article
         article_title_text_view.text = article.name

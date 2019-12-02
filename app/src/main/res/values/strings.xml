@@ -6,4 +6,5 @@
     <string name="victory_steps">It took you %1$d steps to reach your target</string>
     <string name="toolbar_step">Step %1$d</string>
     <string name="article_thumbnail">Article thumbnail</string>
+    <string name="article_header_button">More</string>
 </resources>
