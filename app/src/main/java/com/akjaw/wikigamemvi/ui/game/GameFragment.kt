@@ -104,8 +104,10 @@ class GameFragment: Fragment(){
         val transition = fragmentManager?.beginTransaction() ?: return
 
         transition.replace(R.id.main_fragment_placeholder, VictoryFragment())
+
         val titleTransitionName = getString(R.string.articleTitleTransition)
         transition.addSharedElement(target_article_view.article_title_text_view, titleTransitionName)
+
         transition.commit()
 
         fragmentManager?.beginTransaction()?.apply {

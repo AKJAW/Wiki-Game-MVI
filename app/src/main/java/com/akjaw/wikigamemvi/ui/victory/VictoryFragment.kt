@@ -1,5 +1,6 @@
 package com.akjaw.wikigamemvi.ui.victory
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.LayoutInflater
@@ -13,12 +14,19 @@ import com.akjaw.wikigamemvi.R
 import com.akjaw.wikigamemvi.ui.game.GameViewModel
 import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.injection.injector
+import com.bumptech.glide.GenericTransitionOptions
 import com.bumptech.glide.Glide
+import com.bumptech.glide.TransitionOptions
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.transition.DrawableCrossFadeTransition
+import com.bumptech.glide.request.transition.Transition
+import com.bumptech.glide.request.transition.TransitionFactory
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_article.*
 import kotlinx.android.synthetic.main.fragment_article.view.*
 import kotlinx.android.synthetic.main.fragment_victory.*
+import javax.sql.DataSource
 
 class VictoryFragment: Fragment(){
     private var disposables = CompositeDisposable()
@@ -66,6 +74,13 @@ class VictoryFragment: Fragment(){
                 Glide
                     .with(this)
                     .load(targetArticle.imageUrl)
+                    .fitCenter()
+//                    .transition(GenericTransitionOptions.with(R.anim.article_image_zoom_fade_in))
+                    .transition(GenericTransitionOptions.with {
+                            dataSource, isFirstResource ->
+
+                        DrawableCrossFadeTransition(600, false)
+                    })
                     .into(article_image)
             }
         }
@@ -84,3 +99,4 @@ class VictoryFragment: Fragment(){
     }
 
 }
+

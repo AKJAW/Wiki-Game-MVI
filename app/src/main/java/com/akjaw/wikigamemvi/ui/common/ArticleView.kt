@@ -40,6 +40,10 @@ class ArticleView @JvmOverloads constructor(
             article_title_text_view.transitionName = it
         }
 
+        attributes.getString(R.styleable.ArticleView_imageTransitionName)?.let {
+            article_image_view.transitionName = it
+        }
+
         attributes.recycle()
     }
 
