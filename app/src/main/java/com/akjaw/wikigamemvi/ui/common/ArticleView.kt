@@ -28,6 +28,11 @@ class ArticleView @JvmOverloads constructor(
         val backgroundColor = attributes.getColor(R.styleable.ArticleView_headerBackgroundColor, Color.WHITE)
 
         setHeaderColor(backgroundColor)
+
+        attributes.getString(R.styleable.ArticleView_titleTransitionName)?.let {
+            article_title_text_view.transitionName = it
+        }
+
         attributes.recycle()
     }
 

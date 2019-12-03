@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +16,6 @@ import com.akjaw.wikigamemvi.ui.game.model.GameViewEffect
 import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.ui.victory.VictoryFragment
 import com.akjaw.wikigamemvi.injection.injector
-import com.akjaw.wikigamemvi.ui.common.ArticleFragment.Companion.SHARED_TRANSITION_TITLE
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.article.view.*
@@ -106,9 +104,9 @@ class GameFragment: Fragment(){
         val transition = fragmentManager?.beginTransaction() ?: return
 
         transition.replace(R.id.main_fragment_placeholder, VictoryFragment())
-        transition.addSharedElement(target_article_view.article_title_text_view, SHARED_TRANSITION_TITLE)
+        val titleTransitionName = getString(R.string.articleTitleTransition)
+        transition.addSharedElement(target_article_view.article_title_text_view, titleTransitionName)
         transition.commit()
-
 
         fragmentManager?.beginTransaction()?.apply {
 

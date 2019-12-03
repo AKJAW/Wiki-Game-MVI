@@ -3,5 +3,7 @@
     <declare-styleable name="ArticleView">
         <attr name="header" format="string"/>
         <attr name="headerBackgroundColor" format="color"/>
+        <attr name="titleTransitionName" format="string"/>
+        <attr name="imageTransitionName" format="string"/>
     </declare-styleable>
 </resources>

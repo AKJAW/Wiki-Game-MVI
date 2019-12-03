@@ -13,7 +13,6 @@ import com.akjaw.wikigamemvi.R
 import com.akjaw.wikigamemvi.ui.game.GameViewModel
 import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.injection.injector
-import com.akjaw.wikigamemvi.ui.common.ArticleFragment.Companion.SHARED_TRANSITION_TITLE
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_article.*
@@ -44,7 +43,8 @@ class VictoryFragment: Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_victory, container, false).also {
-            it.article_title.transitionName = SHARED_TRANSITION_TITLE
+            val titleTransitionName = getString(R.string.articleTitleTransition)
+            it.article_title.transitionName = titleTransitionName
         }
     }
 

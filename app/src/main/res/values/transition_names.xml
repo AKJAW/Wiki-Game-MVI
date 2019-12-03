@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="articleTitleTransition">articleTitle</string>
+    <string name="articleImageTransition">articleTitle</string>
+</resources>

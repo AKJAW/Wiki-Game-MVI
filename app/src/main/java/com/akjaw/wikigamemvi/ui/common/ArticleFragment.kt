@@ -32,7 +32,6 @@ class ArticleFragment: Fragment(){
     }
 
     companion object {
-        const val SHARED_TRANSITION_TITLE = "title"
         const val EXTRA_ARTICLE = "EXTRA_ARTICLE"
 
         fun newInstance(article: WikiArticle): ArticleFragment{
