@@ -13,6 +13,7 @@ import com.akjaw.wikigamemvi.R
 import com.akjaw.wikigamemvi.ui.game.GameViewModel
 import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.injection.injector
+import com.bumptech.glide.Glide
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_article.*
@@ -60,6 +61,13 @@ class VictoryFragment: Fragment(){
         if(targetArticle != null){
             article_title.text = targetArticle.name
             article_description.text = targetArticle.description
+
+            if(targetArticle.imageUrl.isNotBlank()){
+                Glide
+                    .with(this)
+                    .load(targetArticle.imageUrl)
+                    .into(article_image)
+            }
         }
 
         val stepsText = resources.getString(R.string.victory_steps, state.numberOfSteps)

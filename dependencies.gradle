@@ -18,6 +18,8 @@ ext {
     rxRelayVersion = '2.1.1'
     rxBindingVersion = '3.0.0'
 
+    glideVersion = '4.10.0'
+
     daggerVersion = '2.24'
     daggerCompilerVersion = '2.22.1'
     daggerProcessorVersion = '2.16'
