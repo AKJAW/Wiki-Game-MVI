@@ -33,6 +33,7 @@
         app:header="@string/game_find_title"
         app:headerBackgroundColor="@color/articleRed"
         app:titleTransitionName="@string/articleTitleTransition"
+        app:imageTransitionName="@string/articleImageTransition"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />

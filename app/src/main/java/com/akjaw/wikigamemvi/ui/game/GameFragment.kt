@@ -1,6 +1,8 @@
 package com.akjaw.wikigamemvi.ui.game
 
 import android.os.Bundle
+import android.transition.TransitionInflater
+import android.transition.TransitionSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -103,18 +105,20 @@ class GameFragment: Fragment(){
     private fun showVictoryFragment() {
         val transition = fragmentManager?.beginTransaction() ?: return
 
-        transition.replace(R.id.main_fragment_placeholder, VictoryFragment())
-
         val titleTransitionName = getString(R.string.articleTitleTransition)
         transition.addSharedElement(target_article_view.article_title_text_view, titleTransitionName)
 
+        val imageTransitionName = getString(R.string.articleImageTransition)
+        transition.addSharedElement(target_article_view.article_image_view, imageTransitionName)
+
+        val transitionSet = TransitionSet()
+        transitionSet.addTransition(TransitionInflater.from(activity).inflateTransition(android.R.transition.move))
+
+        val fragment = VictoryFragment()
+        fragment.sharedElementEnterTransition = transitionSet
+
+        transition.replace(R.id.main_fragment_placeholder, fragment)
         transition.commit()
-
-        fragmentManager?.beginTransaction()?.apply {
-
-
-
-        }
     }
 
     override fun onDestroy() {

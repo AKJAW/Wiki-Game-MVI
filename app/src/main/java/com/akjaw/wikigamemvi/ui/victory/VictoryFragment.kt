@@ -14,6 +14,7 @@ import com.akjaw.wikigamemvi.R
 import com.akjaw.wikigamemvi.ui.game.GameViewModel
 import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.injection.injector
+import com.akjaw.wikigamemvi.util.glideLoadImage
 import com.bumptech.glide.GenericTransitionOptions
 import com.bumptech.glide.Glide
 import com.bumptech.glide.TransitionOptions
@@ -41,9 +42,7 @@ class VictoryFragment: Fragment(){
                 .get(GameViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
-        sharedElementEnterTransition =
-            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-
+        postponeEnterTransition()
     }
 
     override fun onCreateView(
@@ -54,6 +53,9 @@ class VictoryFragment: Fragment(){
         return inflater.inflate(R.layout.fragment_victory, container, false).also {
             val titleTransitionName = getString(R.string.articleTitleTransition)
             it.article_title.transitionName = titleTransitionName
+
+            val imageTransitionName = getString(R.string.articleImageTransition)
+            it.article_image.transitionName = imageTransitionName
         }
     }
 
@@ -63,6 +65,7 @@ class VictoryFragment: Fragment(){
         disposables += viewModel.viewState.subscribe(::render)
     }
 
+    //TODO remove viewModel and pass the data through the intent?
     private fun render(state: GameViewState){
         val targetArticle = state.targetArticle
 
@@ -71,17 +74,11 @@ class VictoryFragment: Fragment(){
             article_description.text = targetArticle.description
 
             if(targetArticle.imageUrl.isNotBlank()){
-                Glide
-                    .with(this)
-                    .load(targetArticle.imageUrl)
-                    .fitCenter()
-//                    .transition(GenericTransitionOptions.with(R.anim.article_image_zoom_fade_in))
-                    .transition(GenericTransitionOptions.with {
-                            dataSource, isFirstResource ->
-
-                        DrawableCrossFadeTransition(600, false)
-                    })
-                    .into(article_image)
+                article_image.glideLoadImage(targetArticle.imageUrl) {
+                    startPostponedEnterTransition()
+                }
+            } else {
+                startPostponedEnterTransition()
             }
         }
 
