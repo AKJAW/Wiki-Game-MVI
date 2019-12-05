@@ -105,17 +105,10 @@ class GameFragment: Fragment(){
     private fun showVictoryFragment() {
         val transition = fragmentManager?.beginTransaction() ?: return
 
-        val titleTransitionName = getString(R.string.articleTitleTransition)
-        transition.addSharedElement(target_article_view.article_title_text_view, titleTransitionName)
-
         val imageTransitionName = getString(R.string.articleImageTransition)
         transition.addSharedElement(target_article_view.article_image_view, imageTransitionName)
 
-        val transitionSet = TransitionSet()
-        transitionSet.addTransition(TransitionInflater.from(activity).inflateTransition(android.R.transition.move))
-
         val fragment = VictoryFragment()
-        fragment.sharedElementEnterTransition = transitionSet
 
         transition.replace(R.id.main_fragment_placeholder, fragment)
         transition.commit()

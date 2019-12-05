@@ -1,19 +1,24 @@
 package com.akjaw.wikigamemvi.ui.victory
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.transition.TransitionSet
 import com.akjaw.wikigamemvi.R
 import com.akjaw.wikigamemvi.ui.game.GameViewModel
 import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.injection.injector
+import com.akjaw.wikigamemvi.util.createFadeInObjectAnimator
 import com.akjaw.wikigamemvi.util.glideLoadImage
 import com.bumptech.glide.GenericTransitionOptions
 import com.bumptech.glide.Glide
@@ -42,6 +47,11 @@ class VictoryFragment: Fragment(){
                 .get(GameViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
+        val transitionSet = android.transition.TransitionSet()
+        transitionSet.duration = 500
+        transitionSet.addTransition(TransitionInflater.from(activity).inflateTransition(android.R.transition.move))
+        sharedElementEnterTransition = transitionSet
+
         postponeEnterTransition()
     }
 
@@ -51,8 +61,8 @@ class VictoryFragment: Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_victory, container, false).also {
-            val titleTransitionName = getString(R.string.articleTitleTransition)
-            it.article_title.transitionName = titleTransitionName
+            //            val titleTransitionName = getString(R.string.articleTitleTransition)
+//            it.article_title.transitionName = titleTransitionName
 
             val imageTransitionName = getString(R.string.articleImageTransition)
             it.article_image.transitionName = imageTransitionName
@@ -76,9 +86,11 @@ class VictoryFragment: Fragment(){
             if(targetArticle.imageUrl.isNotBlank()){
                 article_image.glideLoadImage(targetArticle.imageUrl) {
                     startPostponedEnterTransition()
+                    animateEnterTransition()
                 }
             } else {
                 startPostponedEnterTransition()
+                animateEnterTransition()
             }
         }
 
@@ -88,6 +100,23 @@ class VictoryFragment: Fragment(){
         activity?.findViewById<TextView>(R.id.toolbar_steps)?.apply {
             isVisible = false
         }
+    }
+
+    private fun animateEnterTransition(){
+        val headerFadeIn = victory_header_text_view.createFadeInObjectAnimator(500, 100)
+        val stepsFadeIn = victory_steps_text_view.createFadeInObjectAnimator(500, 200)
+        val articleTitleFadeIn = article_title.createFadeInObjectAnimator(500, 500)
+        val articleDescriptionFadeIn = article_description.createFadeInObjectAnimator(500, 600)
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(
+            headerFadeIn,
+            stepsFadeIn,
+            articleTitleFadeIn,
+            articleDescriptionFadeIn
+        )
+
+        animatorSet.start()
     }
 
     override fun onPause() {
