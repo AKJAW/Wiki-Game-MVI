@@ -127,9 +127,10 @@ class VictoryFragment: Fragment(){
 
 
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            article_image
-                .createFadeInObjectAnimator(IMAGE_SHARED_TRANSITION_DURATION - 100, 100)
-                .start()
+            val imageFadeIn = article_image
+                .createFadeInObjectAnimator(IMAGE_SHARED_TRANSITION_DURATION - 100, 500)
+
+            animatorSet.play(imageFadeIn)
         }
 
         animatorSet.doOnEnd {
