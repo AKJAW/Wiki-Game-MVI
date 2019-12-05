@@ -3,6 +3,7 @@ package com.akjaw.wikigamemvi.ui.victory
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.widget.TextView
+import androidx.core.animation.doOnEnd
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -20,23 +22,18 @@ import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.injection.injector
 import com.akjaw.wikigamemvi.util.createFadeInObjectAnimator
 import com.akjaw.wikigamemvi.util.glideLoadImage
-import com.bumptech.glide.GenericTransitionOptions
-import com.bumptech.glide.Glide
-import com.bumptech.glide.TransitionOptions
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.transition.DrawableCrossFadeTransition
-import com.bumptech.glide.request.transition.Transition
-import com.bumptech.glide.request.transition.TransitionFactory
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_article.*
 import kotlinx.android.synthetic.main.fragment_article.view.*
 import kotlinx.android.synthetic.main.fragment_victory.*
-import javax.sql.DataSource
 
 class VictoryFragment: Fragment(){
+
     private var disposables = CompositeDisposable()
     private lateinit var viewModel: GameViewModel //TODO neccessary?
+
+    private var hasEnterTransitionRun: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,8 +58,13 @@ class VictoryFragment: Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_victory, container, false).also {
-            val imageTransitionName = getString(R.string.articleImageTransition)
-            it.article_image.transitionName = imageTransitionName
+
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1){
+                val imageTransitionName = getString(R.string.articleImageTransition)
+                it.article_image.transitionName = imageTransitionName
+            } else {
+                it.article_image.visibility = View.INVISIBLE
+            }
         }
     }
 
@@ -83,11 +85,9 @@ class VictoryFragment: Fragment(){
             if(targetArticle.imageUrl.isNotBlank()){
                 article_image.glideLoadImage(targetArticle.imageUrl) {
                     startPostponedEnterTransition()
-                    animateEnterTransition()
                 }
             } else {
                 startPostponedEnterTransition()
-                animateEnterTransition()
             }
         }
 
@@ -96,6 +96,14 @@ class VictoryFragment: Fragment(){
 
         activity?.findViewById<TextView>(R.id.toolbar_steps)?.apply {
             isVisible = false
+        }
+    }
+
+    override fun startPostponedEnterTransition() {
+        super.startPostponedEnterTransition()
+
+        if(!hasEnterTransitionRun){
+            animateEnterTransition()
         }
     }
 
@@ -116,6 +124,17 @@ class VictoryFragment: Fragment(){
             articleTitleFadeIn,
             articleDescriptionFadeIn
         )
+
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            article_image
+                .createFadeInObjectAnimator(IMAGE_SHARED_TRANSITION_DURATION - 100, 100)
+                .start()
+        }
+
+        animatorSet.doOnEnd {
+            hasEnterTransitionRun = true
+        }
 
         animatorSet.start()
     }
