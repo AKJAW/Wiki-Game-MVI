@@ -16,20 +16,24 @@ class MockWikipediaApiImpl @Inject constructor(): WikipediaApi {
         WikiResponse(
             name = "First",
             imageUrl = "https://upload.wikimedia.org/wikipedia/commons/0/06/Herv%C3%A1s_Spain.JPG",
+            description = "The description for the first item",
             outgoingTitles = listOf("Third", "Fourth")),
         WikiResponse(
             name = "Second",
             imageUrl = "https://upload.wikimedia.org/wikipedia/commons/c/c9/S_visoti.jpg",
+            description = "The description for the second item",
             outgoingTitles = listOf("Fourth", "First")
         ),
         WikiResponse(
             name = "Third",
             imageUrl = "https://upload.wikimedia.org/wikipedia/commons/3/35/Ortrand_markt.JPG",
+            description = "The description for the third item",
             outgoingTitles = listOf("Fourth", "Second")
         ),
         WikiResponse(
             name = "Fourth",
             imageUrl = "https://upload.wikimedia.org/wikipedia/commons/7/7f/Hrebec-04.jpg",
+            description = "The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, The description for the fourth item, ",
             outgoingTitles = listOf("First", "Third"))
     )
 

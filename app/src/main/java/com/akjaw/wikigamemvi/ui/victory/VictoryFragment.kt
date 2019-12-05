@@ -48,7 +48,7 @@ class VictoryFragment: Fragment(){
         } ?: throw Exception("Invalid Activity")
 
         val transitionSet = android.transition.TransitionSet()
-        transitionSet.duration = 500
+        transitionSet.duration = IMAGE_SHARED_TRANSITION_DURATION
         transitionSet.addTransition(TransitionInflater.from(activity).inflateTransition(android.R.transition.move))
         sharedElementEnterTransition = transitionSet
 
@@ -61,9 +61,6 @@ class VictoryFragment: Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_victory, container, false).also {
-            //            val titleTransitionName = getString(R.string.articleTitleTransition)
-//            it.article_title.transitionName = titleTransitionName
-
             val imageTransitionName = getString(R.string.articleImageTransition)
             it.article_image.transitionName = imageTransitionName
         }
@@ -103,10 +100,14 @@ class VictoryFragment: Fragment(){
     }
 
     private fun animateEnterTransition(){
-        val headerFadeIn = victory_header_text_view.createFadeInObjectAnimator(500, 100)
-        val stepsFadeIn = victory_steps_text_view.createFadeInObjectAnimator(500, 200)
-        val articleTitleFadeIn = article_title.createFadeInObjectAnimator(500, 500)
-        val articleDescriptionFadeIn = article_description.createFadeInObjectAnimator(500, 600)
+        val headerFadeIn = victory_header_text_view
+            .createFadeInObjectAnimator(DEFAULT_FADE_IN_DURATION, 100)
+        val stepsFadeIn = victory_steps_text_view
+            .createFadeInObjectAnimator(DEFAULT_FADE_IN_DURATION, 200)
+        val articleTitleFadeIn = article_title
+            .createFadeInObjectAnimator(DEFAULT_FADE_IN_DURATION, IMAGE_SHARED_TRANSITION_DURATION)
+        val articleDescriptionFadeIn = article_description_scroll_view
+            .createFadeInObjectAnimator(DEFAULT_FADE_IN_DURATION, IMAGE_SHARED_TRANSITION_DURATION + 100)
 
         val animatorSet = AnimatorSet()
         animatorSet.playTogether(
@@ -122,6 +123,11 @@ class VictoryFragment: Fragment(){
     override fun onPause() {
         super.onPause()
         disposables.clear()
+    }
+
+    companion object {
+        const val DEFAULT_FADE_IN_DURATION = 500L
+        const val IMAGE_SHARED_TRANSITION_DURATION = 500L
     }
 
 }
