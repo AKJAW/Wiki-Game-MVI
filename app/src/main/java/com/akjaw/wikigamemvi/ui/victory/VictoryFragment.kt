@@ -1,21 +1,15 @@
 package com.akjaw.wikigamemvi.ui.victory
 
 import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
-import android.widget.TextView
 import androidx.core.animation.doOnEnd
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import androidx.transition.TransitionSet
 import com.akjaw.wikigamemvi.R
 import com.akjaw.wikigamemvi.ui.game.GameViewModel
 import com.akjaw.wikigamemvi.ui.game.model.GameViewState
@@ -24,8 +18,8 @@ import com.akjaw.wikigamemvi.util.createFadeInObjectAnimator
 import com.akjaw.wikigamemvi.util.glideLoadImage
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import kotlinx.android.synthetic.main.fragment_article.*
-import kotlinx.android.synthetic.main.fragment_article.view.*
+import kotlinx.android.synthetic.main.fragment_article_expanded.*
+import kotlinx.android.synthetic.main.fragment_article_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_victory.*
 
 class VictoryFragment: Fragment(){
@@ -61,9 +55,9 @@ class VictoryFragment: Fragment(){
 
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1){
                 val imageTransitionName = getString(R.string.articleImageTransition)
-                it.article_image.transitionName = imageTransitionName
+                it.expanded_image_view.transitionName = imageTransitionName
             } else {
-                it.article_image.visibility = View.INVISIBLE
+                it.expanded_image_view.visibility = View.INVISIBLE
             }
         }
     }
@@ -79,11 +73,11 @@ class VictoryFragment: Fragment(){
         val targetArticle = state.targetArticle
 
         if(targetArticle != null){
-            article_title.text = targetArticle.name
-            article_description.text = targetArticle.description
+            expanded_title_text_view.text = targetArticle.name
+            expanded_description_text_view.text = targetArticle.description
 
             if(targetArticle.imageUrl.isNotBlank()){
-                article_image.glideLoadImage(targetArticle.imageUrl) {
+                expanded_image_view.glideLoadImage(targetArticle.imageUrl) {
                     startPostponedEnterTransition()
                 }
             } else {
@@ -94,9 +88,9 @@ class VictoryFragment: Fragment(){
         val stepsText = resources.getString(R.string.victory_steps, state.numberOfSteps)
         victory_steps_text_view.text = stepsText
 
-        activity?.findViewById<TextView>(R.id.toolbar_steps)?.apply {
-            isVisible = false
-        }
+//        activity?.findViewById<TextView>(R.id.toolbar_steps)?.apply {
+//            isVisible = false
+//        }
     }
 
     override fun startPostponedEnterTransition() {
@@ -112,9 +106,9 @@ class VictoryFragment: Fragment(){
             .createFadeInObjectAnimator(DEFAULT_FADE_IN_DURATION, 100)
         val stepsFadeIn = victory_steps_text_view
             .createFadeInObjectAnimator(DEFAULT_FADE_IN_DURATION, 200)
-        val articleTitleFadeIn = article_title
+        val articleTitleFadeIn = expanded_title_text_view
             .createFadeInObjectAnimator(DEFAULT_FADE_IN_DURATION, IMAGE_SHARED_TRANSITION_DURATION)
-        val articleDescriptionFadeIn = article_description_scroll_view
+        val articleDescriptionFadeIn = expanded_description_scroll_view
             .createFadeInObjectAnimator(DEFAULT_FADE_IN_DURATION, IMAGE_SHARED_TRANSITION_DURATION + 100)
 
         val animatorSet = AnimatorSet()
@@ -127,7 +121,7 @@ class VictoryFragment: Fragment(){
 
 
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            val imageFadeIn = article_image
+            val imageFadeIn = expanded_image_view
                 .createFadeInObjectAnimator(IMAGE_SHARED_TRANSITION_DURATION - 100, 500)
 
             animatorSet.play(imageFadeIn)

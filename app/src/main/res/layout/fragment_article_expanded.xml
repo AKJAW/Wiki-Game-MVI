@@ -8,7 +8,7 @@
 
 
     <ImageView
-        android:id="@+id/article_image"
+        android:id="@+id/expanded_image_view"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:scaleType="fitXY"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/article_title"
+        android:id="@+id/expanded_title_text_view"
         android:transitionName="title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -31,11 +31,11 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/article_image"
+        app:layout_constraintTop_toBottomOf="@+id/expanded_image_view"
         tools:text="Kotlin" />
 
     <ScrollView
-        android:id="@+id/article_description_scroll_view"
+        android:id="@+id/expanded_description_scroll_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
@@ -45,10 +45,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/article_title">
+        app:layout_constraintTop_toBottomOf="@+id/expanded_title_text_view">
 
         <TextView
-            android:id="@+id/article_description"
+            android:id="@+id/expanded_description_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
