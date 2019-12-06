@@ -106,7 +106,6 @@ class GameFragment: Fragment(){
         val transition = fragmentManager?.beginTransaction() ?: return
 
         val imageTransitionName = getString(R.string.articleImageTransition)
-        //TODO a function on the ArticleView that returns the current image_view (collapsed/expanded)
         transition.addSharedElement(target_article_view.article_image_view, imageTransitionName)
 
         val fragment = VictoryFragment()
