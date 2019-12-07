@@ -7,8 +7,10 @@ import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.View
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
+import androidx.transition.TransitionManager
 import com.akjaw.domain.model.WikiArticle
 import com.akjaw.wikigamemvi.R
 import com.bumptech.glide.Glide
@@ -25,15 +27,24 @@ class ArticleView @JvmOverloads constructor(
     private var currentMode: Mode = Mode.COLLAPSED
 
     init {
-        View.inflate(context, R.layout.article_expanded, this)
+        View.inflate(context, R.layout.article_collapsed, this)
 
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.ArticleView)
 
         initializeFromAttributes(attributes)
 
+        setUpMoreClickListener()
+    }
+
+    private fun setUpMoreClickListener() {
+        val collapsedConstraintSet = ConstraintSet()
+        collapsedConstraintSet.clone(article_constraint_root)
+
+        val expandedConstraintSet = ConstraintSet()
+        expandedConstraintSet.clone(context, R.layout.article_expanded)
+
         article_header_button_text_view.setOnClickListener {
-
-
+            changeConstraints(collapsedConstraintSet, expandedConstraintSet)
         }
     }
 
@@ -54,6 +65,24 @@ class ArticleView @JvmOverloads constructor(
         }
 
         attributes.recycle()
+    }
+
+    private fun changeConstraints(
+        collapsedConstraintSet: ConstraintSet,
+        expandedConstraintSet: ConstraintSet
+    ) {
+        TransitionManager.beginDelayedTransition(article_constraint_root)
+        val constraint = when(currentMode){
+            Mode.COLLAPSED -> {
+                currentMode = Mode.EXPANDED
+                expandedConstraintSet
+            }
+            Mode.EXPANDED -> {
+                currentMode = Mode.COLLAPSED
+                collapsedConstraintSet
+            }
+        }
+        constraint.applyTo(article_constraint_root)
     }
 
     fun setArticle(article: WikiArticle, shouldChangeHeaderColor: Boolean = false){
