@@ -3,18 +3,28 @@ package com.akjaw.wikigamemvi.ui.common
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.View
+import androidx.annotation.LayoutRes
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.akjaw.domain.model.WikiArticle
 import com.akjaw.wikigamemvi.R
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.article_collapsed.view.*
 import kotlinx.android.synthetic.main.article_header.view.*
 import kotlin.random.Random
@@ -33,19 +43,7 @@ class ArticleView @JvmOverloads constructor(
 
         initializeFromAttributes(attributes)
 
-        setUpMoreClickListener()
-    }
-
-    private fun setUpMoreClickListener() {
-        val collapsedConstraintSet = ConstraintSet()
-        collapsedConstraintSet.clone(article_constraint_root)
-
-        val expandedConstraintSet = ConstraintSet()
-        expandedConstraintSet.clone(context, R.layout.article_expanded)
-
-        article_header_button_text_view.setOnClickListener {
-            changeConstraints(collapsedConstraintSet, expandedConstraintSet)
-        }
+        article_header_button_text_view.setOnClickListener(::onMoreClick)
     }
 
     private fun initializeFromAttributes(attributes: TypedArray) {
@@ -67,22 +65,80 @@ class ArticleView @JvmOverloads constructor(
         attributes.recycle()
     }
 
-    private fun changeConstraints(
-        collapsedConstraintSet: ConstraintSet,
-        expandedConstraintSet: ConstraintSet
-    ) {
-        TransitionManager.beginDelayedTransition(article_constraint_root)
-        val constraint = when(currentMode){
-            Mode.COLLAPSED -> {
-                currentMode = Mode.EXPANDED
-                expandedConstraintSet
+    private fun onMoreClick(view: View) {
+        val willBeExpanded = when(currentMode){
+            Mode.COLLAPSED -> true
+            Mode.EXPANDED -> false
+        }
+
+        val layout = if(willBeExpanded)  {
+            R.layout.article_expanded
+        } else {
+            R.layout.article_collapsed
+        }
+
+        val constraintSet = ConstraintSet().apply {
+            clone(context, layout)
+        }
+
+        val imgUrl = wikiArticle?.imageUrl
+
+        val isThumbnail = !willBeExpanded
+
+        if(imgUrl != null){
+            updateImage(imgUrl, isThumbnail){
+                runTransition()
+                constraintSet.applyTo(article_constraint_root)
             }
-            Mode.EXPANDED -> {
-                currentMode = Mode.COLLAPSED
-                collapsedConstraintSet
+        } else {
+            runTransition()
+            constraintSet.applyTo(article_constraint_root)
+        }
+
+        article_progress_bar.isVisible = false
+
+        currentMode = when(willBeExpanded){
+            true -> Mode.EXPANDED
+            false -> Mode.COLLAPSED
+        }
+    }
+
+    private fun runTransition() {
+        val transition = ChangeBounds()
+        transition.interpolator = FastOutSlowInInterpolator()
+        TransitionManager.beginDelayedTransition(article_constraint_root, transition)
+    }
+
+    private fun updateImage(url: String, isThumbnail: Boolean, onImageLoad: () -> Unit){
+        val listener = object : RequestListener<Drawable> {
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                onImageLoad()
+                return false
+            }
+
+            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                onImageLoad()
+                return false
             }
         }
-        constraint.applyTo(article_constraint_root)
+
+        val glideLoad = Glide
+            .with(context)
+            .load(url)
+            .listener(listener)
+
+
+        val glideImage = if(isThumbnail) {
+            glideLoad
+                .apply(RequestOptions.circleCropTransform())
+        } else {
+            glideLoad
+        }
+        glideImage
+            .apply(RequestOptions()
+                .override(Target.SIZE_ORIGINAL)
+                .format(DecodeFormat.PREFER_ARGB_8888))
+            .into(article_image_view)
     }
 
     fun setArticle(article: WikiArticle, shouldChangeHeaderColor: Boolean = false){
