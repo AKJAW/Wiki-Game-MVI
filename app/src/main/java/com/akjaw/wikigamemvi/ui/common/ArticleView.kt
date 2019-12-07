@@ -126,14 +126,11 @@ class ArticleView @JvmOverloads constructor(
             .with(context)
             .load(url)
             .listener(listener)
-
-
-        glideLoad
-            .apply(RequestOptions.circleCropTransform())
             .apply(RequestOptions()
                 .override(Target.SIZE_ORIGINAL)
                 .format(DecodeFormat.PREFER_ARGB_8888))
             .into(article_image_view)
+
     }
 
     fun setArticle(article: WikiArticle, shouldChangeHeaderColor: Boolean = false){
@@ -148,7 +145,6 @@ class ArticleView @JvmOverloads constructor(
             Glide
                 .with(context)
                 .load(article.imageUrl)
-                .apply(RequestOptions.circleCropTransform())
                 .into(article_image_view)
         }
 
