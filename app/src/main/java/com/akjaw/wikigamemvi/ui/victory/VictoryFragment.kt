@@ -24,8 +24,8 @@ import com.akjaw.wikigamemvi.util.createFadeInObjectAnimator
 import com.akjaw.wikigamemvi.util.glideLoadImage
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import kotlinx.android.synthetic.main.fragment_article.*
-import kotlinx.android.synthetic.main.fragment_article.view.*
+import kotlinx.android.synthetic.main.fragment_article_details.*
+import kotlinx.android.synthetic.main.fragment_article_details.view.*
 import kotlinx.android.synthetic.main.fragment_victory.*
 
 class VictoryFragment: Fragment(){

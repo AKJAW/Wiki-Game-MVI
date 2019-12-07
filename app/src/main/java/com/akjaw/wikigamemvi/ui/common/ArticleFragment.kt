@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import com.akjaw.domain.model.WikiArticle
 import com.akjaw.wikigamemvi.R
 import com.akjaw.wikigamemvi.ui.base.ParcelableWikiArticle
-import kotlinx.android.synthetic.main.fragment_article.*
-import java.lang.IllegalStateException
+import kotlinx.android.synthetic.main.fragment_article_details.*
 
 
 class ArticleFragment: Fragment(){
@@ -19,7 +17,7 @@ class ArticleFragment: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_article, container, false).also {
+        return inflater.inflate(R.layout.fragment_article_details, container, false).also {
             val article = arguments?.getParcelable<ParcelableWikiArticle>(EXTRA_ARTICLE)
 
             if(article != null){

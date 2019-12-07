@@ -20,7 +20,7 @@ import com.akjaw.wikigamemvi.ui.victory.VictoryFragment
 import com.akjaw.wikigamemvi.injection.injector
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import kotlinx.android.synthetic.main.article.view.*
+import kotlinx.android.synthetic.main.article_collapsed.view.*
 import kotlinx.android.synthetic.main.fragment_game.*
 import kotlinx.android.synthetic.main.fragment_game.toolbar
 import kotlinx.android.synthetic.main.fragment_game.view.*
@@ -64,10 +64,10 @@ class GameFragment: Fragment(){
             }
 
             (activity as? AppCompatActivity?)?.setSupportActionBar(toolbar)
-
-            it.target_article_view.setOnMoreClickListener {
-                Toast.makeText(activity, "More info", Toast.LENGTH_SHORT).show()
-            }
+//
+//            it.target_article_view.setOnMoreClickListener {
+//                Toast.makeText(activity, "More info", Toast.LENGTH_SHORT).show()
+//            }
         }
     }
 

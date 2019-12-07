@@ -1,8 +1,8 @@
 package com.akjaw.wikigamemvi.ui.common
 
 import android.content.Context
+import android.content.res.TypedArray
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.View
@@ -12,12 +12,9 @@ import androidx.core.view.isVisible
 import com.akjaw.domain.model.WikiArticle
 import com.akjaw.wikigamemvi.R
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
-import kotlinx.android.synthetic.main.article.view.*
+import kotlinx.android.synthetic.main.article_collapsed.view.*
+import kotlinx.android.synthetic.main.article_header.view.*
 import kotlin.random.Random
 
 class ArticleView @JvmOverloads constructor(
@@ -25,14 +22,26 @@ class ArticleView @JvmOverloads constructor(
 ) : CardView(context, attrs, defStyleAttr) {
     private var wikiArticle: WikiArticle? = null
 
+    private var currentMode: Mode = Mode.COLLAPSED
+
     init {
-        View.inflate(context, R.layout.article, this)
+        View.inflate(context, R.layout.article_expanded, this)
 
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.ArticleView)
 
+        initializeFromAttributes(attributes)
+
+        article_header_button_text_view.setOnClickListener {
+
+
+        }
+    }
+
+    private fun initializeFromAttributes(attributes: TypedArray) {
         article_header_title_text_view.text = attributes.getString(R.styleable.ArticleView_header)
 
-        val backgroundColor = attributes.getColor(R.styleable.ArticleView_headerBackgroundColor, Color.WHITE)
+        val backgroundColor =
+            attributes.getColor(R.styleable.ArticleView_headerBackgroundColor, Color.WHITE)
 
         setHeaderColor(backgroundColor)
 
@@ -45,10 +54,6 @@ class ArticleView @JvmOverloads constructor(
         }
 
         attributes.recycle()
-    }
-
-    fun setOnMoreClickListener(onClick: (View) -> Unit){
-        article_header_button_text_view.setOnClickListener(onClick)
     }
 
     fun setArticle(article: WikiArticle, shouldChangeHeaderColor: Boolean = false){
@@ -90,5 +95,10 @@ class ArticleView @JvmOverloads constructor(
             R.color.articlePurple,
             R.color.articleGreen
         )
+
+        private enum class Mode{
+            COLLAPSED,
+            EXPANDED
+        }
     }
 }
