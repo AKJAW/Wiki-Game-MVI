@@ -43,6 +43,7 @@
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
         android:gravity="center_vertical|center"
+        android:theme="@style/Widget.AppCompat.Button.Borderless"
         app:layout_constraintBottom_toBottomOf="@+id/header_background"
         app:layout_constraintEnd_toEndOf="@+id/header_background"
         app:layout_constraintTop_toTopOf="@+id/header_background" />

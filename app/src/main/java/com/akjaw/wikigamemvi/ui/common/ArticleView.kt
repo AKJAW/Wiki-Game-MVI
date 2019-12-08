@@ -7,11 +7,13 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.AccelerateInterpolator
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.akjaw.domain.model.WikiArticle
@@ -25,11 +27,6 @@ import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.article_collapsed.view.*
 import kotlinx.android.synthetic.main.article_header.view.*
 import kotlin.random.Random
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
-import androidx.core.graphics.drawable.RoundedBitmapDrawable
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.graphics.BitmapFactory
-import androidx.core.graphics.drawable.toBitmap
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.akjaw.wikigamemvi.R
 
@@ -85,33 +82,42 @@ class ArticleView @JvmOverloads constructor(
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun onMoreClick(view: View) {
+        val isExpanding = currentMode == Mode.COLLAPSED
 
-        val constraintSet = when(currentMode){
-            Mode.COLLAPSED -> expandedConstraintSet
-            Mode.EXPANDED -> collapsedConstraintSet
+        val constraintSet = when(isExpanding){
+            true -> expandedConstraintSet
+            false -> collapsedConstraintSet
         }
 
         val imgUrl = wikiArticle?.imageUrl
 
         if(imgUrl != null && !fullImageLoaded){
             downloadFullResolutionImage(imgUrl){
-                runTransition()
+                runTransition(isExpanding)
                 constraintSet.applyTo(article_constraint_root)
                 fullImageLoaded = true
             }
         } else {
-            TransitionManager.beginDelayedTransition(article_constraint_root)
+            runTransition(isExpanding)
             constraintSet.applyTo(article_constraint_root)
         }
 
         currentMode = currentMode.inverted()
     }
 
-    private fun runTransition() {
+    private fun runTransition(isExpanding: Boolean) {
         val transition = ChangeBounds()
-        transition.interpolator = FastOutSlowInInterpolator()
-        TransitionManager.beginDelayedTransition(article_constraint_root)
+        if(isExpanding){
+            transition.interpolator = LinearOutSlowInInterpolator()
+            transition.startDelay = 50
+            transition.duration = 300
+        } else {
+            transition.interpolator = AccelerateInterpolator()
+            transition.duration = 150
+        }
+        TransitionManager.beginDelayedTransition(article_constraint_root, transition)
     }
 
     private fun downloadFullResolutionImage(url: String, onLoadEnd: () -> Unit){
