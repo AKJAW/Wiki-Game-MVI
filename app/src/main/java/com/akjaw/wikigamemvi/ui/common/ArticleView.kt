@@ -15,7 +15,6 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.akjaw.domain.model.WikiArticle
-import com.akjaw.wikigamemvi.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.DecodeFormat
@@ -26,6 +25,14 @@ import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.article_collapsed.view.*
 import kotlinx.android.synthetic.main.article_header.view.*
 import kotlin.random.Random
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.core.graphics.drawable.RoundedBitmapDrawable
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.graphics.BitmapFactory
+import androidx.core.graphics.drawable.toBitmap
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.akjaw.wikigamemvi.R
+
 
 class ArticleView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -88,7 +95,7 @@ class ArticleView @JvmOverloads constructor(
         val imgUrl = wikiArticle?.imageUrl
 
         if(imgUrl != null && !fullImageLoaded){
-            updateImage(imgUrl){
+            downloadFullResolutionImage(imgUrl){
                 runTransition()
                 constraintSet.applyTo(article_constraint_root)
                 fullImageLoaded = true
@@ -97,8 +104,6 @@ class ArticleView @JvmOverloads constructor(
             TransitionManager.beginDelayedTransition(article_constraint_root)
             constraintSet.applyTo(article_constraint_root)
         }
-
-        article_progress_bar.isVisible = false
 
         currentMode = currentMode.inverted()
     }
@@ -109,7 +114,7 @@ class ArticleView @JvmOverloads constructor(
         TransitionManager.beginDelayedTransition(article_constraint_root)
     }
 
-    private fun updateImage(url: String, onLoadEnd: () -> Unit){
+    private fun downloadFullResolutionImage(url: String, onLoadEnd: () -> Unit){
         val listener = object : RequestListener<Drawable> {
             override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                 onLoadEnd()
@@ -122,10 +127,17 @@ class ArticleView @JvmOverloads constructor(
             }
         }
 
-        val glideLoad = Glide
+        val circularProgressDrawable = CircularProgressDrawable(context).apply {
+            strokeWidth = 5f
+            centerRadius = 15f
+            start()
+        }
+
+        Glide
             .with(context)
             .load(url)
             .listener(listener)
+            .placeholder(circularProgressDrawable)
             .apply(RequestOptions()
                 .override(Target.SIZE_ORIGINAL)
                 .format(DecodeFormat.PREFER_ARGB_8888))
