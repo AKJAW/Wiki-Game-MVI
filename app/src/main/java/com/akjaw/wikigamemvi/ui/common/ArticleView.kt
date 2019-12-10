@@ -12,7 +12,6 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
@@ -37,7 +36,7 @@ class ArticleView @JvmOverloads constructor(
     private var wikiArticle: WikiArticle? = null
     private var fullImageLoaded = false
 
-    private var currentMode: Mode = Mode.COLLAPSED
+    private var currentArticleViewMode: ArticleViewMode = ArticleViewMode.COLLAPSED
 
     private lateinit var collapsedConstraintSet: ConstraintSet
     private lateinit var expandedConstraintSet: ConstraintSet
@@ -50,7 +49,7 @@ class ArticleView @JvmOverloads constructor(
         initializeViewFromAttributes(attributes)
         initializeConstraintSets()
 
-        article_header_button_text_view.setOnClickListener(::onMoreClick)
+//        article_header_button_text_view.setOnClickListener(::onMoreClick)
     }
 
     private fun initializeViewFromAttributes(attributes: TypedArray) {
@@ -82,9 +81,12 @@ class ArticleView @JvmOverloads constructor(
         }
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    private fun onMoreClick(view: View) {
-        val isExpanding = currentMode == Mode.COLLAPSED
+    fun onMoreClick() {
+        if(wikiArticle == null){
+            return
+        }
+
+        val isExpanding = currentArticleViewMode == ArticleViewMode.COLLAPSED
 
         val constraintSet = when(isExpanding){
             true -> expandedConstraintSet
@@ -104,7 +106,7 @@ class ArticleView @JvmOverloads constructor(
             constraintSet.applyTo(article_constraint_root)
         }
 
-        currentMode = currentMode.inverted()
+        currentArticleViewMode = currentArticleViewMode.inverted()
     }
 
     private fun runTransition(isExpanding: Boolean) {
@@ -189,17 +191,18 @@ class ArticleView @JvmOverloads constructor(
             R.color.articlePurple,
             R.color.articleGreen
         )
+    }
+}
 
-        private enum class Mode{
-            COLLAPSED,
-            EXPANDED;
 
-            fun inverted(): Mode {
-                return when (this) {
-                    COLLAPSED -> EXPANDED
-                    EXPANDED -> COLLAPSED
-                }
-            }
+enum class ArticleViewMode{
+    COLLAPSED,
+    EXPANDED;
+
+    fun inverted(): ArticleViewMode {
+        return when (this) {
+            COLLAPSED -> EXPANDED
+            EXPANDED -> COLLAPSED
         }
     }
 }
