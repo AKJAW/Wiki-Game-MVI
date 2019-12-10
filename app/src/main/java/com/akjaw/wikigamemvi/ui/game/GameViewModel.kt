@@ -17,6 +17,7 @@ import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.util.toArticle
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class GameViewModel @Inject constructor(
@@ -83,11 +84,19 @@ class GameViewModel @Inject constructor(
             }
 
             is ToggleTargetArticleModeResult -> {
-                state.copy(targetArticleMode = state.targetArticleMode.inverted())
+                if (state.isTargetArticleLoading){
+                    state.copy()
+                } else {
+                    state.copy(targetArticleMode = state.targetArticleMode.inverted())
+                }
             }
 
             is ToggleCurrentArticleModeResult -> {
-                state.copy(currentArticleMode = state.currentArticleMode.inverted())
+                if(state.isCurrentArticleLoading){
+                    state.copy()
+                } else {
+                    state.copy(currentArticleMode = state.currentArticleMode.inverted())
+                }
             }
 
             else -> state.copy()
@@ -146,6 +155,7 @@ class GameViewModel @Inject constructor(
     private fun Observable<InitializeArticlesAction>.onInitializeArticles(): Observable<Lce<InitializeArticlesResult>> {
         return switchMap {
             initializeArticlesUseCase()
+                .delay(5, TimeUnit.SECONDS)
                 .map<Lce<InitializeArticlesResult>> { responses ->
                     Lce.Content(InitializeArticlesResult(responses.first, responses.second))
                 }

@@ -125,6 +125,9 @@ class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponen
         target_article_view.setIsLoading(state.isTargetArticleLoading)
         current_article_view.setIsLoading(state.isCurrentArticleLoading)
 
+        target_article_view.toggleView(state.targetArticleMode)
+        current_article_view.toggleView(state.currentArticleMode)
+
         if(state.targetArticle != null){
             target_article_view.setArticle(state.targetArticle)
         }

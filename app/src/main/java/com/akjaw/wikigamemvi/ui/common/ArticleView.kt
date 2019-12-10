@@ -48,8 +48,6 @@ class ArticleView @JvmOverloads constructor(
 
         initializeViewFromAttributes(attributes)
         initializeConstraintSets()
-
-//        article_header_button_text_view.setOnClickListener(::onMoreClick)
     }
 
     private fun initializeViewFromAttributes(attributes: TypedArray) {
@@ -81,8 +79,8 @@ class ArticleView @JvmOverloads constructor(
         }
     }
 
-    fun onMoreClick() {
-        if(wikiArticle == null){
+    fun toggleView(newMode: ArticleViewMode) {
+        if(newMode == currentArticleViewMode){
             return
         }
 
@@ -106,7 +104,7 @@ class ArticleView @JvmOverloads constructor(
             constraintSet.applyTo(article_constraint_root)
         }
 
-        currentArticleViewMode = currentArticleViewMode.inverted()
+        currentArticleViewMode = newMode
     }
 
     private fun runTransition(isExpanding: Boolean) {
