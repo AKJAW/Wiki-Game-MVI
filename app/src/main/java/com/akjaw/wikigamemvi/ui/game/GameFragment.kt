@@ -23,15 +23,22 @@ import com.akjaw.wikigamemvi.ui.game.model.GameViewEffect
 import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.ui.victory.VictoryFragment
 import com.akjaw.wikigamemvi.injection.injector
+import com.akjaw.wikigamemvi.ui.base.ActionObservable
+import com.jakewharton.rxbinding3.view.clicks
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.Disposables
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.article_collapsed.view.*
+import kotlinx.android.synthetic.main.article_header.view.*
 import kotlinx.android.synthetic.main.fragment_game.*
 import kotlinx.android.synthetic.main.fragment_game.toolbar
 import kotlinx.android.synthetic.main.fragment_game.view.*
 import java.lang.Exception
+import java.util.concurrent.TimeUnit
 
-class GameFragment: Fragment(), DaggerGameComponentProvider {
+class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponentProvider {
     override val gameComponent: GameComponent by lazy {
         DaggerGameComponent
             .builder()
@@ -41,10 +48,11 @@ class GameFragment: Fragment(), DaggerGameComponentProvider {
     }
 
     private var disposables = CompositeDisposable()
+    private var eventDisposable: Disposable? = null
 
     private lateinit var viewModel: GameViewModel
-    private lateinit var wikiLinksAdapter: ArticleLinksAdapter
 
+    private lateinit var wikiLinksAdapter: ArticleLinksAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -82,6 +90,35 @@ class GameFragment: Fragment(), DaggerGameComponentProvider {
 //                Toast.makeText(activity, "More info", Toast.LENGTH_SHORT).show()
 //            }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        eventDisposable = events().subscribe(viewModel::process)
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        eventDisposable?.dispose()
+    }
+
+    override fun events(): Observable<GameAction> {
+        return Observable.merge(
+            target_article_view.article_header_button_text_view
+                .clicks()
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .map {
+                    GameAction.ToggleTargetArticleModeAction
+                },
+            current_article_view.article_header_button_text_view
+                .clicks()
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .map {
+                    GameAction.ToggleCurrentArticleModeAction
+                }
+        )
     }
 
     private fun render(state: GameViewState){

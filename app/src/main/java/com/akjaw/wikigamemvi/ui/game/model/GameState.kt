@@ -29,6 +29,8 @@ sealed class GameAction: BaseAction {
     data class ShowToastAction(val text: String): GameAction()
     object InitializeArticlesAction: GameAction()
     data class LoadNextArticleAction(val wikiTitle: WikiTitle): GameAction()
+    object ToggleTargetArticleModeAction: GameAction()
+    object ToggleCurrentArticleModeAction: GameAction()
 }
 
 sealed class GameResult: BaseResult {
@@ -44,4 +46,7 @@ sealed class GameResult: BaseResult {
     ): GameResult()
 
     object ShowVictoryScreenResult: GameResult()
+
+    object ToggleTargetArticleModeResult: GameResult()
+    object ToggleCurrentArticleModeResult: GameResult()
 }

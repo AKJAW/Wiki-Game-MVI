@@ -31,11 +31,20 @@ class GameViewModel @Inject constructor(
 
     override fun Observable<GameAction>.actionToResult(): Observable<Lce<out GameResult>> {
         return publish <Lce<out GameResult>> {
-            Observable.merge(
+
+            val observablesToBeMerged = listOf(
                 it.ofType<ShowToastAction>().onShowToast(),
                 it.ofType<InitializeArticlesAction>().onInitializeArticles(),
-                it.ofType<LoadNextArticleAction>().onLoadNextArticle()
+                it.ofType<LoadNextArticleAction>().onLoadNextArticle(),
+                it.ofType<ToggleTargetArticleModeAction>().map {
+                    Lce.Content(ToggleTargetArticleModeResult)
+                },
+                it.ofType<ToggleCurrentArticleModeAction>().map {
+                    Lce.Content(ToggleCurrentArticleModeResult)
+                }
             )
+
+            Observable.merge(observablesToBeMerged)
         }
     }
 
@@ -71,6 +80,14 @@ class GameViewModel @Inject constructor(
                     isCurrentArticleLoading = false,
                     numberOfSteps = state.numberOfSteps + 1,
                     wikiNavigationLinks = payload.articleResponse.outgoingTitles)
+            }
+
+            is ToggleTargetArticleModeResult -> {
+                state.copy(targetArticleMode = state.targetArticleMode.inverted())
+            }
+
+            is ToggleCurrentArticleModeResult -> {
+                state.copy(currentArticleMode = state.currentArticleMode.inverted())
             }
 
             else -> state.copy()
@@ -161,6 +178,5 @@ class GameViewModel @Inject constructor(
             }
             .startWith(Lce.Loading(LoadNextArticleResult()))
     }
-
 
 }
