@@ -13,6 +13,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.akjaw.wikigamemvi.R
 import com.akjaw.domain.model.WikiTitle
+import com.akjaw.wikigamemvi.injection.DaggerGameComponentProvider
+import com.akjaw.wikigamemvi.injection.component.ApplicationComponent
+import com.akjaw.wikigamemvi.injection.component.DaggerGameComponent
+import com.akjaw.wikigamemvi.injection.component.GameComponent
+import com.akjaw.wikigamemvi.injection.gameInjector
 import com.akjaw.wikigamemvi.ui.game.model.GameAction
 import com.akjaw.wikigamemvi.ui.game.model.GameViewEffect
 import com.akjaw.wikigamemvi.ui.game.model.GameViewState
@@ -26,7 +31,15 @@ import kotlinx.android.synthetic.main.fragment_game.toolbar
 import kotlinx.android.synthetic.main.fragment_game.view.*
 import java.lang.Exception
 
-class GameFragment: Fragment(){
+class GameFragment: Fragment(), DaggerGameComponentProvider {
+    override val gameComponent: GameComponent by lazy {
+        DaggerGameComponent
+            .builder()
+            .applicationComponent(injector)
+            .onArticleNavigationClick(::onArticleNavigationClick)
+            .build()
+    }
+
     private var disposables = CompositeDisposable()
 
     private lateinit var viewModel: GameViewModel
@@ -41,7 +54,7 @@ class GameFragment: Fragment(){
                 .get(GameViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
-        wikiLinksAdapter = ArticleLinksAdapter(::onArticleNavigationClick)
+        wikiLinksAdapter = gameInjector.articleLinksAdapter()
 
         disposables += viewModel.viewState.subscribe(::render)
         disposables += viewModel.viewEffects.subscribe(::trigger)

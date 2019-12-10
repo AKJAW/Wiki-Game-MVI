@@ -6,12 +6,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.akjaw.domain.model.WikiTitle
 import com.akjaw.wikigamemvi.R
 import kotlinx.android.synthetic.main.wiki_navigation_item.view.*
+import javax.inject.Inject
+import javax.inject.Named
 
-class ArticleLinksAdapter(
-    private val onItemClick: (com.akjaw.domain.model.WikiTitle) -> Unit
-): ListAdapter<com.akjaw.domain.model.WikiTitle, ArticleLinksAdapter.ViewHolder>(WikiTitleDiffCallback()){
+class ArticleLinksAdapter @Inject constructor(
+    @Named("onArticleNavigationClick") private val onItemClick: (WikiTitle) -> Unit
+): ListAdapter<WikiTitle, ArticleLinksAdapter.ViewHolder>(WikiTitleDiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -25,7 +28,7 @@ class ArticleLinksAdapter(
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
-        fun bind(wikiTitle: com.akjaw.domain.model.WikiTitle){
+        fun bind(wikiTitle: WikiTitle){
             itemView.nagivation_name.text = wikiTitle
 
             itemView.nagivation_container.setOnClickListener {
@@ -35,12 +38,12 @@ class ArticleLinksAdapter(
     }
 }
 
-class WikiTitleDiffCallback: DiffUtil.ItemCallback<com.akjaw.domain.model.WikiTitle>(){
-    override fun areItemsTheSame(oldItem: com.akjaw.domain.model.WikiTitle, newItem: com.akjaw.domain.model.WikiTitle): Boolean {
+class WikiTitleDiffCallback: DiffUtil.ItemCallback<WikiTitle>(){
+    override fun areItemsTheSame(oldItem: WikiTitle, newItem: WikiTitle): Boolean {
         return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: com.akjaw.domain.model.WikiTitle, newItem: com.akjaw.domain.model.WikiTitle): Boolean {
+    override fun areContentsTheSame(oldItem: WikiTitle, newItem: WikiTitle): Boolean {
         return oldItem == newItem
     }
 }
