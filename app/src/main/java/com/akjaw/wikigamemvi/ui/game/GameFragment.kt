@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.akjaw.domain.model.ArticleType
 import com.akjaw.wikigamemvi.R
 import com.akjaw.domain.model.WikiTitle
 import com.akjaw.wikigamemvi.injection.DaggerGameComponentProvider
@@ -110,13 +111,13 @@ class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponen
                 .clicks()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .map {
-                    GameAction.ToggleTargetArticleModeAction
+                    GameAction.ToggleArticleModeAction(ArticleType.TARGET)
                 },
             current_article_view.article_header_button_text_view
                 .clicks()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .map {
-                    GameAction.ToggleCurrentArticleModeAction
+                    GameAction.ToggleArticleModeAction(ArticleType.CURRENT)
                 }
         )
     }

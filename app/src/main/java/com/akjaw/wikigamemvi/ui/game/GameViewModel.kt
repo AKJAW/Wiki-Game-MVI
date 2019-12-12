@@ -1,5 +1,6 @@
 package com.akjaw.wikigamemvi.ui.game
 
+import com.akjaw.domain.model.ArticleType
 import com.akjaw.domain.model.WikiTitle
 import com.akjaw.domain.usecase.ArticleWinConditionUseCase
 import com.akjaw.domain.usecase.GetArticleFromTitleUseCase
@@ -37,11 +38,9 @@ class GameViewModel @Inject constructor(
                 it.ofType<ShowToastAction>().onShowToast(),
                 it.ofType<InitializeArticlesAction>().onInitializeArticles(),
                 it.ofType<LoadNextArticleAction>().onLoadNextArticle(),
-                it.ofType<ToggleTargetArticleModeAction>().map {
-                    Lce.Content(ToggleTargetArticleModeResult)
-                },
-                it.ofType<ToggleCurrentArticleModeAction>().map {
-                    Lce.Content(ToggleCurrentArticleModeResult)
+                it.ofType<ToggleArticleModeAction>().map { action ->
+                    val result = ToggleArticleModeResult(action.type)
+                    Lce.Content(result)
                 }
             )
 
@@ -83,19 +82,19 @@ class GameViewModel @Inject constructor(
                     wikiNavigationLinks = payload.articleResponse.outgoingTitles)
             }
 
-            is ToggleTargetArticleModeResult -> {
-                if (state.isTargetArticleLoading){
-                    state.copy()
-                } else {
-                    state.copy(targetArticleMode = state.targetArticleMode.inverted())
-                }
-            }
+            is ToggleArticleModeResult -> {
 
-            is ToggleCurrentArticleModeResult -> {
-                if(state.isCurrentArticleLoading){
-                    state.copy()
-                } else {
-                    state.copy(currentArticleMode = state.currentArticleMode.inverted())
+                if(state.isTargetArticleLoading){
+                    return state.copy()
+                }
+
+                when(payload.type){
+                    ArticleType.CURRENT -> {
+                        state.copy(currentArticleMode = state.currentArticleMode.inverted())
+                    }
+                    ArticleType.TARGET -> {
+                        state.copy(targetArticleMode = state.targetArticleMode.inverted())
+                    }
                 }
             }
 
