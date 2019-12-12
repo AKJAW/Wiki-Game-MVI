@@ -169,6 +169,7 @@ class GameViewModel @Inject constructor(
 
     private fun Observable<LoadNextArticleAction>.onLoadNextArticle(): Observable<Lce<GameResult>> {
         return switchMap {
+            @Suppress("UNCHECKED_CAST")
             winConditionUseCase(it.wikiTitle)
                 .map <Lce<GameResult>> {
                     Lce.Content(ShowVictoryScreenResult)

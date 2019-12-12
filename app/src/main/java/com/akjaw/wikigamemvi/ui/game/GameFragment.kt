@@ -86,10 +86,7 @@ class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponen
             }
 
             (activity as? AppCompatActivity?)?.setSupportActionBar(toolbar)
-//
-//            it.target_article_view.setOnMoreClickListener {
-//                Toast.makeText(activity, "More info", Toast.LENGTH_SHORT).show()
-//            }
+
         }
     }
 
