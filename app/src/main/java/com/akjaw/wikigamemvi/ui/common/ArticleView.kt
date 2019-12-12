@@ -53,8 +53,15 @@ class ArticleView @JvmOverloads constructor(
     private fun initializeViewFromAttributes(attributes: TypedArray) {
         article_header_title_text_view.text = attributes.getString(R.styleable.ArticleView_header)
 
-        val backgroundColor =
+        val hasRandomHeaderColors = attributes
+            .getBoolean(R.styleable.ArticleView_hasRandomHeaderColors, false)
+
+        val backgroundColor = if(hasRandomHeaderColors){
+            getRandomHeaderColor()
+        } else {
             attributes.getColor(R.styleable.ArticleView_headerBackgroundColor, Color.WHITE)
+        }
+
 
         setHeaderColor(backgroundColor)
 

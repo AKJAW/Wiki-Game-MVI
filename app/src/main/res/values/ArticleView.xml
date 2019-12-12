@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="ArticleView">
         <attr name="header" format="string"/>
+        <attr name="hasRandomHeaderColors" format="boolean"/>
         <attr name="headerBackgroundColor" format="color"/>
         <attr name="titleTransitionName" format="string"/>
         <attr name="imageTransitionName" format="string"/>
