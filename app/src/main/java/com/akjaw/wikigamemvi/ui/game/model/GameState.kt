@@ -5,8 +5,7 @@ import com.akjaw.domain.model.WikiArticle
 import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.model.WikiTitle
 import com.akjaw.wikigamemvi.ui.base.*
-import com.akjaw.wikigamemvi.ui.common.ArticleView
-import com.akjaw.wikigamemvi.ui.common.ArticleViewMode
+import com.akjaw.wikigamemvi.ui.common.ArticleView.ArticleViewMode
 
 data class GameViewState(
     val targetArticle: WikiArticle? = null,

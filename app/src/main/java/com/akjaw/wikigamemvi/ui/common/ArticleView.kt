@@ -156,7 +156,6 @@ class ArticleView @JvmOverloads constructor(
             return
         }
 
-        wikiArticle = article
         article_title_text_view.text = article.name
 
         if(article.imageUrl.isNotBlank()){
@@ -166,12 +165,18 @@ class ArticleView @JvmOverloads constructor(
                 .into(article_image_view)
         }
 
-        if(shouldChangeHeaderColor){
-            val randomIndex = Random.nextInt(COLORS_ID.size)
-            val id = COLORS_ID[randomIndex]
-            val color = ResourcesCompat.getColor(resources, id, null)
+        if(shouldChangeHeaderColor && wikiArticle != null){
+            val color = getRandomHeaderColor()
             setHeaderColor(color)
         }
+
+        wikiArticle = article
+    }
+
+    private fun getRandomHeaderColor(): Int {
+        val randomIndex = Random.nextInt(COLORS_ID.size)
+        val id = COLORS_ID[randomIndex]
+        return ResourcesCompat.getColor(resources, id, null)
     }
 
     private fun setHeaderColor(color: Int){
@@ -190,17 +195,18 @@ class ArticleView @JvmOverloads constructor(
             R.color.articleGreen
         )
     }
-}
 
+    enum class ArticleViewMode{
+        COLLAPSED,
+        EXPANDED;
 
-enum class ArticleViewMode{
-    COLLAPSED,
-    EXPANDED;
-
-    fun inverted(): ArticleViewMode {
-        return when (this) {
-            COLLAPSED -> EXPANDED
-            EXPANDED -> COLLAPSED
+        fun inverted(): ArticleViewMode {
+            return when (this) {
+                COLLAPSED -> EXPANDED
+                EXPANDED -> COLLAPSED
+            }
         }
     }
 }
+
+
