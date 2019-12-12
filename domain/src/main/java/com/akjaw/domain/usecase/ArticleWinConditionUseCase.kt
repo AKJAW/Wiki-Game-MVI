@@ -14,7 +14,7 @@ class ArticleWinConditionUseCaseImpl @Inject constructor(
 ): ArticleWinConditionUseCase {
     override fun invoke(wikiTitle: WikiTitle): Observable<Boolean> {
         return getTargetArticleUseCase(false)
-            .observeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())
             .filter { response -> response.name == wikiTitle }
             .map { true }
     }

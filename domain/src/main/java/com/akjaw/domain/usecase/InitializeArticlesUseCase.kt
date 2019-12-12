@@ -16,7 +16,7 @@ class InitializeArticlesUseCaseImpl @Inject constructor(
 ): InitializeArticlesUseCase {
     override fun invoke(): Observable<Pair<WikiResponse, WikiResponse>> {
         return getTargetArticleUseCase(true)
-            .observeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())
             .flatMap { target ->
                 wikiRepository.getRandomArticle()
                     .map { random -> target to random }

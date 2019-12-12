@@ -29,7 +29,7 @@ class GetTargetArticleUseCaseImpl @Inject constructor(
 
     private fun getTargetArticleFromRepository(): Observable<WikiResponse>{
         return wikiRepository.getRandomArticle()
-            .observeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())
             .doAfterSuccess { targetBehaviorSubject.onNext(it) }
             .toObservable()
     }

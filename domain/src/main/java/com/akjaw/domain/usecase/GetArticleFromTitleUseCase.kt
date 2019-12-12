@@ -17,7 +17,7 @@ class GetArticleFromTitleUseCaseImpl @Inject constructor(
 ): GetArticleFromTitleUseCase {
     override fun invoke(title: WikiTitle): Observable<WikiResponse>{
         return wikiRepository.getArticleFromTitle(title)
-            .observeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())
             .toObservable()
     }
 }

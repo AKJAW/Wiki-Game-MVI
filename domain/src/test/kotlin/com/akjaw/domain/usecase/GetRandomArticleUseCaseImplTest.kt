@@ -46,11 +46,14 @@ class GetRandomArticleUseCaseImplTest {
 
         useCase()
             .test()
-            .also {
-                scheduler.advanceTimeBy(3, TimeUnit.SECONDS)
-            }
             .assertValue(WikiResponse("First"))
 
         Mockito.verify(wikiRepository, Mockito.times(1)).getRandomArticle()
+
+        useCase()
+            .test()
+            .assertValue(WikiResponse("Second"))
+
+        Mockito.verify(wikiRepository, Mockito.times(2)).getRandomArticle()
     }
 }

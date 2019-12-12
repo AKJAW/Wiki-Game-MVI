@@ -33,7 +33,7 @@ class GetTargetArticleUseCaseImplTest {
     }
 
     @Test
-    fun `subsequent invocations without refresh return the same value and doesn't call the repository`() {
+    fun `subsequent invocations without isNewTargetArticle return the same value and doesn't call the repository`() {
         Mockito.`when`(wikiRepository.getRandomArticle())
             .thenReturn(Single.just(WikiResponse(name = "first")))
             .thenReturn(Single.just(WikiResponse(name = "second")))

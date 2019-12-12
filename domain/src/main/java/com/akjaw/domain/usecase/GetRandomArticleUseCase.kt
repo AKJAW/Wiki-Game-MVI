@@ -17,6 +17,6 @@ class GetRandomArticleUseCaseImpl @Inject constructor(
 ): GetRandomArticleUseCase {
     override fun invoke(): Observable<WikiResponse>
             = wikiRepository.getRandomArticle()
-        .observeOn(Schedulers.io())
+        .subscribeOn(Schedulers.io())
         .toObservable()
 }
