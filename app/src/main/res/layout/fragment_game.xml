@@ -45,6 +45,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
+        <ImageView
+            android:layout_width="62dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/previous_article"
+            android:src="@drawable/ic_article_arrow_back_24px"
+            android:theme="@style/Widget.AppCompat.Button.Borderless"
+            app:layout_constraintBottom_toTopOf="@+id/current_article_view"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/target_article_view" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
@@ -56,9 +67,9 @@
             android:id="@+id/seperator"
             android:layout_width="0dp"
             android:layout_height="2dp"
-            android:layout_marginTop="16dp"
-            android:layerType="software"
+            android:layout_marginTop="24dp"
             android:background="@drawable/dotted_line"
+            android:layerType="software"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@id/target_article_view" />
@@ -74,7 +85,7 @@
             android:id="@+id/current_article_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="48dp"
             app:hasRandomHeaderColors="true"
             app:header="@string/current_article"
             app:layout_constraintEnd_toEndOf="parent"
