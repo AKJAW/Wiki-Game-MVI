@@ -7,6 +7,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
+import timber.log.Timber
 
 interface BaseAction
 interface BaseViewState
@@ -27,20 +28,21 @@ abstract class BaseViewModel<A: BaseAction, R: BaseResult, S: BaseViewState, E: 
 
     val viewState: Observable<S> by lazy {
         store.resultToViewState()
-            .doOnNext { Log.d("-----", "vs $it") }
+            .doOnNext { Timber.tag("-----").d("vs $it") }
             .observeOn(AndroidSchedulers.mainThread())
             .replay()
             .autoConnect(1) { disposables += it }
     }
 
     val viewEffects: Observable<E> by lazy {
-        store.doOnNext { Log.d("-----", "ve before $it") }.resultToViewEffect()
-            .doOnNext { Log.d("-----", "ve $it") }
+        store.doOnNext { Timber.tag("-----").d("ve before $it") }
+            .resultToViewEffect()
+            .doOnNext { Timber.tag("-----").d("ve $it") }
             .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun process(action: A) {
-        Log.d("-----", "process $action")
+        Timber.tag("-----").d("process $action")
         actions.accept(action)
     }
 

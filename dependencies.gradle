@@ -20,6 +20,8 @@ ext {
 
     glideVersion = '4.10.0'
 
+    timberVersion = '4.7.1'
+
     daggerVersion = '2.24'
     daggerCompilerVersion = '2.22.1'
     daggerProcessorVersion = '2.16'
