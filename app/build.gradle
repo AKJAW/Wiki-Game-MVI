@@ -62,8 +62,11 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$daggerProcessorVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerCompilerVersion"
 
-    testImplementation "junit:junit:$jUnitVersion"
+//    testImplementation "junit:junit:$jUnitVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$jUnit5Version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$jUnit5Version"
+    androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidJUnitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
 }

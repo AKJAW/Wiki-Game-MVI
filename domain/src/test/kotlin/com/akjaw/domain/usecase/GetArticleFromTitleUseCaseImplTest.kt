@@ -5,18 +5,17 @@ import com.akjaw.domain.repository.WikiRepository
 import io.reactivex.Single
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-import org.junit.Assert.*
 import org.mockito.Mockito
 
 class GetArticleFromTitleUseCaseImplTest {
     private lateinit var wikiRepository: WikiRepository
     private lateinit var useCase: GetArticleFromTitleUseCase
 
-    @Before
+    @BeforeEach
     fun setUp() {
         wikiRepository = Mockito.mock(WikiRepository::class.java)
         useCase = GetArticleFromTitleUseCaseImpl(wikiRepository)
@@ -26,7 +25,7 @@ class GetArticleFromTitleUseCaseImplTest {
         }
     }
 
-    @After
+    @AfterEach
     fun tearDown() {
         RxJavaPlugins.reset()
     }

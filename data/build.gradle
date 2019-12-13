@@ -12,7 +12,8 @@ dependencies {
     implementation dataDependencies.javaxAnnotation
     implementation dataDependencies.javaxInject
 
-    testImplementation dataTestDependencies.jUnit
+    testImplementation dataTestDependencies.jUnit5Api
+    testImplementation dataTestDependencies.jUnit5Engine
     testImplementation dataTestDependencies.mockitoCore
 }
 

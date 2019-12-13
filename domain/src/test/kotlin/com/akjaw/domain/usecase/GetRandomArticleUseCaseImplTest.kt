@@ -6,11 +6,10 @@ import io.reactivex.Single
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
-import org.junit.After
-import org.junit.Before
 
-import org.junit.Assert.*
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import java.util.concurrent.TimeUnit
 
@@ -18,7 +17,7 @@ class GetRandomArticleUseCaseImplTest {
     private lateinit var wikiRepository: WikiRepository
     private lateinit var useCase: GetRandomArticleUseCase
 
-    @Before
+    @BeforeEach
     fun setUp() {
         wikiRepository = Mockito.mock(WikiRepository::class.java)
         useCase = GetRandomArticleUseCaseImpl(wikiRepository)
@@ -28,7 +27,7 @@ class GetRandomArticleUseCaseImplTest {
         }
     }
 
-    @After
+    @AfterEach
     fun tearDown(){
         RxJavaPlugins.reset()
     }

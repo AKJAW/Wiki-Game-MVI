@@ -26,6 +26,7 @@ ext {
 
     //Testing
     jUnitVersion = '4.12'
+    jUnit5Version = '5.5.2'
     androidJUnitVersion = '1.1.1'
     espressoVersion = '3.2.0'
     mockitoVersion = '3.1.0'
@@ -39,7 +40,8 @@ ext {
 
 
     domainTestDependencies = [
-            jUnit: "junit:junit:$jUnitVersion",
+            jUnit5Api: "org.junit.jupiter:junit-jupiter-api:$jUnit5Version",
+            jUnit5Engine: "org.junit.jupiter:junit-jupiter-engine:$jUnit5Version",
             mockitoCore: "org.mockito:mockito-core:$mockitoVersion"
     ]
 
@@ -52,7 +54,8 @@ ext {
 
 
     dataTestDependencies = [
-            jUnit: "junit:junit:$jUnitVersion",
+            jUnit5Api: "org.junit.jupiter:junit-jupiter-api:$jUnit5Version",
+            jUnit5Engine: "org.junit.jupiter:junit-jupiter-engine:$jUnit5Version",
             mockitoCore: "org.mockito:mockito-core:$mockitoVersion"
     ]
 }

@@ -11,7 +11,8 @@ dependencies {
     implementation domainDependencies.javaxAnnotation
     implementation domainDependencies.javaxInject
 
-    testImplementation domainTestDependencies.jUnit
+    testImplementation dataTestDependencies.jUnit5Api
+    testImplementation dataTestDependencies.jUnit5Engine
     testImplementation domainTestDependencies.mockitoCore
 }
 

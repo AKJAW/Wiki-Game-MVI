@@ -5,10 +5,10 @@ import com.akjaw.domain.repository.WikiRepository
 import io.reactivex.Single
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
-import org.junit.After
-import org.junit.Before
 
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 
 class GetTargetArticleUseCaseImplTest {
@@ -16,7 +16,7 @@ class GetTargetArticleUseCaseImplTest {
     private lateinit var usecase: GetTargetArticleUseCase
 
 
-    @Before
+    @BeforeEach
     fun setUp(){
         wikiRepository = Mockito.mock(WikiRepository::class.java)
         usecase =
@@ -27,7 +27,7 @@ class GetTargetArticleUseCaseImplTest {
         }
     }
 
-    @After
+    @AfterEach
     fun tearDown(){
         RxJavaPlugins.reset()
     }

@@ -4,10 +4,9 @@ import com.akjaw.domain.model.WikiResponse
 import io.reactivex.Observable
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
-import org.junit.After
-import org.junit.Before
-
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 
 class ArticleWinConditionUseCaseImplTest {
@@ -15,7 +14,7 @@ class ArticleWinConditionUseCaseImplTest {
     private lateinit var useCase: ArticleWinConditionUseCase
     private lateinit var targetArticleUseCase: GetTargetArticleUseCase
 
-    @Before
+    @BeforeEach
     fun setUp() {
         targetArticleUseCase = Mockito.mock(GetTargetArticleUseCase::class.java)
         useCase = ArticleWinConditionUseCaseImpl(targetArticleUseCase)
@@ -25,7 +24,7 @@ class ArticleWinConditionUseCaseImplTest {
         }
     }
 
-    @After
+    @AfterEach
     fun tearDown() {
         RxJavaPlugins.reset()
     }
