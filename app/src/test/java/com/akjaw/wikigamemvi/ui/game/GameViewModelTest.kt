@@ -4,13 +4,14 @@ import com.akjaw.domain.model.WikiArticle
 import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.usecase.ArticleWinConditionUseCase
 import com.akjaw.domain.usecase.GetArticleFromTitleUseCase
-import com.akjaw.domain.usecase.GetTargetArticleUseCase
 import com.akjaw.domain.usecase.InitializeArticlesUseCase
 import com.akjaw.wikigamemvi.ui.game.model.GameAction
+import com.akjaw.wikigamemvi.ui.game.model.GameViewEffect
 import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.util.toArticle
 import io.reactivex.Observable
 import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.observers.TestObserver
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import org.junit.jupiter.api.*
@@ -18,6 +19,8 @@ import org.junit.jupiter.api.Assertions.*
 import org.mockito.Mockito
 
 class GameViewModelTest {
+    // 1: Initial -> 2: Loading -> 3: Loaded
+    private val STARTING_VALUE_COUNT = 3
 
     private lateinit var initializeArticlesUseCase: InitializeArticlesUseCase
     private lateinit var getArticleFromTitleUseCase: GetArticleFromTitleUseCase
@@ -41,6 +44,10 @@ class GameViewModelTest {
         }
 
         RxAndroidPlugins.setInitMainThreadSchedulerHandler {
+            Schedulers.trampoline()
+        }
+
+        RxJavaPlugins.setIoSchedulerHandler {
             Schedulers.trampoline()
         }
     }
@@ -117,13 +124,13 @@ class GameViewModelTest {
             viewModel.process(GameAction.InitializeArticlesAction)
 
             viewStateTester
-                .assertValueAt(3) {
+                .assertValueAt(STARTING_VALUE_COUNT) {
                     it.checkInitialArticlesLoading()
                     true
                 }
 
             viewStateTester
-                .assertValueAt(4) {
+                .assertValueAt(STARTING_VALUE_COUNT + 1) {
                     it.checkInitialArticlesFinished(target2.toArticle(), current2.toArticle())
                     true
                 }
@@ -141,12 +148,167 @@ class GameViewModelTest {
         private fun GameViewState.checkInitialArticlesFinished(target: WikiArticle, current: WikiArticle){
             val bothAreLoaded = !isCurrentArticleLoading && !isTargetArticleLoading
             assertTrue(bothAreLoaded)
-            assertEquals(targetArticle, target)
-            assertEquals(currentArticle, current)
+            assertEquals(target, targetArticle)
+            assertEquals(current, currentArticle)
         }
 
         //TODO error handling
     }
 
+    @Nested
+    inner class LoadNextArticleActionTests{
+        @BeforeEach
+        fun setUp(){
+            val target = WikiResponse(name = "target")
+            val current = WikiResponse(name = "current")
+            Mockito.`when`(initializeArticlesUseCase())
+                .thenReturn(Observable.just(target to current))
+        }
 
+        @Test
+        fun `it always checks if the winCondition is met`(){
+            Mockito.`when`(winConditionUseCase(Mockito.anyString()))
+                .thenReturn(Observable.empty())
+
+            Mockito.`when`(getArticleFromTitleUseCase(Mockito.anyString()))
+                .thenReturn(Observable.empty())
+
+            viewModel.viewState.test().dispose()
+
+            viewModel.process(GameAction.LoadNextArticleAction("test1"))
+            Mockito.verify(winConditionUseCase, Mockito.times(1)).invoke("test1")
+
+            viewModel.process(GameAction.LoadNextArticleAction("test2"))
+            Mockito.verify(winConditionUseCase, Mockito.times(1)).invoke("test2")
+
+            viewModel.process(GameAction.LoadNextArticleAction("test1"))
+            Mockito.verify(winConditionUseCase, Mockito.times(2)).invoke("test1")
+        }
+
+        @Test
+        fun `it loads the next article if the win condition is not met`(){
+            Mockito.`when`(winConditionUseCase(Mockito.anyString()))
+                .thenReturn(Observable.empty())
+
+            val response1 = WikiResponse(name = "first")
+            val response2 = WikiResponse(name = "second")
+            val response3 = WikiResponse(name = "third")
+
+            Mockito.`when`(getArticleFromTitleUseCase(Mockito.anyString()))
+                .thenReturn(Observable.just(response1))
+                .thenReturn(Observable.just(response2))
+                .thenReturn(Observable.just(response3))
+
+            val viewStateTester = viewModel.viewState.test()
+
+            viewStateTester.processLoadNextAndAssertValues(response1, STARTING_VALUE_COUNT)
+            viewStateTester.processLoadNextAndAssertValues(response2, STARTING_VALUE_COUNT + 2)
+            viewStateTester.processLoadNextAndAssertValues(response3, STARTING_VALUE_COUNT + 4)
+
+            viewStateTester.dispose()
+        }
+
+        private fun TestObserver<GameViewState>.processLoadNextAndAssertValues(
+            response: WikiResponse,
+            index: Int
+        ) {
+            viewModel.process(GameAction.LoadNextArticleAction(Mockito.anyString()))
+            this.assertValueAt(index) {
+                it.checkLoadNextLoading()
+            }
+            this.assertValueAt(index + 1) {
+                it.checkLoadNextFinished(response.toArticle())
+            }
+        }
+
+        @Test
+        fun `if the win condition is met then emit ShowVictoryScreenEffect`(){
+            Mockito.`when`(winConditionUseCase("win"))
+                .thenReturn(Observable.just(true))
+
+            Mockito.`when`(getArticleFromTitleUseCase(Mockito.anyString()))
+                .thenReturn(Observable.just(WikiResponse(name = "first")))
+
+            val viewEffectsTester = viewModel.viewEffects.test()
+
+            viewEffectsTester.assertEmpty()
+
+            viewModel.process(GameAction.LoadNextArticleAction("win"))
+
+            viewEffectsTester.assertValueCount(1)
+            viewEffectsTester.assertValue(GameViewEffect.ShowVictoryScreenEffect)
+
+            viewEffectsTester.dispose()
+        }
+
+        @Test
+        fun `every time a new article is loaded increment numberOfSteps`(){
+            Mockito.`when`(winConditionUseCase(Mockito.anyString()))
+                .thenReturn(Observable.empty())
+
+            Mockito.`when`(getArticleFromTitleUseCase(Mockito.anyString()))
+                .thenReturn(Observable.just(WikiResponse(name = "first")))
+
+            val viewStateTester = viewModel.viewState.test()
+
+            viewStateTester.assertValueAt(viewStateTester.valueCount() - 1) {
+                assertEquals(it.numberOfSteps, 0)
+                true
+            }
+
+            viewModel.process(GameAction.LoadNextArticleAction(Mockito.anyString()))
+            viewStateTester.assertValueAt(viewStateTester.valueCount() - 1) {
+                assertEquals(it.numberOfSteps, 1)
+                true
+            }
+
+            viewModel.process(GameAction.LoadNextArticleAction(Mockito.anyString()))
+            viewStateTester.assertValueAt(viewStateTester.valueCount() - 1) {
+                assertEquals(it.numberOfSteps, 2)
+                true
+            }
+
+            viewStateTester.dispose()
+        }
+
+        @Test
+        fun `if the win condition is met then don't increment numberOfSteps`(){
+            Mockito.`when`(winConditionUseCase(Mockito.anyString()))
+                .thenReturn(Observable.empty())
+                .thenReturn(Observable.just(true))
+
+            Mockito.`when`(getArticleFromTitleUseCase(Mockito.anyString()))
+                .thenReturn(Observable.just(WikiResponse(name = "first")))
+
+            val viewStateTester = viewModel.viewState.test()
+
+            viewModel.process(GameAction.LoadNextArticleAction(Mockito.anyString()))
+            viewStateTester.assertValueAt(viewStateTester.valueCount() - 1) {
+                assertEquals(it.numberOfSteps, 1)
+                true
+            }
+
+            viewModel.process(GameAction.LoadNextArticleAction(Mockito.anyString()))
+            viewStateTester.assertValueAt(viewStateTester.valueCount() - 1) {
+                assertEquals(it.numberOfSteps, 1)
+                true
+            }
+
+            viewStateTester.dispose()
+        }
+
+        private fun GameViewState.checkLoadNextLoading(): Boolean {
+            assertTrue(isCurrentArticleLoading)
+            assertNull(currentArticle)
+
+            return true
+        }
+
+        private fun GameViewState.checkLoadNextFinished(article: WikiArticle): Boolean {
+            assertFalse(isCurrentArticleLoading)
+            assertEquals(article, currentArticle)
+
+            return true
+        }
+    }
 }
