@@ -5,6 +5,9 @@ import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.usecase.ArticleWinConditionUseCase
 import com.akjaw.domain.usecase.GetArticleFromTitleUseCase
 import com.akjaw.domain.usecase.InitializeArticlesUseCase
+import com.akjaw.test_utils.assertLastValue
+import com.akjaw.test_utils.assertSecondToLastValue
+
 import com.akjaw.wikigamemvi.ui.game.model.GameAction
 import com.akjaw.wikigamemvi.ui.game.model.GameViewEffect
 import com.akjaw.wikigamemvi.ui.game.model.GameViewState
@@ -18,9 +21,8 @@ import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
 import org.mockito.Mockito
 
+
 class GameViewModelTest {
-    // 1: Initial -> 2: Loading -> 3: Loaded
-    private val STARTING_VALUE_COUNT = 3
 
     private lateinit var initializeArticlesUseCase: InitializeArticlesUseCase
     private lateinit var getArticleFromTitleUseCase: GetArticleFromTitleUseCase
@@ -93,13 +95,13 @@ class GameViewModelTest {
             val viewStateTester = viewModel.viewState.test()
 
             viewStateTester
-                .assertValueAt(1) {
+                .assertSecondToLastValue {
                     it.checkInitialArticlesLoading()
                     true
                 }
 
             viewStateTester
-                .assertValueAt(2) {
+                .assertLastValue {
                     it.checkInitialArticlesFinished(target.toArticle(), current.toArticle())
                     true
                 }
@@ -124,13 +126,13 @@ class GameViewModelTest {
             viewModel.process(GameAction.InitializeArticlesAction)
 
             viewStateTester
-                .assertValueAt(STARTING_VALUE_COUNT) {
+                .assertSecondToLastValue {
                     it.checkInitialArticlesLoading()
                     true
                 }
 
             viewStateTester
-                .assertValueAt(STARTING_VALUE_COUNT + 1) {
+                .assertLastValue {
                     it.checkInitialArticlesFinished(target2.toArticle(), current2.toArticle())
                     true
                 }
@@ -201,22 +203,21 @@ class GameViewModelTest {
 
             val viewStateTester = viewModel.viewState.test()
 
-            viewStateTester.processLoadNextAndAssertValues(response1, STARTING_VALUE_COUNT)
-            viewStateTester.processLoadNextAndAssertValues(response2, STARTING_VALUE_COUNT + 2)
-            viewStateTester.processLoadNextAndAssertValues(response3, STARTING_VALUE_COUNT + 4)
+            viewStateTester.processLoadNextAndAssertValues(response1)
+            viewStateTester.processLoadNextAndAssertValues(response2)
+            viewStateTester.processLoadNextAndAssertValues(response3)
 
             viewStateTester.dispose()
         }
 
         private fun TestObserver<GameViewState>.processLoadNextAndAssertValues(
-            response: WikiResponse,
-            index: Int
+            response: WikiResponse
         ) {
             viewModel.process(GameAction.LoadNextArticleAction(Mockito.anyString()))
-            this.assertValueAt(index) {
+            this.assertSecondToLastValue {
                 it.checkLoadNextLoading()
             }
-            this.assertValueAt(index + 1) {
+            this.assertLastValue {
                 it.checkLoadNextFinished(response.toArticle())
             }
         }
@@ -251,19 +252,19 @@ class GameViewModelTest {
 
             val viewStateTester = viewModel.viewState.test()
 
-            viewStateTester.assertValueAt(viewStateTester.valueCount() - 1) {
+            viewStateTester.assertLastValue {
                 assertEquals(it.numberOfSteps, 0)
                 true
             }
 
             viewModel.process(GameAction.LoadNextArticleAction(Mockito.anyString()))
-            viewStateTester.assertValueAt(viewStateTester.valueCount() - 1) {
+            viewStateTester.assertLastValue {
                 assertEquals(it.numberOfSteps, 1)
                 true
             }
 
             viewModel.process(GameAction.LoadNextArticleAction(Mockito.anyString()))
-            viewStateTester.assertValueAt(viewStateTester.valueCount() - 1) {
+            viewStateTester.assertLastValue {
                 assertEquals(it.numberOfSteps, 2)
                 true
             }
@@ -283,13 +284,13 @@ class GameViewModelTest {
             val viewStateTester = viewModel.viewState.test()
 
             viewModel.process(GameAction.LoadNextArticleAction(Mockito.anyString()))
-            viewStateTester.assertValueAt(viewStateTester.valueCount() - 1) {
+            viewStateTester.assertLastValue {
                 assertEquals(it.numberOfSteps, 1)
                 true
             }
 
             viewModel.process(GameAction.LoadNextArticleAction(Mockito.anyString()))
-            viewStateTester.assertValueAt(viewStateTester.valueCount() - 1) {
+            viewStateTester.assertLastValue {
                 assertEquals(it.numberOfSteps, 1)
                 true
             }
@@ -310,5 +311,7 @@ class GameViewModelTest {
 
             return true
         }
+
+        //TODO errors
     }
 }
