@@ -154,7 +154,6 @@ class GameViewModel @Inject constructor(
     private fun Observable<InitializeArticlesAction>.onInitializeArticles(): Observable<Lce<InitializeArticlesResult>> {
         return switchMap {
             initializeArticlesUseCase()
-                .delay(5, TimeUnit.SECONDS)
                 .map<Lce<InitializeArticlesResult>> { responses ->
                     Lce.Content(InitializeArticlesResult(responses.first, responses.second))
                 }

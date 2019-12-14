@@ -38,11 +38,6 @@ class GetRandomArticleUseCaseImplTest {
             .thenReturn(Single.just(WikiResponse("First")))
             .thenReturn(Single.just(WikiResponse("Second")))
 
-        val scheduler = TestScheduler()
-        RxJavaPlugins.setComputationSchedulerHandler {
-            scheduler
-        }
-
         useCase()
             .test()
             .assertValue(WikiResponse("First"))
