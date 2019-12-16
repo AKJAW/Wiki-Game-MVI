@@ -9,4 +9,5 @@
     <string name="article_header_button">More</string>
     <string name="article_image">Article image</string>
     <string name="previous_article">Previous article</string>
+    <string name="retry_loading">Retry loading</string>
 </resources>

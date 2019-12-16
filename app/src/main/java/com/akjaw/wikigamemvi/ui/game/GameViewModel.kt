@@ -170,11 +170,13 @@ class GameViewModel @Inject constructor(
 
                 val targetArticleState = state.targetArticleState.copy(
                     article = null,
+                    isLoading = false,
                     hasError = true
                 )
 
                 val currentArticleState = state.targetArticleState.copy(
                     article = null,
+                    isLoading = false,
                     hasError = true
                 )
 
@@ -187,6 +189,7 @@ class GameViewModel @Inject constructor(
 
                 val currentArticleState = state.targetArticleState.copy(
                     article = null,
+                    isLoading = false,
                     hasError = true
                 )
 
@@ -220,6 +223,7 @@ class GameViewModel @Inject constructor(
         return switchMap {
             initializeArticlesUseCase()
                 .map<Lce<InitializeArticlesResult>> { responses ->
+                    throw Error()
                     Lce.Content(InitializeArticlesResult(responses.first, responses.second))
                 }
                 .onErrorReturn {

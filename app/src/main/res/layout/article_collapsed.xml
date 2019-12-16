@@ -41,6 +41,18 @@
         app:layout_constraintTop_toBottomOf="@+id/article_header"
         tools:text="Testowy sting Testowy sting Testowy sting Testowy sting Testowy sting Testowy sting Testowy sting Testowy sting Testowy sting Testowy sting Testowy sting Testowy sting Testowy sting " />
 
+    <ImageView
+        android:id="@+id/article_retry_image_view"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:contentDescription="@string/retry_loading"
+        android:src="@drawable/ic_refresh_24px"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/article_title_text_view"
+        app:layout_constraintEnd_toEndOf="@+id/article_title_text_view"
+        app:layout_constraintStart_toStartOf="@+id/article_image_view"
+        app:layout_constraintTop_toTopOf="@+id/article_title_text_view" />
+
     <ProgressBar
         android:id="@+id/article_progress_bar"
         android:layout_width="20dp"
@@ -48,7 +60,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/article_title_text_view"
         app:layout_constraintEnd_toEndOf="@+id/article_title_text_view"
-        app:layout_constraintStart_toStartOf="@+id/article_title_text_view"
+        app:layout_constraintStart_toStartOf="@+id/article_image_view"
         app:layout_constraintTop_toTopOf="@+id/article_title_text_view" />
 
     <com.akjaw.wikigamemvi.ui.common.MaxHeightScrollView
