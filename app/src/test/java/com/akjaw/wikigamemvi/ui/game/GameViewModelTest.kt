@@ -182,13 +182,6 @@ class GameViewModelTest {
 
     @Nested
     inner class LoadNextArticleActionTests{
-        @BeforeEach
-        fun setUp(){
-            val target = WikiResponse(name = "target")
-            val current = WikiResponse(name = "current")
-            Mockito.`when`(initializeArticlesUseCase())
-                .thenReturn(Observable.just(target to current))
-        }
 
         @Test
         fun `it always checks if the winCondition is met`(){
@@ -340,13 +333,6 @@ class GameViewModelTest {
 
     @Nested
     inner class ToggleArticleModeActionTest{
-        @BeforeEach
-        fun setUp(){
-            val target = WikiResponse(name = "target")
-            val current = WikiResponse(name = "current")
-            Mockito.`when`(initializeArticlesUseCase())
-                .thenReturn(Observable.just(target to current))
-        }
 
         @ParameterizedTest
         @EnumSource(ArticleType::class)
@@ -356,18 +342,8 @@ class GameViewModelTest {
             viewStateTester.assertLastValue {
                 it.checkModeChange(type, ArticleView.ArticleViewMode.COLLAPSED)
             }
-
-            viewModel.process(GameAction.ToggleArticleModeAction(type))
-
-            viewStateTester.assertLastValue {
-                it.checkModeChange(type, ArticleView.ArticleViewMode.EXPANDED)
-            }
-
-            viewModel.process(GameAction.ToggleArticleModeAction(type))
-
-            viewStateTester.assertLastValue {
-                it.checkModeChange(type, ArticleView.ArticleViewMode.COLLAPSED)
-            }
+            viewStateTester.processToggleModeAndAssert(type, ArticleView.ArticleViewMode.EXPANDED)
+            viewStateTester.processToggleModeAndAssert(type, ArticleView.ArticleViewMode.COLLAPSED)
 
             viewStateTester.dispose()
         }
@@ -383,7 +359,7 @@ class GameViewModelTest {
                 ArticleType.CURRENT -> GameViewState(isCurrentArticleLoading = true)
             }
 
-            val viewModel = GameViewModel(
+            viewModel = GameViewModel(
                 initializeArticlesUseCase,
                 getArticleFromTitleUseCase,
                 winConditionUseCase,
@@ -392,23 +368,21 @@ class GameViewModelTest {
 
             val viewStateTester = viewModel.viewState.test()
 
-            viewStateTester.assertLastValue {
-                it.checkModeChange(type, ArticleView.ArticleViewMode.COLLAPSED)
-            }
-
-            viewModel.process(GameAction.ToggleArticleModeAction(type))
-
-            viewStateTester.assertLastValue {
-                it.checkModeChange(type, ArticleView.ArticleViewMode.COLLAPSED)
-            }
-
-            viewModel.process(GameAction.ToggleArticleModeAction(type))
-
-            viewStateTester.assertLastValue {
-                it.checkModeChange(type, ArticleView.ArticleViewMode.COLLAPSED)
-            }
+            viewStateTester.processToggleModeAndAssert(type, ArticleView.ArticleViewMode.COLLAPSED)
+            viewStateTester.processToggleModeAndAssert(type, ArticleView.ArticleViewMode.COLLAPSED)
+            viewStateTester.processToggleModeAndAssert(type, ArticleView.ArticleViewMode.COLLAPSED)
 
             viewStateTester.dispose()
+        }
+
+        private fun TestObserver<GameViewState>.processToggleModeAndAssert(
+            type: ArticleType,
+            expected: ArticleView.ArticleViewMode){
+
+            viewModel.process(GameAction.ToggleArticleModeAction(type))
+            this.assertLastValue {
+                it.checkModeChange(type, expected)
+            }
         }
 
         private fun GameViewState.checkModeChange(
