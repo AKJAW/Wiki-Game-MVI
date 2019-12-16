@@ -1,5 +1,6 @@
 package com.akjaw.wikigamemvi.ui.game
 
+import com.akjaw.domain.model.ArticleType
 import com.akjaw.domain.model.WikiArticle
 import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.usecase.ArticleWinConditionUseCase
@@ -7,6 +8,7 @@ import com.akjaw.domain.usecase.GetArticleFromTitleUseCase
 import com.akjaw.domain.usecase.InitializeArticlesUseCase
 import com.akjaw.test_utils.assertLastValue
 import com.akjaw.test_utils.assertSecondToLastValue
+import com.akjaw.wikigamemvi.ui.common.ArticleView
 
 import com.akjaw.wikigamemvi.ui.game.model.GameAction
 import com.akjaw.wikigamemvi.ui.game.model.GameViewEffect
@@ -19,11 +21,14 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 import org.mockito.Mockito
 
 
 class GameViewModelTest {
 
+    //TODO annotation mock?
     private lateinit var initializeArticlesUseCase: InitializeArticlesUseCase
     private lateinit var getArticleFromTitleUseCase: GetArticleFromTitleUseCase
     private lateinit var winConditionUseCase: ArticleWinConditionUseCase
@@ -313,5 +318,53 @@ class GameViewModelTest {
         }
 
         //TODO errors
+    }
+
+    @Nested
+    inner class ToggleArticleModeActionTest(){
+        @BeforeEach
+        fun setUp(){
+            val target = WikiResponse(name = "target")
+            val current = WikiResponse(name = "current")
+            Mockito.`when`(initializeArticlesUseCase())
+                .thenReturn(Observable.just(target to current))
+        }
+
+        @ParameterizedTest
+        @EnumSource(ArticleType::class)
+        fun `correctly toggles the state of the passed in type`(type: ArticleType){
+            val viewStateTester = viewModel.viewState.test()
+
+            viewStateTester.assertLastValue {
+                it.checkModeChange(type, ArticleView.ArticleViewMode.COLLAPSED)
+            }
+
+            viewModel.process(GameAction.ToggleArticleModeAction(type))
+
+            viewStateTester.assertLastValue {
+                it.checkModeChange(type, ArticleView.ArticleViewMode.EXPANDED)
+            }
+
+            viewModel.process(GameAction.ToggleArticleModeAction(type))
+
+            viewStateTester.assertLastValue {
+                it.checkModeChange(type, ArticleView.ArticleViewMode.COLLAPSED)
+            }
+
+            viewStateTester.dispose()
+        }
+
+        private fun GameViewState.checkModeChange(
+            type: ArticleType,
+            expected: ArticleView.ArticleViewMode): Boolean {
+
+            val mode = when(type){
+                ArticleType.TARGET -> this.targetArticleMode
+                ArticleType.CURRENT -> this.currentArticleMode
+            }
+
+            assertEquals(mode, expected)
+            return true
+        }
     }
 }
