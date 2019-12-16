@@ -10,7 +10,8 @@ import com.akjaw.wikigamemvi.ui.common.ArticleView.ArticleViewMode
 data class ArticleState(
     val article: WikiArticle? = null,
     val isLoading: Boolean = false,
-    val mode: ArticleViewMode = ArticleViewMode.COLLAPSED
+    val mode: ArticleViewMode = ArticleViewMode.COLLAPSED,
+    val hasError: Boolean = false
 )
 
 data class GameViewState(

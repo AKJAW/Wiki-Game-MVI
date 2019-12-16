@@ -165,7 +165,37 @@ class GameViewModel @Inject constructor(
     }
 
     private fun handleResultError(state: GameViewState, payload: GameResult): GameViewState {
-        TODO()
+        return when(payload){
+            is InitializeArticlesResult -> {
+
+                val targetArticleState = state.targetArticleState.copy(
+                    article = null,
+                    hasError = true
+                )
+
+                val currentArticleState = state.targetArticleState.copy(
+                    article = null,
+                    hasError = true
+                )
+
+                return state.copy(
+                    targetArticleState = targetArticleState,
+                    currentArticleState = currentArticleState
+                )
+            }
+            is LoadNextArticleResult -> {
+
+                val currentArticleState = state.targetArticleState.copy(
+                    article = null,
+                    hasError = true
+                )
+
+                return state.copy(
+                    currentArticleState = currentArticleState
+                )
+            }
+            else -> state.copy()
+        }
     }
 
     override fun Observable<Lce<out GameResult>>.resultToViewEffect(): Observable<GameViewEffect> {
