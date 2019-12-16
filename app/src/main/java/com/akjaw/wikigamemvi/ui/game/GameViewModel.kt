@@ -24,7 +24,8 @@ import javax.inject.Inject
 class GameViewModel @Inject constructor(
     private val initializeArticlesUseCase: InitializeArticlesUseCase,
     private val getArticleFromTitleUseCase: GetArticleFromTitleUseCase,
-    private val winConditionUseCase: ArticleWinConditionUseCase
+    private val winConditionUseCase: ArticleWinConditionUseCase,
+    private val initialState: GameViewState = GameViewState()
 ): BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
 
     init {
@@ -49,7 +50,7 @@ class GameViewModel @Inject constructor(
     }
 
     override fun Observable<Lce<out GameResult>>.resultToViewState(): Observable<GameViewState> {
-        return scan(GameViewState()) { state, result ->
+        return scan(initialState) { state, result ->
             when(result){
                 is Lce.Content -> handleResultContent(state, result.payload)
                 is Lce.Loading -> handleResultLoading(state, result.payload)

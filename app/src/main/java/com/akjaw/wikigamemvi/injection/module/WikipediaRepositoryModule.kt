@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @Module
 abstract class WikipediaRepositoryModule {
-    @Binds
+    @Binds @Singleton
     abstract fun bindTaskRepository(wikipediaRepositoryImpl: WikiRepositoryImpl): WikiRepository
 
     @Binds @Singleton

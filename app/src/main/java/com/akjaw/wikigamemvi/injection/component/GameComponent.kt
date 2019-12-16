@@ -30,16 +30,7 @@ interface GameComponent{
             @Named("onArticleNavigationClick")
             onClick: (WikiTitle) -> Unit
         ): GameComponent
-
-//        fun applicationComponent(applicationComponent: ApplicationComponent): Builder
-//        @BindsInstance
-//        fun onArticleNavigationClick(@Named("onArticleNavigationClick") onClick: (WikiTitle) -> Unit): Builder
-//
-//        fun build(): GameComponent
     }
 
     fun articleLinksAdapter(): ArticleLinksAdapter
-//
-//    @Provides
-//    fun initialGaveViewState(): GameViewState = GameViewState()
 }
