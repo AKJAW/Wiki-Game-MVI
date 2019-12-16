@@ -23,22 +23,22 @@ import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
+import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.MockitoAnnotations
 
 
 class GameViewModelTest {
 
     //TODO annotation mock?
-    private lateinit var initializeArticlesUseCase: InitializeArticlesUseCase
-    private lateinit var getArticleFromTitleUseCase: GetArticleFromTitleUseCase
-    private lateinit var winConditionUseCase: ArticleWinConditionUseCase
+    @Mock private lateinit var initializeArticlesUseCase: InitializeArticlesUseCase
+    @Mock private lateinit var getArticleFromTitleUseCase: GetArticleFromTitleUseCase
+    @Mock private lateinit var winConditionUseCase: ArticleWinConditionUseCase
     private lateinit var viewModel: GameViewModel
 
     @BeforeEach
     fun setUp() {
-        initializeArticlesUseCase = Mockito.mock(InitializeArticlesUseCase::class.java)
-        getArticleFromTitleUseCase = Mockito.mock(GetArticleFromTitleUseCase::class.java)
-        winConditionUseCase = Mockito.mock(ArticleWinConditionUseCase::class.java)
+        MockitoAnnotations.initMocks(this)
 
         viewModel = GameViewModel(
             initializeArticlesUseCase,

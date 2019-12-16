@@ -8,16 +8,19 @@ import io.reactivex.schedulers.Schedulers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mock
 
 import org.mockito.Mockito
+import org.mockito.MockitoAnnotations
 
 class GetArticleFromTitleUseCaseImplTest {
-    private lateinit var wikiRepository: WikiRepository
+    @Mock private lateinit var wikiRepository: WikiRepository
     private lateinit var useCase: GetArticleFromTitleUseCase
 
     @BeforeEach
     fun setUp() {
-        wikiRepository = Mockito.mock(WikiRepository::class.java)
+        MockitoAnnotations.initMocks(this)
+
         useCase = GetArticleFromTitleUseCaseImpl(wikiRepository)
 
         RxJavaPlugins.setIoSchedulerHandler {

@@ -7,16 +7,18 @@ import io.reactivex.schedulers.Schedulers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.MockitoAnnotations
 
 class ArticleWinConditionUseCaseImplTest {
-
+    @Mock private lateinit var targetArticleUseCase: GetTargetArticleUseCase
     private lateinit var useCase: ArticleWinConditionUseCase
-    private lateinit var targetArticleUseCase: GetTargetArticleUseCase
 
     @BeforeEach
     fun setUp() {
-        targetArticleUseCase = Mockito.mock(GetTargetArticleUseCase::class.java)
+        MockitoAnnotations.initMocks(this)
+
         useCase = ArticleWinConditionUseCaseImpl(targetArticleUseCase)
 
         RxJavaPlugins.setIoSchedulerHandler {
