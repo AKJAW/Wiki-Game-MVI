@@ -13,7 +13,6 @@ import com.akjaw.wikigamemvi.ui.game.model.GameResult
 import com.akjaw.wikigamemvi.ui.game.model.GameResult.*
 import com.akjaw.wikigamemvi.ui.game.model.GameViewEffect
 import com.akjaw.wikigamemvi.ui.game.model.GameViewEffect.ShowVictoryScreenEffect
-import com.akjaw.wikigamemvi.ui.game.model.GameViewEffect.SomeToastEffect
 import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.util.toArticle
 import io.reactivex.Observable
@@ -36,7 +35,6 @@ class GameViewModel @Inject constructor(
         return publish <Lce<out GameResult>> {
 
             val observablesToBeMerged = listOf(
-                it.ofType<ShowToastAction>().onShowToast(),
                 it.ofType<InitializeArticlesAction>().onInitializeArticles(),
                 it.ofType<LoadNextArticleAction>().onLoadNextArticle(),
                 it.ofType<ToggleArticleModeAction>().map { action ->
@@ -136,7 +134,6 @@ class GameViewModel @Inject constructor(
             .cast(Lce.Content::class.java)
             .flatMap <GameViewEffect> { content ->
                 val viewEffect: GameViewEffect? = when(content.payload){
-                    is ShowToastResult -> SomeToastEffect(content.payload.text)
                     is ShowVictoryScreenResult -> ShowVictoryScreenEffect
                     else -> null
                 }
@@ -148,11 +145,6 @@ class GameViewModel @Inject constructor(
                 }
 
             }
-    }
-
-
-    private fun Observable<ShowToastAction>.onShowToast(): Observable<Lce<ShowToastResult>> {
-        return map<Lce<ShowToastResult>> { Lce.Content(ShowToastResult(it.text)) }
     }
 
     private fun Observable<InitializeArticlesAction>.onInitializeArticles(): Observable<Lce<InitializeArticlesResult>> {

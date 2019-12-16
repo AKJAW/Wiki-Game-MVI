@@ -21,20 +21,16 @@ data class GameViewState(
 ): BaseViewState
 
 sealed class GameViewEffect: BaseViewEffect{
-    data class SomeToastEffect(val text: String): GameViewEffect()
     object ShowVictoryScreenEffect: GameViewEffect()
 }
 
 sealed class GameAction: BaseAction {
-    data class ShowToastAction(val text: String): GameAction()
     object InitializeArticlesAction: GameAction()
     data class LoadNextArticleAction(val wikiTitle: WikiTitle): GameAction()
     data class ToggleArticleModeAction(val type: ArticleType): GameAction()
 }
 
 sealed class GameResult: BaseResult {
-    data class ShowToastResult(val text: String): GameResult()
-
     data class InitializeArticlesResult(
         val targetArticleResponse: WikiResponse = WikiResponse(),
         val currentArticleResponse: WikiResponse = WikiResponse()

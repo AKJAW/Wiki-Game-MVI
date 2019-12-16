@@ -1,12 +1,9 @@
 package com.akjaw.wikigamemvi.ui.game
 
 import android.os.Bundle
-import android.transition.TransitionInflater
-import android.transition.TransitionSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -15,7 +12,6 @@ import com.akjaw.domain.model.ArticleType
 import com.akjaw.wikigamemvi.R
 import com.akjaw.domain.model.WikiTitle
 import com.akjaw.wikigamemvi.injection.DaggerGameComponentProvider
-import com.akjaw.wikigamemvi.injection.component.ApplicationComponent
 import com.akjaw.wikigamemvi.injection.component.DaggerGameComponent
 import com.akjaw.wikigamemvi.injection.component.GameComponent
 import com.akjaw.wikigamemvi.injection.gameInjector
@@ -29,7 +25,6 @@ import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.article_collapsed.view.*
 import kotlinx.android.synthetic.main.article_header.view.*
@@ -143,10 +138,6 @@ class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponen
 
     private fun trigger(effect: GameViewEffect) {
         when(effect){
-            is GameViewEffect.SomeToastEffect -> {
-                Toast.makeText(activity, effect.text, Toast.LENGTH_SHORT).show()
-            }
-
             is GameViewEffect.ShowVictoryScreenEffect -> showVictoryFragment()
         }
     }
