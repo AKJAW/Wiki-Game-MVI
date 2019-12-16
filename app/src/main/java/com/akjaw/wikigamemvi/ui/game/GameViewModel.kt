@@ -67,20 +67,32 @@ class GameViewModel @Inject constructor(
                 val targetArticle = payload.targetArticleResponse.toArticle()
                 val currentArticle = payload.currentArticleResponse.toArticle()
 
+                val targetArticleState = state.targetArticleState.copy(
+                    article = targetArticle,
+                    isLoading = false
+                )
+
+                val currentArticleState = state.targetArticleState.copy(
+                    article = currentArticle,
+                    isLoading = false
+                )
+
                 state.copy(
-                    targetArticle = targetArticle,
-                    isTargetArticleLoading = false,
-                    currentArticle = currentArticle,
-                    isCurrentArticleLoading = false,
+                    targetArticleState = targetArticleState,
+                    currentArticleState = currentArticleState,
                     wikiNavigationLinks = payload.currentArticleResponse.outgoingTitles)
             }
 
             is LoadNextArticleResult -> {
                 val currentArticle = payload.articleResponse.toArticle()
 
+                val currentArticleState = state.targetArticleState.copy(
+                    article = currentArticle,
+                    isLoading = false
+                )
+
                 state.copy(
-                    currentArticle = currentArticle,
-                    isCurrentArticleLoading = false,
+                    currentArticleState = currentArticleState,
                     numberOfSteps = state.numberOfSteps + 1,
                     wikiNavigationLinks = payload.articleResponse.outgoingTitles)
             }
@@ -88,17 +100,23 @@ class GameViewModel @Inject constructor(
             is ToggleArticleModeResult -> {
                 when(payload.type){
                     ArticleType.CURRENT -> {
-                        if(state.isCurrentArticleLoading){
+                        if(state.currentArticleState.isLoading){
                             state.copy()
                         } else {
-                            state.copy(currentArticleMode = state.currentArticleMode.inverted())
+                            val currentArticleState = state.currentArticleState.copy(
+                                mode = state.currentArticleState.mode.inverted()
+                            )
+                            state.copy(currentArticleState = currentArticleState)
                         }
                     }
                     ArticleType.TARGET -> {
-                        if(state.isTargetArticleLoading){
+                        if(state.targetArticleState.isLoading){
                             state.copy()
                         } else {
-                            state.copy(targetArticleMode = state.targetArticleMode.inverted())
+                            val targetArticleState = state.targetArticleState.copy(
+                                mode = state.targetArticleState.mode.inverted()
+                            )
+                            state.copy(targetArticleState = targetArticleState)
                         }
                     }
                 }
@@ -112,18 +130,35 @@ class GameViewModel @Inject constructor(
         state: GameViewState, payload: GameResult
     ): GameViewState {
         return when(payload){
-            is InitializeArticlesResult -> state.copy(
-                targetArticle = null,
-                isTargetArticleLoading = true,
-                currentArticle = null,
-                isCurrentArticleLoading = true,
-                wikiNavigationLinks = listOf())
+            is InitializeArticlesResult -> {
 
-            is LoadNextArticleResult -> state.copy(
-                currentArticle = null,
-                isCurrentArticleLoading = true,
-                wikiNavigationLinks = listOf()
-            )
+                val targetArticleState = state.targetArticleState.copy(
+                    article = null,
+                    isLoading = true
+                )
+
+                val currentArticleState = state.targetArticleState.copy(
+                    article = null,
+                    isLoading = true
+                )
+
+                state.copy(
+                    targetArticleState = targetArticleState,
+                    currentArticleState = currentArticleState,
+                    wikiNavigationLinks = listOf())
+            }
+
+            is LoadNextArticleResult -> {
+                val currentArticleState = state.targetArticleState.copy(
+                    article = null,
+                    isLoading = true
+                )
+
+                state.copy(
+                    currentArticleState = currentArticleState,
+                    wikiNavigationLinks = listOf()
+                )
+            }
 
             else -> state.copy()
         }

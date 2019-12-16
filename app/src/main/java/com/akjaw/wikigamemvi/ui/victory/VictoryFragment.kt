@@ -76,7 +76,7 @@ class VictoryFragment: Fragment(){
 
     //TODO remove viewModel and pass the data through the intent?
     private fun render(state: GameViewState){
-        val targetArticle = state.targetArticle
+        val targetArticle = state.targetArticleState.article
 
         if(targetArticle != null){
             article_title.text = targetArticle.name

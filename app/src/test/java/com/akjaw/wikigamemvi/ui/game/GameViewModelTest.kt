@@ -9,6 +9,7 @@ import com.akjaw.domain.usecase.InitializeArticlesUseCase
 import com.akjaw.test_utils.assertLastValue
 import com.akjaw.test_utils.assertSecondToLastValue
 import com.akjaw.wikigamemvi.ui.common.ArticleView
+import com.akjaw.wikigamemvi.ui.game.model.ArticleState
 
 import com.akjaw.wikigamemvi.ui.game.model.GameAction
 import com.akjaw.wikigamemvi.ui.game.model.GameViewEffect
@@ -30,7 +31,6 @@ import org.mockito.MockitoAnnotations
 
 class GameViewModelTest {
 
-    //TODO annotation mock?
     @Mock private lateinit var initializeArticlesUseCase: InitializeArticlesUseCase
     @Mock private lateinit var getArticleFromTitleUseCase: GetArticleFromTitleUseCase
     @Mock private lateinit var winConditionUseCase: ArticleWinConditionUseCase
@@ -164,17 +164,17 @@ class GameViewModelTest {
         }
 
         private fun GameViewState.checkInitialArticlesLoading(){
-            val bothAreLoading = isCurrentArticleLoading && isTargetArticleLoading
+            val bothAreLoading = currentArticleState.isLoading && targetArticleState.isLoading
             assertTrue(bothAreLoading)
-            assertNull(targetArticle)
-            assertNull(currentArticle)
+            assertNull(targetArticleState.article)
+            assertNull(currentArticleState.article)
         }
 
         private fun GameViewState.checkInitialArticlesFinished(target: WikiArticle, current: WikiArticle){
-            val bothAreLoaded = !isCurrentArticleLoading && !isTargetArticleLoading
+            val bothAreLoaded = !currentArticleState.isLoading && !targetArticleState.isLoading
             assertTrue(bothAreLoaded)
-            assertEquals(target, targetArticle)
-            assertEquals(current, currentArticle)
+            assertEquals(target, targetArticleState.article)
+            assertEquals(current, currentArticleState.article)
         }
 
         //TODO error handling
@@ -315,15 +315,15 @@ class GameViewModelTest {
         }
 
         private fun GameViewState.checkLoadNextLoading(): Boolean {
-            assertTrue(isCurrentArticleLoading)
-            assertNull(currentArticle)
+            assertTrue(currentArticleState.isLoading)
+            assertNull(currentArticleState.article)
 
             return true
         }
 
         private fun GameViewState.checkLoadNextFinished(article: WikiArticle): Boolean {
-            assertFalse(isCurrentArticleLoading)
-            assertEquals(article, currentArticle)
+            assertFalse(currentArticleState.isLoading)
+            assertEquals(article, currentArticleState.article)
 
             return true
         }
@@ -355,8 +355,8 @@ class GameViewModelTest {
                 .thenReturn(Observable.empty())
 
             val initialViewState = when(type){
-                ArticleType.TARGET -> GameViewState(isTargetArticleLoading = true)
-                ArticleType.CURRENT -> GameViewState(isCurrentArticleLoading = true)
+                ArticleType.TARGET -> GameViewState(targetArticleState = ArticleState(isLoading = true))
+                ArticleType.CURRENT -> GameViewState(currentArticleState = ArticleState(isLoading = true))
             }
 
             viewModel = GameViewModel(
@@ -390,8 +390,8 @@ class GameViewModelTest {
             expected: ArticleView.ArticleViewMode): Boolean {
 
             val mode = when(type){
-                ArticleType.TARGET -> this.targetArticleMode
-                ArticleType.CURRENT -> this.currentArticleMode
+                ArticleType.TARGET -> this.targetArticleState.mode
+                ArticleType.CURRENT -> this.currentArticleState.mode
             }
 
             assertEquals(expected, mode)

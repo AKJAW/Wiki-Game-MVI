@@ -7,15 +7,15 @@ import com.akjaw.domain.model.WikiTitle
 import com.akjaw.wikigamemvi.ui.base.*
 import com.akjaw.wikigamemvi.ui.common.ArticleView.ArticleViewMode
 
+data class ArticleState(
+    val article: WikiArticle? = null,
+    val isLoading: Boolean = false,
+    val mode: ArticleViewMode = ArticleViewMode.COLLAPSED
+)
+
 data class GameViewState(
-    val targetArticle: WikiArticle? = null,
-    val isTargetArticleLoading: Boolean = false,
-    val targetArticleMode: ArticleViewMode = ArticleViewMode.COLLAPSED,
-
-    val currentArticle: WikiArticle? = null,
-    val isCurrentArticleLoading: Boolean = false,
-    val currentArticleMode: ArticleViewMode = ArticleViewMode.COLLAPSED,
-
+    val targetArticleState: ArticleState = ArticleState(),
+    val currentArticleState: ArticleState = ArticleState(),
     val numberOfSteps: Int = 0,
     val wikiNavigationLinks: List<WikiTitle> = listOf()
 ): BaseViewState

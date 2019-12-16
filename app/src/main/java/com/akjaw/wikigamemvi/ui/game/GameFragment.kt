@@ -115,18 +115,20 @@ class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponen
     }
 
     private fun render(state: GameViewState){
-        target_article_view.setIsLoading(state.isTargetArticleLoading)
-        current_article_view.setIsLoading(state.isCurrentArticleLoading)
+        target_article_view.setIsLoading(state.targetArticleState.isLoading)
+        current_article_view.setIsLoading(state.currentArticleState.isLoading)
 
-        target_article_view.toggleView(state.targetArticleMode)
-        current_article_view.toggleView(state.currentArticleMode)
+        target_article_view.toggleView(state.targetArticleState.mode)
+        current_article_view.toggleView(state.currentArticleState.mode)
 
-        if(state.targetArticle != null){
-            target_article_view.setArticle(state.targetArticle)
+        val targetArticle = state.targetArticleState.article
+        if(targetArticle != null){
+            target_article_view.setArticle(targetArticle)
         }
 
-        if(state.currentArticle != null){
-            current_article_view.setArticle(state.currentArticle, true)
+        val currentArticle = state.currentArticleState.article
+        if(currentArticle != null){
+            current_article_view.setArticle(currentArticle, true)
         }
 
         if(state.wikiNavigationLinks.isNotEmpty()){
