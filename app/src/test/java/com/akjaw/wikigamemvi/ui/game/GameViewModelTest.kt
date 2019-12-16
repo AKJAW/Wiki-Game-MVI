@@ -84,8 +84,10 @@ class GameViewModelTest {
     inner class InitializationTests{
         @Test
         fun `in the initialization initializeArticlesUseCase is called`(){
-            viewModel.viewEffects
+            viewModel.viewState
                 .test()
+
+            viewModel.initialize()
 
             Mockito.verify(initializeArticlesUseCase, Mockito.times(1)).invoke()
         }
@@ -98,6 +100,8 @@ class GameViewModelTest {
                 .thenReturn(Observable.just(target to current))
 
             val viewStateTester = viewModel.viewState.test()
+
+            viewModel.initialize()
 
             viewStateTester
                 .assertSecondToLastValue {
@@ -127,6 +131,20 @@ class GameViewModelTest {
                 .thenReturn(Observable.just(target2 to current2))
 
             val viewStateTester = viewModel.viewState.test()
+
+            viewModel.process(GameAction.InitializeArticlesAction)
+
+            viewStateTester
+                .assertSecondToLastValue {
+                    it.checkInitialArticlesLoading()
+                    true
+                }
+
+            viewStateTester
+                .assertLastValue {
+                    it.checkInitialArticlesFinished(target1.toArticle(), current1.toArticle())
+                    true
+                }
 
             viewModel.process(GameAction.InitializeArticlesAction)
 

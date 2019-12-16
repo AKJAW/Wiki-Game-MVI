@@ -26,9 +26,13 @@ class GameViewModel @Inject constructor(
     private val winConditionUseCase: ArticleWinConditionUseCase,
     private val initialState: GameViewState = GameViewState()
 ): BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
+    private var isInitialized = false
 
-    init {
-        process(InitializeArticlesAction)
+    fun initialize(){
+        if(!isInitialized){
+            process(InitializeArticlesAction)
+            isInitialized = true
+        }
     }
 
     override fun Observable<GameAction>.actionToResult(): Observable<Lce<out GameResult>> {

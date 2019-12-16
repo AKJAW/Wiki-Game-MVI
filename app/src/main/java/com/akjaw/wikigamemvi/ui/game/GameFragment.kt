@@ -56,6 +56,8 @@ class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponen
                 .get(GameViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
+        viewModel.initialize()
+
         wikiLinksAdapter = gameInjector.articleLinksAdapter()
 
         disposables += viewModel.viewState.subscribe(::render)
