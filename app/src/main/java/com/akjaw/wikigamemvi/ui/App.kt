@@ -8,8 +8,7 @@ import com.akjaw.wikigamemvi.injection.component.DaggerApplicationComponent
 class App: Application(), DaggerApplicationComponentProvider {
     override val applicationComponent: ApplicationComponent by lazy {
         DaggerApplicationComponent
-            .builder()
-            .applicationContext(applicationContext)
-            .build()
+            .factory()
+            .create(applicationContext)
     }
 }

@@ -7,8 +7,10 @@ import com.akjaw.wikigamemvi.ui.game.GameViewModel
 import com.akjaw.wikigamemvi.injection.module.WikipediaApiModule
 import com.akjaw.wikigamemvi.injection.module.WikipediaRepositoryModule
 import com.akjaw.wikigamemvi.ui.game.ArticleLinksAdapter
+import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import dagger.BindsInstance
 import dagger.Component
+import dagger.Provides
 import javax.inject.Named
 import javax.inject.Scope
 
@@ -20,14 +22,24 @@ annotation class GameFragmentScope
 @Component(dependencies = [ApplicationComponent::class])
 interface GameComponent{
 
-    @Component.Builder
-    interface Builder{
-        fun applicationComponent(applicationComponent: ApplicationComponent): Builder
-        @BindsInstance
-        fun onArticleNavigationClick(@Named("onArticleNavigationClick") onClick: (WikiTitle) -> Unit): Builder
+    @Component.Factory
+    interface Factory{
+        fun create(
+            applicationComponent: ApplicationComponent,
+            @BindsInstance
+            @Named("onArticleNavigationClick")
+            onClick: (WikiTitle) -> Unit
+        ): GameComponent
 
-        fun build(): GameComponent
+//        fun applicationComponent(applicationComponent: ApplicationComponent): Builder
+//        @BindsInstance
+//        fun onArticleNavigationClick(@Named("onArticleNavigationClick") onClick: (WikiTitle) -> Unit): Builder
+//
+//        fun build(): GameComponent
     }
 
     fun articleLinksAdapter(): ArticleLinksAdapter
+//
+//    @Provides
+//    fun initialGaveViewState(): GameViewState = GameViewState()
 }

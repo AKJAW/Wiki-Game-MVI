@@ -14,12 +14,13 @@ import javax.inject.Singleton
 @Component(modules = [WikipediaApiModule::class, WikipediaRepositoryModule::class])
 interface ApplicationComponent{
 
-    @Component.Builder
+    @Component.Factory
     interface Builder{
-        @BindsInstance
-        fun applicationContext(@Named("applicationContext") applicationContext: Context): Builder
-
-        fun build(): ApplicationComponent
+        fun create(
+            @BindsInstance
+            @Named("applicationContext")
+            applicationContext: Context
+        ): ApplicationComponent
     }
 
     fun gameViewModelFactory(): ViewModelFactory<GameViewModel>

@@ -42,10 +42,8 @@ import java.util.concurrent.TimeUnit
 class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponentProvider {
     override val gameComponent: GameComponent by lazy {
         DaggerGameComponent
-            .builder()
-            .applicationComponent(injector)
-            .onArticleNavigationClick(::onArticleNavigationClick)
-            .build()
+            .factory()
+            .create(injector, ::onArticleNavigationClick)
     }
 
     private var disposables = CompositeDisposable()
