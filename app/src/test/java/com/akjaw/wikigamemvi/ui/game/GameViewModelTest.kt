@@ -321,7 +321,7 @@ class GameViewModelTest {
     }
 
     @Nested
-    inner class ToggleArticleModeActionTest(){
+    inner class ToggleArticleModeActionTest{
         @BeforeEach
         fun setUp(){
             val target = WikiResponse(name = "target")
@@ -354,6 +354,45 @@ class GameViewModelTest {
             viewStateTester.dispose()
         }
 
+        @ParameterizedTest
+        @EnumSource(ArticleType::class)
+        fun `if the article is loading then the mode isn't changed`(type: ArticleType){
+            Mockito.`when`(initializeArticlesUseCase())
+                .thenReturn(Observable.empty())
+
+            val initialViewState = when(type){
+                ArticleType.TARGET -> GameViewState(isTargetArticleLoading = true)
+                ArticleType.CURRENT -> GameViewState(isCurrentArticleLoading = true)
+            }
+
+            val viewModel = GameViewModel(
+                initializeArticlesUseCase,
+                getArticleFromTitleUseCase,
+                winConditionUseCase,
+                initialViewState
+            )
+
+            val viewStateTester = viewModel.viewState.test()
+
+            viewStateTester.assertLastValue {
+                it.checkModeChange(type, ArticleView.ArticleViewMode.COLLAPSED)
+            }
+
+            viewModel.process(GameAction.ToggleArticleModeAction(type))
+
+            viewStateTester.assertLastValue {
+                it.checkModeChange(type, ArticleView.ArticleViewMode.COLLAPSED)
+            }
+
+            viewModel.process(GameAction.ToggleArticleModeAction(type))
+
+            viewStateTester.assertLastValue {
+                it.checkModeChange(type, ArticleView.ArticleViewMode.COLLAPSED)
+            }
+
+            viewStateTester.dispose()
+        }
+
         private fun GameViewState.checkModeChange(
             type: ArticleType,
             expected: ArticleView.ArticleViewMode): Boolean {
@@ -363,7 +402,7 @@ class GameViewModelTest {
                 ArticleType.CURRENT -> this.currentArticleMode
             }
 
-            assertEquals(mode, expected)
+            assertEquals(expected, mode)
             return true
         }
     }

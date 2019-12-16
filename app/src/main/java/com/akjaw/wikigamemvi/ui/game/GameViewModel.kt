@@ -84,17 +84,20 @@ class GameViewModel @Inject constructor(
             }
 
             is ToggleArticleModeResult -> {
-
-                if(state.isTargetArticleLoading){
-                    return state.copy()
-                }
-
                 when(payload.type){
                     ArticleType.CURRENT -> {
-                        state.copy(currentArticleMode = state.currentArticleMode.inverted())
+                        if(state.isCurrentArticleLoading){
+                            state.copy()
+                        } else {
+                            state.copy(currentArticleMode = state.currentArticleMode.inverted())
+                        }
                     }
                     ArticleType.TARGET -> {
-                        state.copy(targetArticleMode = state.targetArticleMode.inverted())
+                        if(state.isTargetArticleLoading){
+                            state.copy()
+                        } else {
+                            state.copy(targetArticleMode = state.targetArticleMode.inverted())
+                        }
                     }
                 }
             }
