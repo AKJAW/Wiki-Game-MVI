@@ -223,7 +223,6 @@ class GameViewModel @Inject constructor(
         return switchMap {
             initializeArticlesUseCase()
                 .map<Lce<InitializeArticlesResult>> { responses ->
-                    throw Error()
                     Lce.Content(InitializeArticlesResult(responses.first, responses.second))
                 }
                 .onErrorReturn {

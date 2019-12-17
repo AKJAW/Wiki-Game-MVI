@@ -21,6 +21,7 @@ import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.ui.victory.VictoryFragment
 import com.akjaw.wikigamemvi.injection.injector
 import com.akjaw.wikigamemvi.ui.base.ActionObservable
+import com.akjaw.wikigamemvi.util.MethodThrottler
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -47,6 +48,9 @@ class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponen
     private lateinit var viewModel: GameViewModel
 
     private lateinit var wikiLinksAdapter: ArticleLinksAdapter
+
+    private lateinit var navigationClickThrottler: MethodThrottler<WikiTitle, Unit>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -60,12 +64,18 @@ class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponen
 
         wikiLinksAdapter = gameInjector.articleLinksAdapter()
 
+        navigationClickThrottler = MethodThrottler(500) {
+            val action = GameAction.LoadNextArticleAction(it)
+            viewModel.process(action)
+        }
+
         disposables += viewModel.viewState.subscribe(::render)
         disposables += viewModel.viewEffects.subscribe(::trigger)
+        disposables += navigationClickThrottler.disposable
     }
 
     private fun onArticleNavigationClick(wikiTitle: WikiTitle){
-        viewModel.process(GameAction.LoadNextArticleAction(wikiTitle))
+        navigationClickThrottler.onClick(wikiTitle)
     }
 
     override fun onCreateView(
