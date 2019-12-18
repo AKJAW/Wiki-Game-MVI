@@ -177,7 +177,21 @@ class GameViewModelTest {
             assertEquals(current, currentArticleState.article)
         }
 
-        //TODO error handling
+        @Test
+        fun `when an error occurs then both articles state changes accordingly`(){
+            Mockito.`when`(initializeArticlesUseCase())
+                .thenReturn(Observable.error(Error()))
+
+            val viewStateTester = viewModel.viewState.test()
+
+            viewModel.process(GameAction.InitializeArticlesAction)
+
+            viewStateTester
+                .assertLastValue {
+                    checkArticleErrorState(it.targetArticleState)
+                    checkArticleErrorState(it.currentArticleState)
+                }
+        }
     }
 
     @Nested
@@ -328,7 +342,29 @@ class GameViewModelTest {
             return true
         }
 
-        //TODO errors
+        @Test
+        fun `when the getArticleFromTitleUseCase has an error then the current article state changes accordingly`(){
+            Mockito.`when`(winConditionUseCase(Mockito.anyString()))
+                .thenReturn(Observable.empty())
+
+            Mockito.`when`(getArticleFromTitleUseCase(Mockito.anyString()))
+                .thenReturn(Observable.error(Error()))
+
+            val viewStateTester = viewModel.viewState.test()
+
+            viewModel.process(GameAction.LoadNextArticleAction(Mockito.anyString()))
+            viewStateTester.assertLastValue {
+                checkArticleErrorState(it.currentArticleState)
+            }
+        }
+    }
+
+    fun checkArticleErrorState(article: ArticleState): Boolean {
+        assertFalse(article.isLoading)
+        assertTrue(article.hasError)
+        assertNull(article.article)
+
+        return true
     }
 
     @Nested
