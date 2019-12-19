@@ -1,2 +1,2 @@
-include ':app', ':domain', ':data', ':test-utils'
+include ':app', ':domain', ':data', ':test-utils', ':presentation'
 rootProject.name='Wiki game MVI'

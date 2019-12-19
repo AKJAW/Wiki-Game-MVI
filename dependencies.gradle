@@ -36,8 +36,7 @@ ext {
     domainDependencies = [
             javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
             javaxInject: "javax.inject:javax.inject:$javaxInjectVersion",
-            rxKotlin: "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion",
-            rxRelay: "com.jakewharton.rxrelay2:rxrelay:$rxRelayVersion"
+            rxKotlin: "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion"
     ]
 
 
@@ -50,8 +49,7 @@ ext {
     dataDependencies = [
             javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
             javaxInject: "javax.inject:javax.inject:$javaxInjectVersion",
-            rxKotlin: "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion",
-            rxRelay: "com.jakewharton.rxrelay2:rxrelay:$rxRelayVersion"
+            rxKotlin: "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion"
     ]
 
     dataTestDependencies = [
@@ -63,5 +61,21 @@ ext {
     testUtilsDependencies = [
             javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
             rxKotlin: "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion",
+    ]
+
+    presentationDependencies = [
+            javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
+            javaxInject: "javax.inject:javax.inject:$javaxInjectVersion",
+            rxKotlin: "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion",
+            rxAndroid: "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion",
+            rxRelay: "com.jakewharton.rxrelay2:rxrelay:$rxRelayVersion",
+            timber: "com.jakewharton.timber:timber:$timberVersion"
+    ]
+
+    presentationTestDependencies = [
+            jUnit5Api: "org.junit.jupiter:junit-jupiter-api:$jUnit5Version",
+            jUnit5Engine: "org.junit.jupiter:junit-jupiter-engine:$jUnit5Version",
+            jUnit5Params: "org.junit.jupiter:junit-jupiter-params:$jUnit5Version",
+            mockitoCore: "org.mockito:mockito-core:$mockitoVersion"
     ]
 }

@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.article_collapsed.view.*
 import kotlinx.android.synthetic.main.article_header.view.*
 import kotlin.random.Random
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.akjaw.presentation.game.ArticleViewMode
 import com.akjaw.wikigamemvi.R
 
 
@@ -36,7 +37,8 @@ class ArticleView @JvmOverloads constructor(
     private var wikiArticle: WikiArticle? = null
     private var fullImageLoaded = false
 
-    private var currentArticleViewMode: ArticleViewMode = ArticleViewMode.COLLAPSED
+    private var currentArticleViewMode: ArticleViewMode =
+        ArticleViewMode.COLLAPSED
 
     private lateinit var collapsedConstraintSet: ConstraintSet
     private lateinit var expandedConstraintSet: ConstraintSet
@@ -203,17 +205,6 @@ class ArticleView @JvmOverloads constructor(
         )
     }
 
-    enum class ArticleViewMode{
-        COLLAPSED,
-        EXPANDED;
-
-        fun inverted(): ArticleViewMode {
-            return when (this) {
-                COLLAPSED -> EXPANDED
-                EXPANDED -> COLLAPSED
-            }
-        }
-    }
 }
 
 

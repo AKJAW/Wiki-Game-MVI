@@ -1,16 +1,9 @@
 package com.akjaw.wikigamemvi.injection.component
 
-import android.content.Context
 import com.akjaw.domain.model.WikiTitle
-import com.akjaw.wikigamemvi.ui.base.ViewModelFactory
-import com.akjaw.wikigamemvi.ui.game.GameViewModel
-import com.akjaw.wikigamemvi.injection.module.WikipediaApiModule
-import com.akjaw.wikigamemvi.injection.module.WikipediaRepositoryModule
 import com.akjaw.wikigamemvi.ui.game.ArticleLinksAdapter
-import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import dagger.BindsInstance
 import dagger.Component
-import dagger.Provides
 import javax.inject.Named
 import javax.inject.Scope
 

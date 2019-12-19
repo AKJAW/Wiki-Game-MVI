@@ -1,13 +1,10 @@
 package com.akjaw.wikigamemvi.injection.component
 
 import android.content.Context
-import com.akjaw.domain.usecase.*
-import com.akjaw.wikigamemvi.ui.base.ViewModelFactory
-import com.akjaw.wikigamemvi.ui.game.GameViewModel
+import com.akjaw.wikigamemvi.injection.factory.ViewModelFactory
+import com.akjaw.presentation.game.GameViewModel
 import com.akjaw.wikigamemvi.injection.module.WikipediaApiModule
 import com.akjaw.wikigamemvi.injection.module.WikipediaRepositoryModule
-import com.akjaw.wikigamemvi.ui.game.model.GameViewState
-import dagger.Binds
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Named
@@ -24,7 +21,7 @@ interface ApplicationComponent{
             @Named("applicationContext")
             applicationContext: Context,
             @BindsInstance
-            initialGameViewState: GameViewState = GameViewState()
+            initialGameViewState: com.akjaw.presentation.game.GameViewState = com.akjaw.presentation.game.GameViewState()
         ): ApplicationComponent
     }
 

@@ -7,7 +7,6 @@ dependencies {
     def domainTestDependencies = rootProject.ext.domainTestDependencies
 
     implementation domainDependencies.rxKotlin
-    implementation domainDependencies.rxRelay
     implementation domainDependencies.javaxAnnotation
     implementation domainDependencies.javaxInject
 

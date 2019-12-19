@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.akjaw.domain.model.WikiArticle
 import com.akjaw.wikigamemvi.R
-import com.akjaw.wikigamemvi.ui.base.ParcelableWikiArticle
+import com.akjaw.presentation.base.ParcelableWikiArticle
 import kotlinx.android.synthetic.main.fragment_article_details.*
 
 

@@ -1,27 +1,21 @@
 package com.akjaw.wikigamemvi.ui.victory
 
 import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
 import android.widget.TextView
 import androidx.core.animation.doOnEnd
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import androidx.transition.TransitionSet
 import com.akjaw.wikigamemvi.R
-import com.akjaw.wikigamemvi.ui.game.GameViewModel
-import com.akjaw.wikigamemvi.ui.game.model.GameViewState
 import com.akjaw.wikigamemvi.injection.injector
-import com.akjaw.wikigamemvi.util.createFadeInObjectAnimator
-import com.akjaw.wikigamemvi.util.glideLoadImage
+import com.akjaw.wikigamemvi.view_util.createFadeInObjectAnimator
+import com.akjaw.wikigamemvi.view_util.glideLoadImage
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_article_details.*
@@ -31,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_victory.*
 class VictoryFragment: Fragment(){
 
     private var disposables = CompositeDisposable()
-    private lateinit var viewModel: GameViewModel //TODO neccessary?
+    private lateinit var viewModel: com.akjaw.presentation.game.GameViewModel //TODO neccessary?
 
     private var hasEnterTransitionRun: Boolean = false
 
@@ -41,7 +35,7 @@ class VictoryFragment: Fragment(){
         viewModel = activity?.run {
             ViewModelProviders
                 .of(this, injector.gameViewModelFactory())
-                .get(GameViewModel::class.java)
+                .get(com.akjaw.presentation.game.GameViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
         val transitionSet = android.transition.TransitionSet()
@@ -75,7 +69,7 @@ class VictoryFragment: Fragment(){
     }
 
     //TODO remove viewModel and pass the data through the intent?
-    private fun render(state: GameViewState){
+    private fun render(state: com.akjaw.presentation.game.GameViewState){
         val targetArticle = state.targetArticleState.article
 
         if(targetArticle != null){
