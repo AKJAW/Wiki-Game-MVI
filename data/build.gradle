@@ -14,6 +14,7 @@ dependencies {
     implementation dataDependencies.rxKotlin
     implementation dataDependencies.moshi
     kapt dataDependencies.kaptMoshiCodeGen
+    implementation dataDependencies.okHttpLoggingInterceptor
     implementation dataDependencies.retrofit
     implementation dataDependencies.retrofitRxJava
     implementation dataDependencies.retrofitConverterMoshi

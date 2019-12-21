@@ -19,6 +19,7 @@ ext {
     rxBindingVersion = '3.0.0'
 
     moshiVersion = "1.9.2"
+    okHttpVersion = "4.2.1"
     retrofitVersion = "2.7.0"
 
     glideVersion = '4.10.0'
@@ -55,6 +56,7 @@ ext {
             rxKotlin: "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion",
             moshi: "com.squareup.moshi:moshi-kotlin:$moshiVersion",
             kaptMoshiCodeGen: "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion",
+            okHttpLoggingInterceptor: "com.squareup.okhttp3:logging-interceptor:$okHttpVersion",
             retrofit: "com.squareup.retrofit2:retrofit:$retrofitVersion",
             retrofitRxJava: "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion",
             retrofitConverterMoshi: "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
