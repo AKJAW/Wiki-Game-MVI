@@ -1,5 +1,7 @@
 apply plugin: 'kotlin'
 
+apply plugin: 'kotlin-kapt'
+
 dependencies {
     implementation project(':domain')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -7,9 +9,14 @@ dependencies {
     def dataDependencies = rootProject.ext.dataDependencies
     def dataTestDependencies = rootProject.ext.dataTestDependencies
 
-    implementation dataDependencies.rxKotlin
     implementation dataDependencies.javaxAnnotation
     implementation dataDependencies.javaxInject
+    implementation dataDependencies.rxKotlin
+    implementation dataDependencies.moshi
+    kapt dataDependencies.kaptMoshiCodeGen
+    implementation dataDependencies.retrofit
+    implementation dataDependencies.retrofitRxJava
+    implementation dataDependencies.retrofitConverterMoshi
 
     testImplementation dataTestDependencies.jUnit5Api
     testImplementation dataTestDependencies.jUnit5Engine

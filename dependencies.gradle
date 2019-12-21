@@ -18,6 +18,9 @@ ext {
     rxRelayVersion = '2.1.1'
     rxBindingVersion = '3.0.0'
 
+    moshiVersion = "1.9.2"
+    retrofitVersion = "2.7.0"
+
     glideVersion = '4.10.0'
 
     timberVersion = '4.7.1'
@@ -49,7 +52,12 @@ ext {
     dataDependencies = [
             javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
             javaxInject: "javax.inject:javax.inject:$javaxInjectVersion",
-            rxKotlin: "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion"
+            rxKotlin: "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion",
+            moshi: "com.squareup.moshi:moshi-kotlin:$moshiVersion",
+            kaptMoshiCodeGen: "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion",
+            retrofit: "com.squareup.retrofit2:retrofit:$retrofitVersion",
+            retrofitRxJava: "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion",
+            retrofitConverterMoshi: "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
     ]
 
     dataTestDependencies = [

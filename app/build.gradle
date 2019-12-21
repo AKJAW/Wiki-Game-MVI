@@ -55,6 +55,13 @@ dependencies {
 //    implementation "com.jakewharton.rxbinding3:rxbinding-swiperefreshlayout:$rxBindingVersion"
 //    implementation "com.jakewharton.rxbinding3:rxbinding-viewpager:$rxBindingVersion"
 
+
+    implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 
