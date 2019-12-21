@@ -1,4 +1,4 @@
-package com.akjaw.presentation.game
+package com.akjaw.wikigamemvi.ui.game
 
 import com.akjaw.domain.model.ArticleType
 import com.akjaw.domain.model.WikiArticle
@@ -6,10 +6,10 @@ import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.usecase.ArticleWinConditionUseCase
 import com.akjaw.domain.usecase.GetArticleFromTitleUseCase
 import com.akjaw.domain.usecase.InitializeArticlesUseCase
-import com.akjaw.presentation.game.GameAction.*
-import com.akjaw.presentation.game.GameViewEffect.*
+import com.akjaw.wikigamemvi.ui.game.GameAction.*
+import com.akjaw.wikigamemvi.ui.game.GameViewEffect.*
 
-import com.akjaw.presentation.util.toArticle
+import com.akjaw.wikigamemvi.util.toArticle
 import com.akjaw.test_utils.assertLastValue
 import com.akjaw.test_utils.assertSecondToLastValue
 import io.reactivex.Observable
@@ -418,7 +418,8 @@ class GameViewModelTest {
 
         private fun TestObserver<GameViewState>.processToggleModeAndAssert(
             type: ArticleType,
-            expected: ArticleViewMode){
+            expected: ArticleViewMode
+        ){
 
             viewModel.process(ToggleArticleModeAction(type))
             this.assertLastValue {
@@ -428,7 +429,8 @@ class GameViewModelTest {
 
         private fun GameViewState.checkModeChange(
             type: ArticleType,
-            expected: ArticleViewMode): Boolean {
+            expected: ArticleViewMode
+        ): Boolean {
 
             val mode = when(type){
                 ArticleType.TARGET -> this.targetArticleState.mode

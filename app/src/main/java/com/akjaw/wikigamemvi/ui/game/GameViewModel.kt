@@ -1,16 +1,16 @@
-package com.akjaw.presentation.game
+package com.akjaw.wikigamemvi.ui.game
 
 import com.akjaw.domain.model.ArticleType
 import com.akjaw.domain.model.WikiTitle
 import com.akjaw.domain.usecase.ArticleWinConditionUseCase
 import com.akjaw.domain.usecase.GetArticleFromTitleUseCase
 import com.akjaw.domain.usecase.InitializeArticlesUseCase
-import com.akjaw.presentation.base.BaseViewModel
-import com.akjaw.presentation.base.Lce
-import com.akjaw.presentation.game.GameAction.*
-import com.akjaw.presentation.game.GameResult.*
-import com.akjaw.presentation.game.GameViewEffect.ShowVictoryScreenEffect
-import com.akjaw.presentation.util.toArticle
+import com.akjaw.wikigamemvi.ui.base.BaseViewModel
+import com.akjaw.wikigamemvi.ui.base.Lce
+import com.akjaw.wikigamemvi.ui.game.GameAction.*
+import com.akjaw.wikigamemvi.ui.game.GameResult.*
+import com.akjaw.wikigamemvi.ui.game.GameViewEffect.ShowVictoryScreenEffect
+import com.akjaw.wikigamemvi.util.toArticle
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import javax.inject.Inject

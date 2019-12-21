@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.article_collapsed.view.*
 import kotlinx.android.synthetic.main.article_header.view.*
 import kotlin.random.Random
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.akjaw.presentation.game.ArticleViewMode
+import com.akjaw.wikigamemvi.ui.game.ArticleViewMode
 import com.akjaw.wikigamemvi.R
 
 

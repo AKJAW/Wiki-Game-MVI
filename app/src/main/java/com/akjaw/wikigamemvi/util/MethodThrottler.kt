@@ -1,4 +1,4 @@
-package com.akjaw.presentation.util
+package com.akjaw.wikigamemvi.util
 
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable

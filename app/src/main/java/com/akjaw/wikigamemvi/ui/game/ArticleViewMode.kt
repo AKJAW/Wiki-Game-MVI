@@ -1,4 +1,4 @@
-package com.akjaw.presentation.game
+package com.akjaw.wikigamemvi.ui.game
 
 enum class ArticleViewMode{
     COLLAPSED,

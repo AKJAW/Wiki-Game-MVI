@@ -1,10 +1,13 @@
-package com.akjaw.presentation.game
+package com.akjaw.wikigamemvi.ui.game
 
 import com.akjaw.domain.model.ArticleType
 import com.akjaw.domain.model.WikiArticle
 import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.model.WikiTitle
-import com.akjaw.presentation.base.*
+import com.akjaw.wikigamemvi.ui.base.BaseAction
+import com.akjaw.wikigamemvi.ui.base.BaseResult
+import com.akjaw.wikigamemvi.ui.base.BaseViewEffect
+import com.akjaw.wikigamemvi.ui.base.BaseViewState
 
 data class ArticleState(
     val article: WikiArticle? = null,
@@ -20,7 +23,7 @@ data class GameViewState(
     val wikiNavigationLinks: List<WikiTitle> = listOf()
 ): BaseViewState
 
-sealed class GameViewEffect: BaseViewEffect{
+sealed class GameViewEffect: BaseViewEffect {
     object ShowVictoryScreenEffect: GameViewEffect()
 }
 

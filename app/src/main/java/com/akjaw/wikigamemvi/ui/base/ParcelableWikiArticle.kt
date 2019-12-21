@@ -1,4 +1,4 @@
-package com.akjaw.presentation.base
+package com.akjaw.wikigamemvi.ui.base
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

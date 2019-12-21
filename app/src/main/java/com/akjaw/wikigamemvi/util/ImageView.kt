@@ -1,4 +1,4 @@
-package com.akjaw.wikigamemvi.view_util
+package com.akjaw.wikigamemvi.util
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView

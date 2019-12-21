@@ -1,11 +1,9 @@
-package com.akjaw.presentation.util
+package com.akjaw.wikigamemvi.util
 
-import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.TestScheduler
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -39,7 +37,8 @@ class MethodThrottlerTest {
     fun `when onClick are called one after another inside the time window then the method is only invoked once`(){
         Mockito.verify(mockClick, Mockito.times(0)).invoke(Unit)
 
-        val throttler = MethodThrottler(compositeDisposable, 500, mockClick)
+        val throttler =
+            MethodThrottler(compositeDisposable, 500, mockClick)
 
         throttler.onClick(Unit)
         throttler.onClick(Unit)
@@ -52,7 +51,8 @@ class MethodThrottlerTest {
     fun `when onClick is called after the time window it invokes the method again`(){
         Mockito.verify(mockClick, Mockito.times(0)).invoke(Unit)
 
-        val throttler = MethodThrottler(compositeDisposable, 500, mockClick)
+        val throttler =
+            MethodThrottler(compositeDisposable, 500, mockClick)
 
         throttler.onClick(Unit)
         Mockito.verify(mockClick, Mockito.times(1)).invoke(Unit)
@@ -71,7 +71,8 @@ class MethodThrottlerTest {
 
         Mockito.verify(mockClick, Mockito.times(0)).invoke(Unit)
 
-        val throttler = MethodThrottler(compositeDisposable, 500, mockClick)
+        val throttler =
+            MethodThrottler(compositeDisposable, 500, mockClick)
 
         throttler.onClick(Unit)
 
@@ -87,7 +88,8 @@ class MethodThrottlerTest {
     fun `when clearing the passed in compositeDisposable then the stream is ended`(){
         Mockito.verify(mockClick, Mockito.times(0)).invoke(Unit)
 
-        val throttler = MethodThrottler(compositeDisposable, 500, mockClick)
+        val throttler =
+            MethodThrottler(compositeDisposable, 500, mockClick)
 
         compositeDisposable.clear()
 

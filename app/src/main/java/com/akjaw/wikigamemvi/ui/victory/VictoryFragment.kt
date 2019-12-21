@@ -12,12 +12,12 @@ import androidx.core.animation.doOnEnd
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.akjaw.presentation.game.GameViewModel
-import com.akjaw.presentation.game.GameViewState
+import com.akjaw.wikigamemvi.ui.game.GameViewModel
+import com.akjaw.wikigamemvi.ui.game.GameViewState
 import com.akjaw.wikigamemvi.R
 import com.akjaw.wikigamemvi.injection.injector
-import com.akjaw.wikigamemvi.view_util.createFadeInObjectAnimator
-import com.akjaw.wikigamemvi.view_util.glideLoadImage
+import com.akjaw.wikigamemvi.util.createFadeInObjectAnimator
+import com.akjaw.wikigamemvi.util.glideLoadImage
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_article_details.*

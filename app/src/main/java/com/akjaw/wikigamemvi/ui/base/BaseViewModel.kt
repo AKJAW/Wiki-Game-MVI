@@ -1,4 +1,4 @@
-package com.akjaw.presentation.base
+package com.akjaw.wikigamemvi.ui.base
 
 import androidx.lifecycle.ViewModel
 import com.jakewharton.rxrelay2.BehaviorRelay

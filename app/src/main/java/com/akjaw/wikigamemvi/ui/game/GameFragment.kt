@@ -15,14 +15,10 @@ import com.akjaw.wikigamemvi.injection.DaggerGameComponentProvider
 import com.akjaw.wikigamemvi.injection.component.DaggerGameComponent
 import com.akjaw.wikigamemvi.injection.component.GameComponent
 import com.akjaw.wikigamemvi.injection.gameInjector
-import com.akjaw.presentation.game.GameAction
-import com.akjaw.presentation.game.GameViewEffect
-import com.akjaw.presentation.game.GameViewState
 import com.akjaw.wikigamemvi.ui.victory.VictoryFragment
 import com.akjaw.wikigamemvi.injection.injector
-import com.akjaw.presentation.base.ActionObservable
-import com.akjaw.presentation.game.GameViewModel
-import com.akjaw.presentation.util.MethodThrottler
+import com.akjaw.wikigamemvi.ui.base.ActionObservable
+import com.akjaw.wikigamemvi.util.MethodThrottler
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
