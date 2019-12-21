@@ -1,4 +1,4 @@
-package com.akjaw.wikigamemvi.ui.common
+package com.akjaw.wikigamemvi.ui.common.view
 
 import android.content.Context
 import android.content.res.TypedArray
@@ -27,7 +27,6 @@ import kotlinx.android.synthetic.main.article_collapsed.view.*
 import kotlinx.android.synthetic.main.article_header.view.*
 import kotlin.random.Random
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.akjaw.wikigamemvi.ui.game.ArticleViewMode
 import com.akjaw.wikigamemvi.R
 
 
@@ -203,6 +202,18 @@ class ArticleView @JvmOverloads constructor(
             R.color.articlePurple,
             R.color.articleGreen
         )
+    }
+
+    enum class ArticleViewMode{
+        COLLAPSED,
+        EXPANDED;
+
+        fun inverted(): ArticleViewMode {
+            return when (this) {
+                COLLAPSED -> EXPANDED
+                EXPANDED -> COLLAPSED
+            }
+        }
     }
 
 }

@@ -6,7 +6,7 @@ import com.akjaw.domain.usecase.ArticleWinConditionUseCase
 import com.akjaw.domain.usecase.GetArticleFromTitleUseCase
 import com.akjaw.domain.usecase.InitializeArticlesUseCase
 import com.akjaw.wikigamemvi.ui.base.BaseViewModel
-import com.akjaw.wikigamemvi.ui.base.Lce
+import com.akjaw.wikigamemvi.ui.common.Lce
 import com.akjaw.wikigamemvi.ui.game.GameAction.*
 import com.akjaw.wikigamemvi.ui.game.GameResult.*
 import com.akjaw.wikigamemvi.ui.game.GameViewEffect.ShowVictoryScreenEffect

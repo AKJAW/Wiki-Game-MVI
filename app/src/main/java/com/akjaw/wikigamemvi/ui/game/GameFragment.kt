@@ -17,7 +17,7 @@ import com.akjaw.wikigamemvi.injection.component.GameComponent
 import com.akjaw.wikigamemvi.injection.gameInjector
 import com.akjaw.wikigamemvi.ui.victory.VictoryFragment
 import com.akjaw.wikigamemvi.injection.injector
-import com.akjaw.wikigamemvi.ui.base.ActionObservable
+import com.akjaw.wikigamemvi.ui.common.ActionObservable
 import com.akjaw.wikigamemvi.util.MethodThrottler
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
@@ -94,7 +94,7 @@ class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponen
     override fun onResume() {
         super.onResume()
 
-        eventDisposable = events().subscribe(viewModel::process)
+        eventDisposable = actions().subscribe(viewModel::process)
     }
 
     override fun onPause() {
@@ -103,7 +103,7 @@ class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponen
         eventDisposable?.dispose()
     }
 
-    override fun events(): Observable<GameAction> {
+    override fun actions(): Observable<GameAction> {
         return Observable.merge(
             target_article_view.article_header_button_text_view
                 .clicks()

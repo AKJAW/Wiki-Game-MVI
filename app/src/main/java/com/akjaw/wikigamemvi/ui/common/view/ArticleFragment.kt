@@ -1,4 +1,4 @@
-package com.akjaw.wikigamemvi.ui.common
+package com.akjaw.wikigamemvi.ui.common.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.akjaw.domain.model.WikiArticle
 import com.akjaw.wikigamemvi.R
-import com.akjaw.wikigamemvi.ui.base.ParcelableWikiArticle
+import com.akjaw.wikigamemvi.data.model.ParcelableWikiArticle
 import kotlinx.android.synthetic.main.fragment_article_details.*
 
 
@@ -32,7 +32,7 @@ class ArticleFragment: Fragment(){
     companion object {
         const val EXTRA_ARTICLE = "EXTRA_ARTICLE"
 
-        fun newInstance(article: WikiArticle): ArticleFragment{
+        fun newInstance(article: WikiArticle): ArticleFragment {
             val parcelableArticle = ParcelableWikiArticle(
                 article.name,
                 article.description,

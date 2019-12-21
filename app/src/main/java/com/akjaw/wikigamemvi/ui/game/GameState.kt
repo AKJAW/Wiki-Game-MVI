@@ -8,11 +8,12 @@ import com.akjaw.wikigamemvi.ui.base.BaseAction
 import com.akjaw.wikigamemvi.ui.base.BaseResult
 import com.akjaw.wikigamemvi.ui.base.BaseViewEffect
 import com.akjaw.wikigamemvi.ui.base.BaseViewState
+import com.akjaw.wikigamemvi.ui.common.view.ArticleView
 
 data class ArticleState(
     val article: WikiArticle? = null,
     val isLoading: Boolean = false,
-    val mode: ArticleViewMode = ArticleViewMode.COLLAPSED,
+    val mode: ArticleView.ArticleViewMode = ArticleView.ArticleViewMode.COLLAPSED,
     val hasError: Boolean = false
 )
 

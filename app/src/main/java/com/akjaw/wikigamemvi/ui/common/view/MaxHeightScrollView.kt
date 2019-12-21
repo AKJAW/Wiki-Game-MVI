@@ -1,4 +1,4 @@
-package com.akjaw.wikigamemvi.ui.common
+package com.akjaw.wikigamemvi.ui.common.view
 
 import android.content.Context
 import android.util.AttributeSet

@@ -1,4 +1,4 @@
-package com.akjaw.wikigamemvi.ui.base
+package com.akjaw.wikigamemvi.ui.common
 
 sealed class Lce<T> {
     class Loading<T>(val payload: T) : Lce<T>()

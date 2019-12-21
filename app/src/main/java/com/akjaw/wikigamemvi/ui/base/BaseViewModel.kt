@@ -1,6 +1,7 @@
 package com.akjaw.wikigamemvi.ui.base
 
 import androidx.lifecycle.ViewModel
+import com.akjaw.wikigamemvi.ui.common.Lce
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers

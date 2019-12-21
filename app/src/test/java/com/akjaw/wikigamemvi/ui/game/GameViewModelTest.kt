@@ -12,6 +12,7 @@ import com.akjaw.wikigamemvi.ui.game.GameViewEffect.*
 import com.akjaw.wikigamemvi.util.toArticle
 import com.akjaw.test_utils.assertLastValue
 import com.akjaw.test_utils.assertSecondToLastValue
+import com.akjaw.wikigamemvi.ui.common.view.ArticleView
 import io.reactivex.Observable
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.observers.TestObserver
@@ -373,10 +374,10 @@ class GameViewModelTest {
             val viewStateTester = viewModel.viewState.test()
 
             viewStateTester.assertLastValue {
-                it.checkModeChange(type, ArticleViewMode.COLLAPSED)
+                it.checkModeChange(type, ArticleView.ArticleViewMode.COLLAPSED)
             }
-            viewStateTester.processToggleModeAndAssert(type, ArticleViewMode.EXPANDED)
-            viewStateTester.processToggleModeAndAssert(type, ArticleViewMode.COLLAPSED)
+            viewStateTester.processToggleModeAndAssert(type, ArticleView.ArticleViewMode.EXPANDED)
+            viewStateTester.processToggleModeAndAssert(type, ArticleView.ArticleViewMode.COLLAPSED)
 
             viewStateTester.dispose()
         }
@@ -409,16 +410,16 @@ class GameViewModelTest {
 
             val viewStateTester = viewModel.viewState.test()
 
-            viewStateTester.processToggleModeAndAssert(type, ArticleViewMode.COLLAPSED)
-            viewStateTester.processToggleModeAndAssert(type, ArticleViewMode.COLLAPSED)
-            viewStateTester.processToggleModeAndAssert(type, ArticleViewMode.COLLAPSED)
+            viewStateTester.processToggleModeAndAssert(type, ArticleView.ArticleViewMode.COLLAPSED)
+            viewStateTester.processToggleModeAndAssert(type, ArticleView.ArticleViewMode.COLLAPSED)
+            viewStateTester.processToggleModeAndAssert(type, ArticleView.ArticleViewMode.COLLAPSED)
 
             viewStateTester.dispose()
         }
 
         private fun TestObserver<GameViewState>.processToggleModeAndAssert(
             type: ArticleType,
-            expected: ArticleViewMode
+            expected: ArticleView.ArticleViewMode
         ){
 
             viewModel.process(ToggleArticleModeAction(type))
@@ -429,7 +430,7 @@ class GameViewModelTest {
 
         private fun GameViewState.checkModeChange(
             type: ArticleType,
-            expected: ArticleViewMode
+            expected: ArticleView.ArticleViewMode
         ): Boolean {
 
             val mode = when(type){

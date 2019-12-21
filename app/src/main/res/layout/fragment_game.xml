@@ -33,7 +33,7 @@
                 />
         </androidx.appcompat.widget.Toolbar>
 
-        <com.akjaw.wikigamemvi.ui.common.ArticleView
+        <com.akjaw.wikigamemvi.ui.common.view.ArticleView
             android:id="@+id/target_article_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.75" />
 
-        <com.akjaw.wikigamemvi.ui.common.ArticleView
+        <com.akjaw.wikigamemvi.ui.common.view.ArticleView
             android:id="@+id/current_article_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
