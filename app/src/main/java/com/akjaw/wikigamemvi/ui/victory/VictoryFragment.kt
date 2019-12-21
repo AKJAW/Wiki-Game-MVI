@@ -12,6 +12,8 @@ import androidx.core.animation.doOnEnd
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.akjaw.presentation.game.GameViewModel
+import com.akjaw.presentation.game.GameViewState
 import com.akjaw.wikigamemvi.R
 import com.akjaw.wikigamemvi.injection.injector
 import com.akjaw.wikigamemvi.view_util.createFadeInObjectAnimator
@@ -25,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_victory.*
 class VictoryFragment: Fragment(){
 
     private var disposables = CompositeDisposable()
-    private lateinit var viewModel: com.akjaw.presentation.game.GameViewModel //TODO neccessary?
+    private lateinit var viewModel: GameViewModel //TODO neccessary?
 
     private var hasEnterTransitionRun: Boolean = false
 
@@ -35,7 +37,7 @@ class VictoryFragment: Fragment(){
         viewModel = activity?.run {
             ViewModelProviders
                 .of(this, injector.gameViewModelFactory())
-                .get(com.akjaw.presentation.game.GameViewModel::class.java)
+                .get(GameViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
         val transitionSet = android.transition.TransitionSet()
@@ -69,7 +71,7 @@ class VictoryFragment: Fragment(){
     }
 
     //TODO remove viewModel and pass the data through the intent?
-    private fun render(state: com.akjaw.presentation.game.GameViewState){
+    private fun render(state: GameViewState){
         val targetArticle = state.targetArticleState.article
 
         if(targetArticle != null){

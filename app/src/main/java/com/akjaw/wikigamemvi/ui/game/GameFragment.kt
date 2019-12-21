@@ -21,6 +21,7 @@ import com.akjaw.presentation.game.GameViewState
 import com.akjaw.wikigamemvi.ui.victory.VictoryFragment
 import com.akjaw.wikigamemvi.injection.injector
 import com.akjaw.presentation.base.ActionObservable
+import com.akjaw.presentation.game.GameViewModel
 import com.akjaw.presentation.util.MethodThrottler
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
@@ -35,7 +36,7 @@ import kotlinx.android.synthetic.main.fragment_game.view.*
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
-class GameFragment: Fragment(), ActionObservable<com.akjaw.presentation.game.GameAction>, DaggerGameComponentProvider {
+class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponentProvider {
     override val gameComponent: GameComponent by lazy {
         DaggerGameComponent
             .factory()
@@ -45,7 +46,7 @@ class GameFragment: Fragment(), ActionObservable<com.akjaw.presentation.game.Gam
     private var disposables = CompositeDisposable()
     private var eventDisposable: Disposable? = null
 
-    private lateinit var viewModel: com.akjaw.presentation.game.GameViewModel
+    private lateinit var viewModel: GameViewModel
 
     private lateinit var wikiLinksAdapter: ArticleLinksAdapter
 
@@ -57,7 +58,7 @@ class GameFragment: Fragment(), ActionObservable<com.akjaw.presentation.game.Gam
         viewModel = activity?.run {
             ViewModelProviders
                 .of(this, injector.gameViewModelFactory())
-                .get(com.akjaw.presentation.game.GameViewModel::class.java)
+                .get(GameViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
         viewModel.initialize()
@@ -65,7 +66,7 @@ class GameFragment: Fragment(), ActionObservable<com.akjaw.presentation.game.Gam
         wikiLinksAdapter = gameInjector.articleLinksAdapter()
 
         navigationClickThrottler = MethodThrottler(500) {
-            val action = com.akjaw.presentation.game.GameAction.LoadNextArticleAction(it)
+            val action = GameAction.LoadNextArticleAction(it)
             viewModel.process(action)
         }
 
@@ -107,24 +108,24 @@ class GameFragment: Fragment(), ActionObservable<com.akjaw.presentation.game.Gam
         eventDisposable?.dispose()
     }
 
-    override fun events(): Observable<com.akjaw.presentation.game.GameAction> {
+    override fun events(): Observable<GameAction> {
         return Observable.merge(
             target_article_view.article_header_button_text_view
                 .clicks()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .map {
-                    com.akjaw.presentation.game.GameAction.ToggleArticleModeAction(ArticleType.TARGET)
+                    GameAction.ToggleArticleModeAction(ArticleType.TARGET)
                 },
             current_article_view.article_header_button_text_view
                 .clicks()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .map {
-                    com.akjaw.presentation.game.GameAction.ToggleArticleModeAction(ArticleType.CURRENT)
+                    GameAction.ToggleArticleModeAction(ArticleType.CURRENT)
                 }
         )
     }
 
-    private fun render(state: com.akjaw.presentation.game.GameViewState){
+    private fun render(state: GameViewState){
         target_article_view.setIsLoading(state.targetArticleState.isLoading)
         current_article_view.setIsLoading(state.currentArticleState.isLoading)
 
@@ -150,9 +151,9 @@ class GameFragment: Fragment(), ActionObservable<com.akjaw.presentation.game.Gam
     }
 
 
-    private fun trigger(effect: com.akjaw.presentation.game.GameViewEffect) {
+    private fun trigger(effect: GameViewEffect) {
         when(effect){
-            is com.akjaw.presentation.game.GameViewEffect.ShowVictoryScreenEffect -> showVictoryFragment()
+            is GameViewEffect.ShowVictoryScreenEffect -> showVictoryFragment()
         }
     }
 

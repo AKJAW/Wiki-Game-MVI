@@ -1,4 +1,4 @@
-package com.akjaw.wikigamemvi.ui.game
+package com.akjaw.presentation.game
 
 import com.akjaw.domain.model.ArticleType
 import com.akjaw.domain.model.WikiArticle
@@ -6,7 +6,8 @@ import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.usecase.ArticleWinConditionUseCase
 import com.akjaw.domain.usecase.GetArticleFromTitleUseCase
 import com.akjaw.domain.usecase.InitializeArticlesUseCase
-import com.akjaw.presentation.game.ArticleViewMode
+import com.akjaw.presentation.game.GameAction.*
+import com.akjaw.presentation.game.GameViewEffect.*
 
 import com.akjaw.presentation.util.toArticle
 import com.akjaw.test_utils.assertLastValue
@@ -30,13 +31,13 @@ class GameViewModelTest {
     @Mock private lateinit var initializeArticlesUseCase: InitializeArticlesUseCase
     @Mock private lateinit var getArticleFromTitleUseCase: GetArticleFromTitleUseCase
     @Mock private lateinit var winConditionUseCase: ArticleWinConditionUseCase
-    private lateinit var viewModel: com.akjaw.presentation.game.GameViewModel
+    private lateinit var viewModel: GameViewModel
 
     @BeforeEach
     fun setUp() {
         MockitoAnnotations.initMocks(this)
 
-        viewModel = com.akjaw.presentation.game.GameViewModel(
+        viewModel = GameViewModel(
             initializeArticlesUseCase,
             getArticleFromTitleUseCase,
             winConditionUseCase
@@ -64,7 +65,7 @@ class GameViewModelTest {
     fun `after subscribing the initial viewState is returned`(){
         viewModel.viewState
             .test()
-            .assertValue(com.akjaw.presentation.game.GameViewState())
+            .assertValue(GameViewState())
             .dispose()
     }
 
@@ -128,7 +129,7 @@ class GameViewModelTest {
 
             val viewStateTester = viewModel.viewState.test()
 
-            viewModel.process(com.akjaw.presentation.game.GameAction.InitializeArticlesAction)
+            viewModel.process(InitializeArticlesAction)
 
             viewStateTester
                 .assertSecondToLastValue {
@@ -142,7 +143,7 @@ class GameViewModelTest {
                     true
                 }
 
-            viewModel.process(com.akjaw.presentation.game.GameAction.InitializeArticlesAction)
+            viewModel.process(InitializeArticlesAction)
 
             viewStateTester
                 .assertSecondToLastValue {
@@ -159,14 +160,14 @@ class GameViewModelTest {
             viewStateTester.dispose()
         }
 
-        private fun com.akjaw.presentation.game.GameViewState.checkInitialArticlesLoading(){
+        private fun GameViewState.checkInitialArticlesLoading(){
             val bothAreLoading = currentArticleState.isLoading && targetArticleState.isLoading
             assertTrue(bothAreLoading)
             assertNull(targetArticleState.article)
             assertNull(currentArticleState.article)
         }
 
-        private fun com.akjaw.presentation.game.GameViewState.checkInitialArticlesFinished(target: WikiArticle, current: WikiArticle){
+        private fun GameViewState.checkInitialArticlesFinished(target: WikiArticle, current: WikiArticle){
             val bothAreLoaded = !currentArticleState.isLoading && !targetArticleState.isLoading
             assertTrue(bothAreLoaded)
             assertEquals(target, targetArticleState.article)
@@ -180,7 +181,7 @@ class GameViewModelTest {
 
             val viewStateTester = viewModel.viewState.test()
 
-            viewModel.process(com.akjaw.presentation.game.GameAction.InitializeArticlesAction)
+            viewModel.process(InitializeArticlesAction)
 
             viewStateTester
                 .assertLastValue {
@@ -203,13 +204,13 @@ class GameViewModelTest {
 
             viewModel.viewState.test().dispose()
 
-            viewModel.process(com.akjaw.presentation.game.GameAction.LoadNextArticleAction("test1"))
+            viewModel.process(LoadNextArticleAction("test1"))
             Mockito.verify(winConditionUseCase, Mockito.times(1)).invoke("test1")
 
-            viewModel.process(com.akjaw.presentation.game.GameAction.LoadNextArticleAction("test2"))
+            viewModel.process(LoadNextArticleAction("test2"))
             Mockito.verify(winConditionUseCase, Mockito.times(1)).invoke("test2")
 
-            viewModel.process(com.akjaw.presentation.game.GameAction.LoadNextArticleAction("test1"))
+            viewModel.process(LoadNextArticleAction("test1"))
             Mockito.verify(winConditionUseCase, Mockito.times(2)).invoke("test1")
         }
 
@@ -236,10 +237,10 @@ class GameViewModelTest {
             viewStateTester.dispose()
         }
 
-        private fun TestObserver<com.akjaw.presentation.game.GameViewState>.processLoadNextAndAssertValues(
+        private fun TestObserver<GameViewState>.processLoadNextAndAssertValues(
             response: WikiResponse
         ) {
-            viewModel.process(com.akjaw.presentation.game.GameAction.LoadNextArticleAction(Mockito.anyString()))
+            viewModel.process(LoadNextArticleAction(Mockito.anyString()))
             this.assertSecondToLastValue {
                 it.checkLoadNextLoading()
             }
@@ -260,10 +261,10 @@ class GameViewModelTest {
 
             viewEffectsTester.assertEmpty()
 
-            viewModel.process(com.akjaw.presentation.game.GameAction.LoadNextArticleAction("win"))
+            viewModel.process(LoadNextArticleAction("win"))
 
             viewEffectsTester.assertValueCount(1)
-            viewEffectsTester.assertValue(com.akjaw.presentation.game.GameViewEffect.ShowVictoryScreenEffect)
+            viewEffectsTester.assertValue(ShowVictoryScreenEffect)
 
             viewEffectsTester.dispose()
         }
@@ -283,13 +284,13 @@ class GameViewModelTest {
                 true
             }
 
-            viewModel.process(com.akjaw.presentation.game.GameAction.LoadNextArticleAction(Mockito.anyString()))
+            viewModel.process(LoadNextArticleAction(Mockito.anyString()))
             viewStateTester.assertLastValue {
                 assertEquals(it.numberOfSteps, 1)
                 true
             }
 
-            viewModel.process(com.akjaw.presentation.game.GameAction.LoadNextArticleAction(Mockito.anyString()))
+            viewModel.process(LoadNextArticleAction(Mockito.anyString()))
             viewStateTester.assertLastValue {
                 assertEquals(it.numberOfSteps, 2)
                 true
@@ -309,13 +310,13 @@ class GameViewModelTest {
 
             val viewStateTester = viewModel.viewState.test()
 
-            viewModel.process(com.akjaw.presentation.game.GameAction.LoadNextArticleAction(Mockito.anyString()))
+            viewModel.process(LoadNextArticleAction(Mockito.anyString()))
             viewStateTester.assertLastValue {
                 assertEquals(it.numberOfSteps, 1)
                 true
             }
 
-            viewModel.process(com.akjaw.presentation.game.GameAction.LoadNextArticleAction(Mockito.anyString()))
+            viewModel.process(LoadNextArticleAction(Mockito.anyString()))
             viewStateTester.assertLastValue {
                 assertEquals(it.numberOfSteps, 1)
                 true
@@ -324,14 +325,14 @@ class GameViewModelTest {
             viewStateTester.dispose()
         }
 
-        private fun com.akjaw.presentation.game.GameViewState.checkLoadNextLoading(): Boolean {
+        private fun GameViewState.checkLoadNextLoading(): Boolean {
             assertTrue(currentArticleState.isLoading)
             assertNull(currentArticleState.article)
 
             return true
         }
 
-        private fun com.akjaw.presentation.game.GameViewState.checkLoadNextFinished(article: WikiArticle): Boolean {
+        private fun GameViewState.checkLoadNextFinished(article: WikiArticle): Boolean {
             assertFalse(currentArticleState.isLoading)
             assertEquals(article, currentArticleState.article)
 
@@ -348,14 +349,14 @@ class GameViewModelTest {
 
             val viewStateTester = viewModel.viewState.test()
 
-            viewModel.process(com.akjaw.presentation.game.GameAction.LoadNextArticleAction(Mockito.anyString()))
+            viewModel.process(LoadNextArticleAction(Mockito.anyString()))
             viewStateTester.assertLastValue {
                 checkArticleErrorState(it.currentArticleState)
             }
         }
     }
 
-    fun checkArticleErrorState(article: com.akjaw.presentation.game.ArticleState): Boolean {
+    fun checkArticleErrorState(article: ArticleState): Boolean {
         assertFalse(article.isLoading)
         assertTrue(article.hasError)
         assertNull(article.article)
@@ -387,19 +388,19 @@ class GameViewModelTest {
                 .thenReturn(Observable.empty())
 
             val initialViewState = when(type){
-                ArticleType.TARGET -> com.akjaw.presentation.game.GameViewState(
-                    targetArticleState = com.akjaw.presentation.game.ArticleState(
+                ArticleType.TARGET -> GameViewState(
+                    targetArticleState = ArticleState(
                         isLoading = true
                     )
                 )
-                ArticleType.CURRENT -> com.akjaw.presentation.game.GameViewState(
-                    currentArticleState = com.akjaw.presentation.game.ArticleState(
+                ArticleType.CURRENT -> GameViewState(
+                    currentArticleState = ArticleState(
                         isLoading = true
                     )
                 )
             }
 
-            viewModel = com.akjaw.presentation.game.GameViewModel(
+            viewModel = GameViewModel(
                 initializeArticlesUseCase,
                 getArticleFromTitleUseCase,
                 winConditionUseCase,
@@ -415,17 +416,17 @@ class GameViewModelTest {
             viewStateTester.dispose()
         }
 
-        private fun TestObserver<com.akjaw.presentation.game.GameViewState>.processToggleModeAndAssert(
+        private fun TestObserver<GameViewState>.processToggleModeAndAssert(
             type: ArticleType,
             expected: ArticleViewMode){
 
-            viewModel.process(com.akjaw.presentation.game.GameAction.ToggleArticleModeAction(type))
+            viewModel.process(ToggleArticleModeAction(type))
             this.assertLastValue {
                 it.checkModeChange(type, expected)
             }
         }
 
-        private fun com.akjaw.presentation.game.GameViewState.checkModeChange(
+        private fun GameViewState.checkModeChange(
             type: ArticleType,
             expected: ArticleViewMode): Boolean {
 

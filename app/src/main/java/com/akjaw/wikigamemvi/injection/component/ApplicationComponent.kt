@@ -3,6 +3,7 @@ package com.akjaw.wikigamemvi.injection.component
 import android.content.Context
 import com.akjaw.wikigamemvi.injection.factory.ViewModelFactory
 import com.akjaw.presentation.game.GameViewModel
+import com.akjaw.presentation.game.GameViewState
 import com.akjaw.wikigamemvi.injection.module.WikipediaApiModule
 import com.akjaw.wikigamemvi.injection.module.WikipediaRepositoryModule
 import dagger.BindsInstance
@@ -21,7 +22,7 @@ interface ApplicationComponent{
             @Named("applicationContext")
             applicationContext: Context,
             @BindsInstance
-            initialGameViewState: com.akjaw.presentation.game.GameViewState = com.akjaw.presentation.game.GameViewState()
+            initialGameViewState: GameViewState = GameViewState()
         ): ApplicationComponent
     }
 
