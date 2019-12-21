@@ -1,8 +1,7 @@
-package com.akjaw.data.remote
+package com.akjaw.remote
 
-import com.akjaw.data.model.WikiApiResponseEntity
-import io.reactivex.Observable
-import retrofit2.Call
+import com.akjaw.remote.model.WikiApiResponseEntity
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -14,11 +13,11 @@ import retrofit2.http.Query
 
 interface WikiApiService {
     @GET("random-article")
-    fun randomArticle(): Observable<WikiApiResponseEntity>
+    fun randomArticle(): Single<WikiApiResponseEntity>
 
 
     @GET("article-from-title")
-    fun articleFromTitle(@Query("title") title: String): Observable<WikiApiResponseEntity>
+    fun articleFromTitle(@Query("title") title: String): Single<WikiApiResponseEntity>
 }
 
 fun main() {
@@ -35,11 +34,12 @@ fun main() {
 
     val service = retrofit.create(WikiApiService::class.java)
 
-    Thread.sleep(2000)
 
     service.articleFromTitle("Kotlin")
+        .toObservable()
         .subscribe {
             print(it)
         }
 
+    Thread.sleep(2000)
 }

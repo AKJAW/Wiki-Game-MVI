@@ -1,4 +1,4 @@
-package com.akjaw.data.model.base
+package com.akjaw.base
 
 interface EntityMapper <E, D> {
 

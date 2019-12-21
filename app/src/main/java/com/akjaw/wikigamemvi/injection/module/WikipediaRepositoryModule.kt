@@ -1,6 +1,6 @@
 package com.akjaw.wikigamemvi.injection.module
 
-import com.akjaw.data.repository.WikiRepositoryImpl
+import com.akjaw.common.WikiRepositoryImpl
 import com.akjaw.domain.repository.WikiRepository
 import com.akjaw.domain.usecase.*
 import com.akjaw.domain.usecase.GetTargetArticleUseCase

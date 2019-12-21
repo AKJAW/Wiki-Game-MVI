@@ -1,5 +1,6 @@
-package com.akjaw.data.repository
+package com.akjaw.common
 
+import com.akjaw.base.WikipediaApi
 import com.akjaw.domain.model.WikiResponse
 import com.akjaw.domain.model.WikiTitle
 import com.akjaw.domain.repository.WikiRepository

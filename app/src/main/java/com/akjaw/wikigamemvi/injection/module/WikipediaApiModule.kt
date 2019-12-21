@@ -1,7 +1,7 @@
 package com.akjaw.wikigamemvi.injection.module
 
-import com.akjaw.data.repository.MockWikipediaApiImpl
-import com.akjaw.data.repository.WikipediaApi
+import com.akjaw.base.WikipediaApi
+import com.akjaw.local.WikipediaMockApi
 import dagger.Binds
 import dagger.Module
 
@@ -9,7 +9,7 @@ import dagger.Module
 abstract class WikipediaApiModule {
 
     @Binds
-    abstract fun bindWikiApi(impl: MockWikipediaApiImpl)
+    abstract fun bindWikiApi(impl: WikipediaMockApi)
             : WikipediaApi
 
 
