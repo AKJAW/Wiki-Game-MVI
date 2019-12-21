@@ -65,14 +65,13 @@ class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponen
 
         wikiLinksAdapter = gameInjector.articleLinksAdapter()
 
-        navigationClickThrottler = MethodThrottler(500) {
+        navigationClickThrottler = MethodThrottler(disposables, 500) {
             val action = GameAction.LoadNextArticleAction(it)
             viewModel.process(action)
         }
 
         disposables += viewModel.viewState.subscribe(::render)
         disposables += viewModel.viewEffects.subscribe(::trigger)
-        disposables += navigationClickThrottler.disposable
     }
 
     private fun onArticleNavigationClick(wikiTitle: WikiTitle){

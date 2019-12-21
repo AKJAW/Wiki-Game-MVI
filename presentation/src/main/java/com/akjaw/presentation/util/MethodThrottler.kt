@@ -2,17 +2,26 @@ package com.akjaw.presentation.util
 
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import java.util.concurrent.TimeUnit
 
-class MethodThrottler<I, R>(private val duration: Long = 500L, private val passedInOnClick: (I) -> R){
+class MethodThrottler<I, R>(
+    compositeDisposable: CompositeDisposable,
+    private val duration: Long = 500L,
+    private val passedInOnClick: (I) -> R
+){
+
     private val relay = PublishRelay.create<I>()
 
-    val disposable: Disposable = createObservable()
-        .onErrorResumeNext(createObservable())
-        .subscribe()
+    init {
+        createOnClickObservable()
+            .onErrorResumeNext(createOnClickObservable())
+            .subscribe()
+            .addTo(compositeDisposable)
+    }
 
-    private fun createObservable(): Observable<I> {
+    private fun createOnClickObservable(): Observable<I> {
         return relay
             .throttleFirst(duration, TimeUnit.MILLISECONDS)
             .doOnNext {
