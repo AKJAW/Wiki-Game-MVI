@@ -8,10 +8,11 @@ import com.akjaw.domain.model.WikiTitle
 import com.akjaw.remote.model.RemoteMapper
 import io.reactivex.Single
 import io.reactivex.rxkotlin.subscribeBy
+import javax.inject.Inject
 
-class WikipediaRemoteApi(
+class WikipediaRemoteApi @Inject constructor(
     private val api: WikiApiService,
-    private val mapper: EntityMapper<WikiApiResponseEntity, WikiResponse>
+    private val mapper: RemoteMapper
 ): WikipediaApi {
     override fun randomArticle(): Single<WikiResponse> {
         return api.randomArticle().map {

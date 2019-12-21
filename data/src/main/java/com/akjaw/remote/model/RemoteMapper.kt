@@ -4,8 +4,9 @@ import com.akjaw.remote.model.WikiApiResponseEntity
 import com.akjaw.remote.model.WikiArticleResponseEntity
 import com.akjaw.base.EntityMapper
 import com.akjaw.domain.model.WikiResponse
+import javax.inject.Inject
 
-class RemoteMapper: EntityMapper<WikiApiResponseEntity, WikiResponse> {
+class RemoteMapper @Inject constructor(): EntityMapper<WikiApiResponseEntity, WikiResponse> {
     override fun mapFromEntity(entity: WikiApiResponseEntity): WikiResponse {
         return WikiResponse(
             name = entity.article.name,

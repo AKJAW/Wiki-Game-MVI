@@ -7,7 +7,8 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-object ApiFactory {
+//For testing and debugging
+internal object ApiFactory {
     private val interceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
@@ -16,7 +17,7 @@ object ApiFactory {
 
     val retrofit = Retrofit.Builder()
         .baseUrl("https://wiki-api-us.herokuapp.com/")
-//        .client(client)
+        .client(client)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(MoshiConverterFactory.create())
         .build()
