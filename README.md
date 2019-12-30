@@ -1,6 +1,29 @@
 # Wiki Game
 The point of the game is to find the target article by using hyperlinks from other articles. Every article is fetched from Wikipedia.
 
+## Modules
+The project is broken down into 4 modules
+
+#### app module
+The standard entry point to the App, it contains everything related to:
+- Android (Activities, Fragments, Views), 
+- Presentation layer (ViewModels) 
+- Dependency injection (Dagger 2 modules and components)
+
+Because of Dependency injection this module is depends on every other module. Although leaving out the DI, this module does not directly interact with any module besides the **domain module**.
+
+#### domain module
+The so called business logic layer that is not dependent on any other module. It contains the UseCases (Interactors) of the App, and the Repository interfaces.
+
+#### data module
+This module connects the App to the outside world, in this case it is an API which serves the Wikipedia articles. The only dependency of this module is the **domain module**, in particular the Repository interfaces which are implemented inside this module.
+
+![Module dependency graph](docs/modules.png)
+
+#### test-utils module
+A simple utility module that provides common functionality which can be used inside tests of every other module. It's main purpose is to help with the DRY principle inside tests.
+
+
 ## Architecture
 The app uses an MVI-like architecture inspired by 
 - Kaushik Gopal's talk at Mobilization IX and the accompanying App [movies-usf-android](https://github.com/kaushikgopal/movies-usf-android)
@@ -28,4 +51,7 @@ All of the UI data flow logic is orchestrated inside the abstract BaseViewModel 
 Activities and Fragments listen to the **viewState** and on every emit update the UI according to the state. A **viewEffects** emit "trigger" a one time effect in the App.
 
 The BaseViewModel takes in four generic types each of which implement (**BaseAction**, **BaseResult**, **BaseViewState**, **BaseViewEffect**). Every ViewModel that extends the BaseViewModel and has to provide the four generics along with the **actionToResult**, **resultToViewState**, **resultToViewEffect** functions.
+
+![Data flow flowchart](docs/data_flow.png)
+
 
