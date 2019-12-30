@@ -27,7 +27,7 @@ class WikipediaApiModule {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create())
 
-        if(BuildConfig.DEBUG){
+        if(BuildConfig.DEBUG && false){
             val interceptor = HttpLoggingInterceptor()
             interceptor.level = HttpLoggingInterceptor.Level.BODY
 
