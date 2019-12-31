@@ -29,9 +29,9 @@ abstract class BaseViewModel<A: BaseAction, R: BaseResult, S: BaseViewState, E: 
     val viewState: Observable<S> by lazy {
         store.resultToViewState()
             .doOnNext { Timber.tag("-----").d("vs $it") }
-            .observeOn(AndroidSchedulers.mainThread())
             .replay()
             .autoConnect(1) { disposables += it }
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     val viewEffects: Observable<E> by lazy {
