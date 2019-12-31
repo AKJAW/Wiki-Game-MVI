@@ -53,41 +53,43 @@ Activities and Fragments listen to the **viewState** and on every emit update th
 The BaseViewModel takes in four generic types each of which implement (**BaseAction**, **BaseResult**, **BaseViewState**, **BaseViewEffect**). Every ViewModel that extends the BaseViewModel and has to provide the four generics along with the **actionToResult**, **resultToViewState**, **resultToViewEffect** functions.
 
 ![Data flow flowchart](docs/data_flow.png)
- ```kotlin
+
+###### BaseViewModel
+```kotlin
 private val actions = BehaviorRelay.create<A>()
 private val store: Observable<Lce<out R>> by lazy {
-        actions.actionToResult()
-            .share()
+    actions.actionToResult()
+        .share()
 }
 
 fun process(action: A) {
     actions.accept(action)
 }
- ```
-  ```kotlin
+```
+```kotlin
 val viewState: Observable<S> by lazy {
     store.resultToViewState()
         .replay()
         .autoConnect(1) { disposables += it }
         .observeOn(AndroidSchedulers.mainThread())
 }
- ```
-  ```kotlin
+```
+```kotlin
 val viewEffects: Observable<E> by lazy {
     store.resultToViewEffect()
         .observeOn(AndroidSchedulers.mainThread())
 }
- ```
+```
 #### LCE
 Before **actionToResult** sends the Result down the chain it wraps it with a [LCE](https://tech.instacart.com/lce-modeling-data-loading-in-rxjava-b798ac98d80)
  class. The wrapper class significantly helps with the **L**oading, **C**ontent or **E**rror states that will occur during the lifecycle of the App. Instead of creating a new class for every possible state that can occur in the App, this class gives the ability to express different outcomes by simply wrapping the normal state.
- ```kotlin
+```kotlin
 sealed class Lce<T> {
-    data class Loading<T>(val payload: T) : Lce<T>()
-    data class Content<T>(val payload: T) : Lce<T>()
-    data class Error<T>(val payload: T) : Lce<T>()
+    data class Loading<T>(val payload: T): Lce<T>()
+    data class Content<T>(val payload: T): Lce<T>()
+    data class Error<T>(val payload: T): Lce<T>()
 }
- ```
+```
 My implementation differs a bit from the one in the article. The Loading class also has a payload passed in, this is needed to differentiate the generic **T** type. Because generics are not reified at run-time there is no way to get the type of a Loading without the payload of that same type.
 
 The Lce is mostly used inside **resultToViewState** to helps with grouping related state management logic.
