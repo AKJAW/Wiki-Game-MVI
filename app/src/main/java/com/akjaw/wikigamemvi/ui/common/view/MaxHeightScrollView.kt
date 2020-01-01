@@ -11,20 +11,22 @@ class MaxHeightScrollView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : NestedScrollView(context, attrs, defStyleAttr) {
 
-    private val DEFAULT_HEIGHT = context.resources
+    private val defaultHeight = context.resources
         .getDimension(R.dimen.default_scroll_view_height_cap).toInt()
-    private var maxHeight: Int = DEFAULT_HEIGHT
+    private val maxHeight: Int
 
 
     init {
         if (attrs != null) {
             val styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.MaxHeightScrollView)
-            maxHeight = styledAttrs.getDimensionPixelSize(
+            maxHeight =  styledAttrs.getDimensionPixelSize(
                 R.styleable.MaxHeightScrollView_maxHeight,
-                DEFAULT_HEIGHT
+                defaultHeight
             )
 
             styledAttrs.recycle()
+        } else {
+            maxHeight = defaultHeight
         }
     }
 

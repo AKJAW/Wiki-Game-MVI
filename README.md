@@ -106,3 +106,15 @@ override fun Observable<Lce<out Result>>.resultToViewState(): Observable<ViewSta
 }
 ```
 Every **handle** function returns a new state depending in the payload type.
+
+## Views
+
+##### ArticleView
+
+![ArticleView in action](docs/article_view.gif)
+
+It is a compound view used to show the target article (shown above) and the current article from which the user has to navigate. The view uses a **declare-styleable** to pass variables from the XML into the View. The toggle animation is done using **ConstraintSet** by changing between the collapsed and expanded layout.
+
+##### MaxHeightScrollView
+
+A simple NestedScrollView which allows for a maxHeight attribute
