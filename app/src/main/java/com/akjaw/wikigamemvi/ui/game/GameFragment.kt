@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.akjaw.domain.model.ArticleType
 import com.akjaw.wikigamemvi.R
 import com.akjaw.domain.model.WikiTitle
+import com.akjaw.wikigamemvi.data.model.ParcelableWikiArticle
 import com.akjaw.wikigamemvi.injection.DaggerGameComponentProvider
 import com.akjaw.wikigamemvi.injection.component.DaggerGameComponent
 import com.akjaw.wikigamemvi.injection.component.GameComponent
@@ -158,7 +159,8 @@ class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponen
         val imageTransitionName = getString(R.string.articleImageTransition)
         transition.addSharedElement(target_article_view.article_image_view, imageTransitionName)
 
-        val fragment = VictoryFragment()
+        val article = ParcelableWikiArticle()
+        val fragment = VictoryFragment.create(article, 0)
 
         transition.replace(R.id.main_fragment_placeholder, fragment)
         transition.commit()
