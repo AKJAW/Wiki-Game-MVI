@@ -54,7 +54,8 @@ The BaseViewModel takes in four generic types each of which implement (**BaseAct
 
 ![Data flow flowchart](docs/data_flow.png)
 
-###### BaseViewModel
+##### [BaseViewModel](app/src/main/java/com/akjaw/wikigamemvi/ui/base/BaseViewModel.kt)
+
 ```kotlin
 private val actions = BehaviorRelay.create<A>()
 private val store: Observable<Lce<out R>> by lazy {
@@ -80,7 +81,7 @@ val viewEffects: Observable<E> by lazy {
         .observeOn(AndroidSchedulers.mainThread())
 }
 ```
-#### LCE
+#### [LCE](app/src/main/java/com/akjaw/wikigamemvi/ui/common/Lce.kt)
 Before **actionToResult** sends the Result down the chain it wraps it with a [LCE](https://tech.instacart.com/lce-modeling-data-loading-in-rxjava-b798ac98d80)
  class. The wrapper class significantly helps with the **L**oading, **C**ontent or **E**rror states that will occur during the lifecycle of the App. Instead of creating a new class for every possible state that can occur in the App, this class gives the ability to express different outcomes by simply wrapping the normal state.
 ```kotlin
@@ -109,12 +110,12 @@ Every **handle** function returns a new state depending in the payload type.
 
 ## Views
 
-##### ArticleView
+#### [ArticleView](app/src/main/java/com/akjaw/wikigamemvi/ui/common/view/ArticleView.kt)
 
 ![ArticleView in action](docs/article_view.gif)
 
-It is a compound view used to show the target article (shown above) and the current article from which the user has to navigate. The view uses a **declare-styleable** to pass variables from the XML into the View. The toggle animation is done using **ConstraintSet** by changing between the collapsed and expanded layout.
+It is a compound view used to show the target article (shown above) and also the current article from which the user has to navigate. The view uses a **declare-styleable** to pass variables from the XML into the View. The toggle animation is done with **ConstraintSet** by changing between the collapsed and expanded layout.
 
-##### MaxHeightScrollView
+#### [MaxHeightScrollView](app/src/main/java/com/akjaw/wikigamemvi/ui/common/view/MaxHeightScrollView.kt)
 
 A simple NestedScrollView which allows for a maxHeight attribute
