@@ -1,6 +1,7 @@
 package com.akjaw.wikigamemvi.injection.component
 
 import android.content.Context
+import com.akjaw.domain.model.WikiLanguage
 import com.akjaw.wikigamemvi.injection.factory.ViewModelFactory
 import com.akjaw.wikigamemvi.ui.game.GameViewModel
 import com.akjaw.wikigamemvi.ui.game.GameViewState
@@ -22,7 +23,9 @@ interface ApplicationComponent{
             @Named("applicationContext")
             applicationContext: Context,
             @BindsInstance
-            initialGameViewState: GameViewState = GameViewState()
+            initialGameViewState: GameViewState = GameViewState(),
+            @BindsInstance
+            language: WikiLanguage = "pl"
         ): ApplicationComponent
     }
 

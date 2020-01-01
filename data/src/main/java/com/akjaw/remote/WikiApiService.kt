@@ -13,11 +13,11 @@ import retrofit2.http.Query
 
 interface WikiApiService {
     @GET("random-article")
-    fun randomArticle(): Single<WikiApiResponseEntity>
+    fun randomArticle(@Query("language") language: String): Single<WikiApiResponseEntity>
 
 
     @GET("article-from-title")
-    fun articleFromTitle(@Query("title") title: String): Single<WikiApiResponseEntity>
+    fun articleFromTitle(@Query("language") language: String, @Query("title") title: String): Single<WikiApiResponseEntity>
 }
 
 fun main() {
@@ -26,7 +26,7 @@ fun main() {
     val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("https://wiki-api-us.herokuapp.com/")
+        .baseUrl("https://akjaw-wiki-api.herokuapp.com")
         .client(client)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(MoshiConverterFactory.create())
@@ -35,7 +35,7 @@ fun main() {
     val service = retrofit.create(WikiApiService::class.java)
 
 
-    service.articleFromTitle("Kotlin")
+    service.articleFromTitle("pl", "Kotlin")
         .toObservable()
         .subscribe {
             print(it)

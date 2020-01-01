@@ -11,7 +11,7 @@ class RemoteMapper @Inject constructor(): EntityMapper<WikiApiResponseEntity, Wi
         return WikiResponse(
             name = entity.article.name,
             description = entity.article.description,
-            imageUrl = entity.article.image,
+            imageUrl = entity.article.image ?: "",//TODO
             wikipediaUrl = entity.article.url,
             outgoingTitles = entity.links
         )

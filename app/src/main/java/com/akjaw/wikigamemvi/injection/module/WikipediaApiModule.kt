@@ -23,7 +23,7 @@ class WikipediaApiModule {
     fun retrofit(): Retrofit {
 
         val builder = Retrofit.Builder()
-            .baseUrl("https://wiki-api-us.herokuapp.com/")
+            .baseUrl("https://akjaw-wiki-api.herokuapp.com")
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create())
 

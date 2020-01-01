@@ -16,7 +16,7 @@ internal object ApiFactory {
     private val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("https://wiki-api-us.herokuapp.com/")
+        .baseUrl("https://akjaw-wiki-api.herokuapp.com")
         .client(client)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(MoshiConverterFactory.create())
@@ -26,7 +26,7 @@ internal object ApiFactory {
 }
 
 fun main() {
-    ApiFactory.api.articleFromTitle("Kotlin")
+    ApiFactory.api.articleFromTitle("pl", "Kotlin")
         .subscribeBy(
             onSuccess = {
                 println("s")
