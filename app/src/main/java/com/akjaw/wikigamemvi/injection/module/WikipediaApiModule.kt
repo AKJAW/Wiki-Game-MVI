@@ -6,6 +6,7 @@ import com.akjaw.remote.WikiApiService
 import com.akjaw.remote.WikipediaRemoteApi
 import com.akjaw.remote.model.RemoteMapper
 import com.akjaw.wikigamemvi.BuildConfig
+import com.akjaw.wikigamemvi.injection.component.GameFragmentScope
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -19,7 +20,7 @@ import javax.inject.Singleton
 @Module
 class WikipediaApiModule {
     @Provides
-    @Singleton
+    @GameFragmentScope
     fun retrofit(): Retrofit {
 
         val builder = Retrofit.Builder()
@@ -45,7 +46,7 @@ class WikipediaApiModule {
     }
 
     @Provides
-    fun bindWikiApi(impl: WikipediaRemoteApi)
+    fun bindWikiApi(impl: WikipediaMockApi)
             : WikipediaApi{
         return impl
     }

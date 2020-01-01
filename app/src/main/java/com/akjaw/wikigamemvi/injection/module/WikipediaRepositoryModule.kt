@@ -5,6 +5,7 @@ import com.akjaw.domain.repository.WikiRepository
 import com.akjaw.domain.usecase.*
 import com.akjaw.domain.usecase.GetTargetArticleUseCase
 import com.akjaw.domain.usecase.GetTargetArticleUseCaseImpl
+import com.akjaw.wikigamemvi.injection.component.GameFragmentScope
 import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton
@@ -12,26 +13,26 @@ import javax.inject.Singleton
 
 @Module
 abstract class WikipediaRepositoryModule {
-    @Binds @Singleton
+    @Binds @GameFragmentScope
     abstract fun bindTaskRepository(wikipediaRepositoryImpl: WikiRepositoryImpl): WikiRepository
 
-    @Binds @Singleton
+    @Binds @GameFragmentScope
     abstract fun bindGetRandomArticleUseCase(impl: GetRandomArticleUseCaseImpl)
             : GetRandomArticleUseCase
 
-    @Binds @Singleton
+    @Binds @GameFragmentScope
     abstract fun bindGetArticleFromTitleUseCase(impl: GetArticleFromTitleUseCaseImpl)
             : GetArticleFromTitleUseCase
 
-    @Binds @Singleton
+    @Binds @GameFragmentScope
     abstract fun bindGetTargetArticleUseCase(impl: GetTargetArticleUseCaseImpl)
             : GetTargetArticleUseCase
 
-    @Binds @Singleton
+    @Binds @GameFragmentScope
     abstract fun bindInitializeArticlesUseCase(impl: InitializeArticlesUseCaseImpl)
             : InitializeArticlesUseCase
 
-    @Binds @Singleton
+    @Binds @GameFragmentScope
     abstract fun bindArticleWinConditionUseCase(impl: ArticleWinConditionUseCaseImpl)
             : ArticleWinConditionUseCase
 }

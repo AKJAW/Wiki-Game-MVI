@@ -54,7 +54,7 @@ class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponen
 
         viewModel = activity?.run {
             ViewModelProviders
-                .of(this, injector.gameViewModelFactory())
+                .of(this, gameInjector.gameViewModelFactory())
                 .get(GameViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 

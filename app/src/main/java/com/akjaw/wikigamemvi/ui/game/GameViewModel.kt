@@ -23,6 +23,7 @@ class GameViewModel @Inject constructor(
     private val initialState: GameViewState = GameViewState()
 ): BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
     private var isInitialized = false
+    //TODO Or maybe the whole state? Then the state is only read only and never user for updating values
     private lateinit var targetArticle: WikiArticle
     private var numberOfSteps: Int = 0
 
