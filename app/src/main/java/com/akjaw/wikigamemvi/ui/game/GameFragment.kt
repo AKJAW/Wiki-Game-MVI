@@ -88,7 +88,6 @@ class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponen
             }
 
             (activity as? AppCompatActivity?)?.setSupportActionBar(toolbar)
-
         }
     }
 
@@ -149,18 +148,24 @@ class GameFragment: Fragment(), ActionObservable<GameAction>, DaggerGameComponen
 
     private fun trigger(effect: GameViewEffect) {
         when(effect){
-            is GameViewEffect.ShowVictoryScreenEffect -> showVictoryFragment()
+            is GameViewEffect.ShowVictoryScreenEffect -> showVictoryFragment(effect)
         }
     }
 
-    private fun showVictoryFragment() {
+    private fun showVictoryFragment(effect: GameViewEffect.ShowVictoryScreenEffect) {
         val transition = fragmentManager?.beginTransaction() ?: return
 
         val imageTransitionName = getString(R.string.articleImageTransition)
         transition.addSharedElement(target_article_view.article_image_view, imageTransitionName)
 
-        val article = ParcelableWikiArticle()
-        val fragment = VictoryFragment.create(article, 0)
+        val targetArticle = effect.article
+
+        val parcelableWikiArticle = ParcelableWikiArticle(
+            targetArticle.name,
+            targetArticle.description,
+            targetArticle.imageUrl)
+
+        val fragment = VictoryFragment.create(parcelableWikiArticle, effect.numberOfSteps)
 
         transition.replace(R.id.main_fragment_placeholder, fragment)
         transition.commit()

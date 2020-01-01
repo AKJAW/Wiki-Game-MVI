@@ -77,19 +77,26 @@ class VictoryFragment: Fragment(){
     }
 
     private fun initializeView(){
-        val steps = arguments?.getInt(EXTRA_STEPS) ?: -1
-        val article = arguments?.getParcelable(EXTRA_ARTICLE) ?: ParcelableWikiArticle()
+        val steps = arguments?.getInt(EXTRA_STEPS)
+        val article: ParcelableWikiArticle? = arguments?.getParcelable(EXTRA_ARTICLE)
 
-        if(article.imageUrl != null){
-            article_image.glideLoadImage(article.imageUrl) {
+        if(article != null){
+            article_title.text = article.name
+            article_description.text = article.description
+
+            if(article.imageUrl !== null){
+                article_image.glideLoadImage(article.imageUrl) {
+                    startPostponedEnterTransition()
+                }
+            } else {
                 startPostponedEnterTransition()
             }
-        } else {
-            startPostponedEnterTransition()
         }
 
-        val stepsText = resources.getString(R.string.victory_steps, steps)
-        victory_steps_text_view.text = stepsText
+        if(steps != null){
+            val stepsText = resources.getString(R.string.victory_steps, steps)
+            victory_steps_text_view.text = stepsText
+        }
 
         activity?.findViewById<TextView>(R.id.toolbar_steps)?.apply {
             isVisible = false

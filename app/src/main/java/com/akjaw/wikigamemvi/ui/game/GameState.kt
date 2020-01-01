@@ -25,7 +25,10 @@ data class GameViewState(
 ): BaseViewState
 
 sealed class GameViewEffect: BaseViewEffect {
-    object ShowVictoryScreenEffect: GameViewEffect()
+    data class ShowVictoryScreenEffect(
+        val article: WikiArticle,
+        val numberOfSteps: Int
+    ): GameViewEffect()
 }
 
 sealed class GameAction: BaseAction {

@@ -1,6 +1,7 @@
 package com.akjaw.wikigamemvi.ui.game
 
 import com.akjaw.domain.model.ArticleType
+import com.akjaw.domain.model.WikiArticle
 import com.akjaw.domain.model.WikiTitle
 import com.akjaw.domain.usecase.ArticleWinConditionUseCase
 import com.akjaw.domain.usecase.GetArticleFromTitleUseCase
@@ -22,6 +23,8 @@ class GameViewModel @Inject constructor(
     private val initialState: GameViewState = GameViewState()
 ): BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
     private var isInitialized = false
+    private lateinit var targetArticle: WikiArticle
+    private var numberOfSteps: Int = 0
 
     fun initialize(){
         if(!isInitialized){
@@ -59,7 +62,7 @@ class GameViewModel @Inject constructor(
     private fun handleResultContent(state: GameViewState, payload: GameResult): GameViewState {
         return when(payload){
             is InitializeArticlesResult -> {
-                val targetArticle = payload.targetArticleResponse.toArticle()
+                targetArticle = payload.targetArticleResponse.toArticle()
                 val currentArticle = payload.currentArticleResponse.toArticle()
 
                 val targetArticleState = state.targetArticleState.copy(
@@ -86,9 +89,11 @@ class GameViewModel @Inject constructor(
                     isLoading = false
                 )
 
+                numberOfSteps = state.numberOfSteps + 1
+
                 state.copy(
                     currentArticleState = currentArticleState,
-                    numberOfSteps = state.numberOfSteps + 1,
+                    numberOfSteps = numberOfSteps,
                     wikiNavigationLinks = payload.articleResponse.outgoingTitles)
             }
 
@@ -201,7 +206,7 @@ class GameViewModel @Inject constructor(
             .cast(Lce.Content::class.java)
             .flatMap <GameViewEffect> { content ->
                 val viewEffect: GameViewEffect? = when(content.payload){
-                    is ShowVictoryScreenResult -> ShowVictoryScreenEffect
+                    is ShowVictoryScreenResult -> ShowVictoryScreenEffect(targetArticle, numberOfSteps)
                     else -> null
                 }
 
