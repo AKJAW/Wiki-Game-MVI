@@ -112,7 +112,7 @@ Every **handle** function returns a new state depending in the payload type.
 
 #### [ArticleView](app/src/main/java/com/akjaw/wikigamemvi/ui/common/view/ArticleView.kt)
 
-![ArticleView in action](docs/article_view.gif)
+![ArticleView in action](https://akjaw.com/wiki-game/article_view.gif)
 
 It is a compound view used to show the target article (shown above) and also the current article from which the user has to navigate. The view uses a **declare-styleable** to pass variables from the XML into the View. The toggle animation is done with **ConstraintSet** by changing between the collapsed and expanded layout.
 
