@@ -1,7 +1,5 @@
 package com.akjaw.remote.model
 
-import com.akjaw.remote.model.WikiApiResponseEntity
-import com.akjaw.remote.model.WikiArticleResponseEntity
 import com.akjaw.base.EntityMapper
 import com.akjaw.domain.model.WikiResponse
 import javax.inject.Inject
@@ -13,7 +11,7 @@ class RemoteMapper @Inject constructor(): EntityMapper<WikiApiResponseEntity, Wi
             description = entity.article.description,
             imageUrl = entity.article.image ?: "",//TODO
             wikipediaUrl = entity.article.url,
-            outgoingTitles = entity.links
+            outgoingTitles = entity.titles
         )
     }
 
@@ -27,7 +25,7 @@ class RemoteMapper @Inject constructor(): EntityMapper<WikiApiResponseEntity, Wi
 
         return WikiApiResponseEntity(
             article = article,
-            links = domain.outgoingTitles
+            titles = domain.outgoingTitles
         )
     }
 
