@@ -251,22 +251,32 @@ class GameViewModelTest {
         }
 
         @Test
-        fun `if the win condition is met then emit ShowVictoryScreenEffect`(){
-            Mockito.`when`(winConditionUseCase("win"))
+        fun `if the win condition is met then emit ShowVictoryScreenEffect with the correct state`(){
+            val targetResponse = WikiResponse("target")
+            val currentResponse = WikiResponse("current")
+
+            Mockito.`when`(initializeArticlesUseCase())
+                .thenReturn(Observable.just(targetResponse to currentResponse))
+
+            Mockito.`when`(winConditionUseCase(Mockito.anyString()))
+                .thenReturn(Observable.empty())
                 .thenReturn(Observable.just(true))
 
             Mockito.`when`(getArticleFromTitleUseCase(Mockito.anyString()))
                 .thenReturn(Observable.just(WikiResponse(name = "first")))
 
+            val viewStateTester = viewModel.viewState.test()
             val viewEffectsTester = viewModel.viewEffects.test()
 
             viewEffectsTester.assertEmpty()
-
+            viewModel.initialize()
+            viewModel.process(LoadNextArticleAction(""))
             viewModel.process(LoadNextArticleAction("win"))
 
             viewEffectsTester.assertValueCount(1)
-            viewEffectsTester.assertValue(ShowVictoryScreenEffect)
+            viewEffectsTester.assertValue(ShowVictoryScreenEffect(targetResponse.toArticle(), 1))
 
+            viewStateTester.dispose()
             viewEffectsTester.dispose()
         }
 
