@@ -167,7 +167,7 @@ class ArticleView @JvmOverloads constructor(
         article_title_text_view.text = article.name
         article_description.text = article.description
 
-        if(article.imageUrl.isNotBlank()){
+        if(article.imageUrl != null){
             Glide
                 .with(context)
                 .load(article.imageUrl)
