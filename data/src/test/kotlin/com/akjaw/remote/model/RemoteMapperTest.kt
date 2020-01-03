@@ -15,25 +15,24 @@ class RemoteMapperTest {
     }
 
     @Test
-    fun `mapFromEntity maps correctly`(){
+    fun `mapFrom maps correctly`(){
         val article = WikiArticleResponseEntity("name", "description", "image", "url")
         val titles = listOf("a", "b", "c", "d")
         val entity = WikiApiResponseEntity(article, titles)
         val responseEntity = mapper.mapFrom(entity)
 
-        //TODO take null into account
-        val expectedResponse = WikiResponse(article.name, article.description, article.image!!, article.url, titles)
+        val expectedResponse = WikiResponse(article.name, article.description, article.image, article.url, titles)
 
         assertEquals(expectedResponse, responseEntity)
     }
 
 
     @Test
-    fun `mapToEntity maps correctly`(){
+    fun `mapTo maps correctly`(){
         val article = WikiArticleResponseEntity("name", "description", "image", "url")
         val titles = listOf("a", "b", "c", "d")
-        //TODO take null into account
-        val response = WikiResponse(article.name, article.description, article.image!!, article.url, titles)
+
+        val response = WikiResponse(article.name, article.description, article.image, article.url, titles)
         val responseEntity = mapper.mapTo(response)
 
         val expectedEntity = WikiApiResponseEntity(article, titles)

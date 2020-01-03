@@ -9,9 +9,9 @@ import com.akjaw.domain.usecase.InitializeArticlesUseCase
 import com.akjaw.wikigamemvi.ui.game.GameAction.*
 import com.akjaw.wikigamemvi.ui.game.GameViewEffect.*
 
-import com.akjaw.wikigamemvi.util.toArticle
 import com.akjaw.test_utils.assertLastValue
 import com.akjaw.test_utils.assertSecondToLastValue
+import com.akjaw.wikigamemvi.data.model.ResponseToArticleMapper
 import com.akjaw.wikigamemvi.ui.common.view.ArticleView
 import io.reactivex.Observable
 import io.reactivex.android.plugins.RxAndroidPlugins
@@ -32,16 +32,20 @@ class GameViewModelTest {
     @Mock private lateinit var initializeArticlesUseCase: InitializeArticlesUseCase
     @Mock private lateinit var getArticleFromTitleUseCase: GetArticleFromTitleUseCase
     @Mock private lateinit var winConditionUseCase: ArticleWinConditionUseCase
+    private lateinit var responseToArticleMapper: ResponseToArticleMapper
     private lateinit var viewModel: GameViewModel
 
     @BeforeEach
     fun setUp() {
         MockitoAnnotations.initMocks(this)
 
+        responseToArticleMapper = ResponseToArticleMapper()
+
         viewModel = GameViewModel(
             initializeArticlesUseCase,
             getArticleFromTitleUseCase,
-            winConditionUseCase
+            winConditionUseCase,
+            responseToArticleMapper
         )
 
         RxAndroidPlugins.setMainThreadSchedulerHandler {
@@ -109,7 +113,10 @@ class GameViewModelTest {
 
             viewStateTester
                 .assertLastValue {
-                    it.checkInitialArticlesFinished(target.toArticle(), current.toArticle())
+                    it.checkInitialArticlesFinished(
+                        responseToArticleMapper.mapTo(target),
+                        responseToArticleMapper.mapTo(current)
+                    )
                     true
                 }
 
@@ -140,7 +147,10 @@ class GameViewModelTest {
 
             viewStateTester
                 .assertLastValue {
-                    it.checkInitialArticlesFinished(target1.toArticle(), current1.toArticle())
+                    it.checkInitialArticlesFinished(
+                        responseToArticleMapper.mapTo(target1),
+                        responseToArticleMapper.mapTo(current1)
+                    )
                     true
                 }
 
@@ -154,7 +164,10 @@ class GameViewModelTest {
 
             viewStateTester
                 .assertLastValue {
-                    it.checkInitialArticlesFinished(target2.toArticle(), current2.toArticle())
+                    it.checkInitialArticlesFinished(
+                        responseToArticleMapper.mapTo(target2),
+                        responseToArticleMapper.mapTo(current2)
+                    )
                     true
                 }
 
@@ -246,7 +259,7 @@ class GameViewModelTest {
                 it.checkLoadNextLoading()
             }
             this.assertLastValue {
-                it.checkLoadNextFinished(response.toArticle())
+                it.checkLoadNextFinished(responseToArticleMapper.mapTo(response))
             }
         }
 
@@ -274,7 +287,10 @@ class GameViewModelTest {
             viewModel.process(LoadNextArticleAction("win"))
 
             viewEffectsTester.assertValueCount(1)
-            viewEffectsTester.assertValue(ShowVictoryScreenEffect(targetResponse.toArticle(), 1))
+            val expectedEffect = ShowVictoryScreenEffect(
+                responseToArticleMapper.mapTo(targetResponse),
+                1)
+            viewEffectsTester.assertValue(expectedEffect)
 
             viewStateTester.dispose()
             viewEffectsTester.dispose()
@@ -415,6 +431,7 @@ class GameViewModelTest {
                 initializeArticlesUseCase,
                 getArticleFromTitleUseCase,
                 winConditionUseCase,
+                responseToArticleMapper,
                 initialViewState
             )
 

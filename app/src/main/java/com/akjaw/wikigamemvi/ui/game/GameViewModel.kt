@@ -1,17 +1,15 @@
 package com.akjaw.wikigamemvi.ui.game
 
-import com.akjaw.domain.model.ArticleType
-import com.akjaw.domain.model.WikiArticle
-import com.akjaw.domain.model.WikiTitle
+import com.akjaw.domain.model.*
 import com.akjaw.domain.usecase.ArticleWinConditionUseCase
 import com.akjaw.domain.usecase.GetArticleFromTitleUseCase
 import com.akjaw.domain.usecase.InitializeArticlesUseCase
+import com.akjaw.wikigamemvi.data.model.ResponseToArticleMapper
 import com.akjaw.wikigamemvi.ui.base.BaseViewModel
 import com.akjaw.wikigamemvi.ui.common.Lce
 import com.akjaw.wikigamemvi.ui.game.GameAction.*
 import com.akjaw.wikigamemvi.ui.game.GameResult.*
 import com.akjaw.wikigamemvi.ui.game.GameViewEffect.ShowVictoryScreenEffect
-import com.akjaw.wikigamemvi.util.toArticle
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import javax.inject.Inject
@@ -20,6 +18,7 @@ class GameViewModel @Inject constructor(
     private val initializeArticlesUseCase: InitializeArticlesUseCase,
     private val getArticleFromTitleUseCase: GetArticleFromTitleUseCase,
     private val winConditionUseCase: ArticleWinConditionUseCase,
+    private val responseToArticleMapper: Mapper<WikiArticle, WikiResponse>,
     private val initialState: GameViewState = GameViewState()
 ): BaseViewModel<GameAction, GameResult, GameViewState, GameViewEffect>(){
     private var isInitialized = false
@@ -63,8 +62,9 @@ class GameViewModel @Inject constructor(
     private fun handleResultContent(state: GameViewState, payload: GameResult): GameViewState {
         return when(payload){
             is InitializeArticlesResult -> {
-                targetArticle = payload.targetArticleResponse.toArticle()
-                val currentArticle = payload.currentArticleResponse.toArticle()
+
+                targetArticle = responseToArticleMapper.mapTo(payload.targetArticleResponse)
+                val currentArticle = responseToArticleMapper.mapTo(payload.currentArticleResponse)
 
                 val targetArticleState = state.targetArticleState.copy(
                     article = targetArticle,
@@ -83,7 +83,7 @@ class GameViewModel @Inject constructor(
             }
 
             is LoadNextArticleResult -> {
-                val currentArticle = payload.articleResponse.toArticle()
+                val currentArticle = responseToArticleMapper.mapTo(payload.articleResponse)
 
                 val currentArticleState = state.targetArticleState.copy(
                     article = currentArticle,
