@@ -1,8 +1,11 @@
 package com.akjaw.wikigamemvi.injection.component
 
-import com.akjaw.domain.model.WikiLanguage
-import com.akjaw.domain.model.WikiTitle
+import com.akjaw.base.WikipediaApi
+import com.akjaw.domain.model.*
+import com.akjaw.remote.WikipediaRemoteApi
+import com.akjaw.wikigamemvi.data.model.ResponseToArticleMapper
 import com.akjaw.wikigamemvi.injection.factory.ViewModelFactory
+import com.akjaw.wikigamemvi.injection.module.MapperModule
 import com.akjaw.wikigamemvi.injection.module.WikipediaApiModule
 import com.akjaw.wikigamemvi.injection.module.WikipediaRepositoryModule
 import com.akjaw.wikigamemvi.ui.game.ArticleLinksAdapter
@@ -10,6 +13,7 @@ import com.akjaw.wikigamemvi.ui.game.GameViewModel
 import com.akjaw.wikigamemvi.ui.game.GameViewState
 import dagger.BindsInstance
 import dagger.Component
+import dagger.Provides
 import javax.inject.Named
 import javax.inject.Scope
 
@@ -20,7 +24,7 @@ annotation class GameFragmentScope
 @GameFragmentScope
 @Component(
     dependencies = [ApplicationComponent::class],
-    modules = [WikipediaApiModule::class, WikipediaRepositoryModule::class]
+    modules = [WikipediaApiModule::class, WikipediaRepositoryModule::class, MapperModule::class]
 )
 interface GameComponent{
 
