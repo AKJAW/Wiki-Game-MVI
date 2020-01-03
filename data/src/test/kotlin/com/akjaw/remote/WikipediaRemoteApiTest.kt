@@ -1,16 +1,12 @@
 package com.akjaw.remote
 
-import com.akjaw.base.EntityMapper
 import com.akjaw.domain.model.WikiLanguage
 import com.akjaw.domain.model.WikiResponse
-import com.akjaw.remote.model.RemoteMapper
 import com.akjaw.remote.model.WikiApiResponseEntity
 import com.akjaw.remote.model.WikiArticleResponseEntity
 import io.reactivex.Single
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.mockito.Mock
@@ -21,7 +17,7 @@ import org.mockito.MockitoAnnotations
 internal class WikipediaRemoteApiTest {
     private val language: WikiLanguage = "pl"
     @Mock private lateinit var apiService: WikiApiService
-    @Mock private lateinit var mapper: EntityMapper<WikiApiResponseEntity, WikiResponse>
+    @Mock private lateinit var mapper: com.akjaw.domain.model.Mapper<WikiApiResponseEntity, WikiResponse>
     private lateinit var wikipediaRemoteApi: WikipediaRemoteApi
     private lateinit var wikiApiResponseEntity: WikiApiResponseEntity
 
@@ -81,7 +77,7 @@ internal class WikipediaRemoteApiTest {
 
             wikipediaRemoteApi.randomArticle().test().dispose()
             Mockito.verify(mapper, times(1))
-                .mapFromEntity(entity)
+                .mapFrom(entity)
         }
 
         @Test
@@ -91,7 +87,7 @@ internal class WikipediaRemoteApiTest {
 
             wikipediaRemoteApi.articleFromTitle("title").test().dispose()
             Mockito.verify(mapper, times(1))
-                .mapFromEntity(entity)
+                .mapFrom(entity)
         }
     }
 

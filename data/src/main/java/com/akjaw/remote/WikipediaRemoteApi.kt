@@ -1,6 +1,6 @@
 package com.akjaw.remote
 
-import com.akjaw.base.EntityMapper
+import com.akjaw.domain.model.Mapper
 import com.akjaw.base.WikipediaApi
 import com.akjaw.domain.model.WikiLanguage
 import com.akjaw.domain.model.WikiResponse
@@ -14,17 +14,17 @@ import javax.inject.Inject
 class WikipediaRemoteApi @Inject constructor(
     private val language: WikiLanguage,
     private val apiService: WikiApiService,
-    private val mapper: EntityMapper<WikiApiResponseEntity, WikiResponse>
+    private val mapper: Mapper<WikiApiResponseEntity, WikiResponse>
 ): WikipediaApi {
     override fun randomArticle(): Single<WikiResponse> {
         return apiService.randomArticle(language).map {
-            mapper.mapFromEntity(it)
+            mapper.mapFrom(it)
         }
     }
 
     override fun articleFromTitle(title: WikiTitle): Single<WikiResponse> {
         return apiService.articleFromTitle(language, title).map {
-            mapper.mapFromEntity(it)
+            mapper.mapFrom(it)
         }
     }
 
